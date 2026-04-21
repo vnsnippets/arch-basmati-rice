@@ -1,14 +1,14 @@
 # Services
 
-## Networking Service
+## Network Service
 
-`Networking.qml` is a reactive, event-driven singleton for monitoring and
-controlling network connectivity through NetworkManager. It follows a
-**Two-Tier architecture**: a persistent DBus stream provides instant change
-notifications (Tier 1), while on-demand `nmcli` and `gdbus` calls handle
-data-heavy queries and actions (Tier 2). All Tier-2 one-shot commands are
-routed through the `Command` singleton so process lifetimes are managed in
-one place.
+**Network Service** `NetworkService.qml` is a reactive, event-driven singleton for monitoring and controlling network connectivity through NetworkManager.
+
+It follows a **Two-Tier architecture**:
+- Tier 1: A persistent DBus stream provides instant change notifications
+- Tier 2: On-demand `nmcli` and `gdbus` calls handle data-heavy queries and actions.
+
+All Tier-2 one-shot commands are routed through the `Daemon.qml` singleton so process lifetimes are managed in one place.
 
 ---
 
@@ -16,10 +16,9 @@ one place.
 
 | Dependency | Purpose |
 |---|---|
-| `gdbus` (part of `glib2`) | Tier 1 persistent monitors; one-shot property gets |
+| `gdbus` (part of `glib2`) | Persistent monitors and One-shot property gets |
 | `nmcli` (part of `networkmanager`) | Scanning, connecting, status queries, radio control |
 | `xdg-open` | Opening the captive-portal browser |
-| `Command` singleton | Fire-and-forget process execution for all Tier-2 actions |
 
 Import it via:
 
@@ -36,33 +35,33 @@ Networking.connectTo("MySSID", "password", callback)
 ### Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────┐
 │                     Networking.qml                       │
-│                                                         │
-│  TIER 1 – Persistent Streaming (bare Process objects)   │
-│  ┌──────────────────┐   ┌────────────────────────────┐  │
+│                                                          │
+│  TIER 1 – Persistent Streaming (bare Process objects)    │
+│  ┌──────────────────┐   ┌────────────────────────────┐   │
 │  │  globalMonitor   │   │    apStrengthMonitor        │  │
 │  │  gdbus monitor   │   │    gdbus monitor (per-AP)   │  │
 │  │  /NM root path   │   │    dynamic object-path      │  │
-│  └────────┬─────────┘   └───────────┬────────────────┘  │
+│  └────────┬─────────┘   └───────────┬────────────────┘   │
 │           │ events                  │ Strength byte      │
 │           ▼                         ▼                    │
 │     parse + update             _signalStrength           │
 │     reactive properties                                  │
-│                                                         │
-│  TIER 2 – On-Demand (via Command.execute or named Proc) │
-│  ┌────────────┐ ┌───────────┐ ┌────────────────────┐   │
-│  │wifiListProc│ │rescanProc │ │  activeDetailProc   │   │
-│  │nmcli list  │ │nmcli      │ │  nmcli dev wifi     │   │
-│  └────────────┘ │--rescan   │ └────────────────────┘   │
-│                 └───────────┘                           │
-│  All public action functions → Command.execute()        │
-└─────────────────────────────────────────────────────────┘
+│                                                          │
+│  TIER 2 – On-Demand (via Command.execute or named Proc)  │
+│  ┌────────────┐ ┌───────────┐ ┌────────────────────┐     │
+│  │wifiListProc│ │rescanProc │ │  activeDetailProc   │    │
+│  │nmcli list  │ │nmcli      │ │  nmcli dev wifi     │    │
+│  └────────────┘ │--rescan   │ └────────────────────┘     │
+│                 └───────────┘                            │
+│  All public action functions → Command.execute()         │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### Reactive Properties (subscribe, don't poll)
+### Reactive Properties (Subscribe, don't poll)
 
 These update automatically whenever NetworkManager emits a DBus signal.
 Bind to them directly in your UI — no timers needed.
@@ -290,6 +289,8 @@ immediately. Use it to swap signal-bar icons for an Ethernet icon in your bar.
 ```qml
 icon: Networking.isWired ? "" : strengthIcon(Networking.signalStrength)
 ```
+
+***
 
 ## NMCLI Service
 
