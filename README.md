@@ -71,7 +71,7 @@ Bind to them directly in your UI — no timers needed.
 | Property | Type | Description |
 |---|---|---|
 | `isRunning` | `bool` | `true` while the `gdbus monitor` is receiving output from NM |
-| `connectivity` | `int` | NM global connectivity level: `0` unknown · `1` none · `2` captive portal · `3` limited · `4` full |
+| `connectivity` | `int` | NM global connectivity level: <br/>`0` unknown <br/>`1` none <br/>`2` captive portal <br/>`3` limited <br/>`4` full |
 | `activeSsid` | `string` | SSID of the currently connected Wi-Fi AP, or `""` when wired / offline |
 | `signalStrength` | `int` | Signal strength of the active AP (0–100), pushed by the per-AP DBus monitor |
 | `isWired` | `bool` | `true` when `PrimaryConnectionType` is `802-3-ethernet` |
