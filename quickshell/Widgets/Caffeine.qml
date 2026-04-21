@@ -1,4 +1,5 @@
 import QtQuick
+
 import Quickshell
 import Quickshell.Io
 
@@ -24,7 +25,8 @@ WidgetBase {
             state.inhibitProcess = null;
         } else {
             // Start and save the reference
-            state.inhibitProcess = Command.execute(["systemd-inhibit", "--what=idle", "sleep", "infinity"]);
+            var cmd = ["systemd-inhibit", "--what=idle", "sleep", "infinity"]
+            state.inhibitProcess = Daemon.execute(cmd);
 
             // Process dies unexpectedly (crashes), reset our state
             state.inhibitProcess.runningChanged.connect(() => {

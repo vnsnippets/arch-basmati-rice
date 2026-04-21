@@ -13,7 +13,10 @@ Singleton {
     property var ethernetInterfaces: []
     property bool isConnected: false
     property string activeInterface: ""
+    property string activeInterfaceType: ""
     property string activeConnection: ""
+    property bool networkingEnabled: true
+    property bool initialized: false
     property bool wifiEnabled: true
     readonly property bool scanning: rescanProc.running
     readonly property list<AccessPoint> networks: []
@@ -629,6 +632,7 @@ Singleton {
             let connected = false;
             let activeIf = "";
             let activeConn = "";
+            let activeType = "";
 
             for (const line of lines) {
                 const parts = line.split(":");
@@ -637,6 +641,7 @@ Singleton {
                     if (isConnectedState(state)) {
                         connected = true;
                         activeIf = parts[0] || "";
+                        activeType = parts[1] || "";
                         activeConn = parts[3] || "";
                         break;
                     }
@@ -645,14 +650,42 @@ Singleton {
 
             root.isConnected = connected;
             root.activeInterface = activeIf;
+            root.activeInterfaceType = activeType;
             root.activeConnection = activeConn;
 
-            if (callback)
-                callback({
-                    connected,
-                    interface: activeIf,
-                    connection: activeConn
-                });
+            getNetworkingStatus(() => {
+                if (callback)
+                    callback({
+                        connected,
+                        interface: activeIf,
+                        type: activeType,
+                        connection: activeConn
+                    });
+            });
+        });
+    }
+
+    function getNetworkingStatus(callback: var): void {
+        executeCommand(["networking"], result => {
+            if (result.success) {
+                const enabled = result.output.trim() === "enabled";
+                root.networkingEnabled = enabled;
+                if (callback)
+                    callback(enabled);
+            } else if (callback) {
+                callback(root.networkingEnabled);
+            }
+        });
+    }
+
+    function enableNetworking(enabled: bool, callback: var): void {
+        const cmd = enabled ? "on" : "off";
+        executeCommand(["networking", cmd], result => {
+            if (result.success) {
+                getNetworkingStatus(callback);
+            } else if (callback) {
+                callback(false);
+            }
         });
     }
 
@@ -1025,6 +1058,7 @@ Singleton {
     }
 
     function refreshOnConnectionChange(): void {
+        getNetworkingStatus(() => {});
         getNetworks(networks => {
             const newActive = root.active;
 
@@ -1065,10 +1099,13 @@ Singleton {
     }
 
     Component.onCompleted: {
+        getNetworkingStatus(() => {});
         getWifiStatus(() => {});
         getNetworks(() => {});
         loadSavedConnections(() => {});
-        getEthernetInterfaces(() => {});
+        getEthernetInterfaces(() => {
+            root.initialized = true;
+        });
 
         Qt.callLater(() => {
             if (root.wirelessInterfaces.length > 0) {

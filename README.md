@@ -1,8 +1,10 @@
-# NMCLI Service
+# Services
+
+## NMCLI Service
 
 The `NMCLI.qml` service is a singleton providing a comprehensive interface for managing network connections via the `nmcli` command-line tool. It supports both wireless (Wi-Fi) and wired (Ethernet) interfaces, connection monitoring, and network scanning.
 
-## Variables for Client Use
+### Variables for Client Use
 
 These properties are intended for external use by components consuming this service.
 
@@ -25,9 +27,9 @@ These properties are intended for external use by components consuming this serv
 | `wirelessDeviceDetails` | `var` | Configuration details (IP, gateway, DNS, etc.) for the active wireless interface. |
 | `ethernetDeviceDetails` | `var` | Configuration details for the active ethernet interface. |
 
-## Functions
+### Functions
 
-### Wireless Management
+#### Wireless Management
 
 | Function | Arguments | Description |
 | :--- | :--- | :--- |
@@ -42,7 +44,7 @@ These properties are intended for external use by components consuming this serv
 | `getWifiStatus(callback)` | `callback: function(enabled)` | Checks if the Wi-Fi radio is enabled. |
 | `disconnectFromNetwork()` | None | Disconnects from the current active Wi-Fi network. |
 
-### Ethernet Management
+#### Ethernet Management
 
 | Function | Arguments | Description |
 | :--- | :--- | :--- |
@@ -51,7 +53,7 @@ These properties are intended for external use by components consuming this serv
 | `disconnectEthernet(connectionName, callback)` | `connectionName: string`, `callback: function(result)` | Disconnects the specified ethernet connection. |
 | `getEthernetDeviceDetails(interfaceName, callback)` | `interfaceName: string`, `callback: function(details)` | Updates and returns configuration details for an ethernet interface. |
 
-### General Device & Status
+#### General Device & Status
 
 | Function | Arguments | Description |
 | :--- | :--- | :--- |
@@ -64,7 +66,7 @@ These properties are intended for external use by components consuming this serv
 | `bringInterfaceDown(interfaceName, callback)` | `interfaceName: string`, `callback: function(result)` | Disconnects the specified interface. |
 | `loadSavedConnections(callback)` | `callback: function(ssids)` | Refreshes the list of saved connection profiles and wireless SSIDs. |
 
-## Processes
+### Processes
 
 The service utilizes several background processes to interact with the system and monitor network changes.
 
@@ -74,7 +76,7 @@ The service utilizes several background processes to interact with the system an
 | `rescanProc` | Performs a manual Wi-Fi scan. | **Triggered** | Started by calling `rescanWifi()`. Runs once and then exits. Triggers `getNetworks()` upon completion. |
 | `commandProc` | Used for executing one-off `nmcli` commands. | **Triggered** | Created dynamically via `executeCommand()`. Runs the specified command and returns the result through a callback. |
 
-## Startup Lifecycle
+### Startup Lifecycle
 
 When the service is initialized (`Component.onCompleted`):
 1.  **Initial Data Fetch**: It immediately fetches Wi-Fi status, available networks, saved connection profiles, and ethernet interfaces.
