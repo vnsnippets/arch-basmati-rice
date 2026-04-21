@@ -1,5 +1,296 @@
 # Services
 
+## Networking Service
+
+`Networking.qml` is a reactive, event-driven singleton for monitoring and
+controlling network connectivity through NetworkManager. It follows a
+**Two-Tier architecture**: a persistent DBus stream provides instant change
+notifications (Tier 1), while on-demand `nmcli` and `gdbus` calls handle
+data-heavy queries and actions (Tier 2). All Tier-2 one-shot commands are
+routed through the `Command` singleton so process lifetimes are managed in
+one place.
+
+---
+
+### Dependencies
+
+| Dependency | Purpose |
+|---|---|
+| `gdbus` (part of `glib2`) | Tier 1 persistent monitors; one-shot property gets |
+| `nmcli` (part of `networkmanager`) | Scanning, connecting, status queries, radio control |
+| `xdg-open` | Opening the captive-portal browser |
+| `Command` singleton | Fire-and-forget process execution for all Tier-2 actions |
+
+Import it via:
+
+```qml
+import qs.Services
+
+// Access the singleton directly:
+Networking.activeSsid
+Networking.connectTo("MySSID", "password", callback)
+```
+
+---
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     Networking.qml                       │
+│                                                         │
+│  TIER 1 – Persistent Streaming (bare Process objects)   │
+│  ┌──────────────────┐   ┌────────────────────────────┐  │
+│  │  globalMonitor   │   │    apStrengthMonitor        │  │
+│  │  gdbus monitor   │   │    gdbus monitor (per-AP)   │  │
+│  │  /NM root path   │   │    dynamic object-path      │  │
+│  └────────┬─────────┘   └───────────┬────────────────┘  │
+│           │ events                  │ Strength byte      │
+│           ▼                         ▼                    │
+│     parse + update             _signalStrength           │
+│     reactive properties                                  │
+│                                                         │
+│  TIER 2 – On-Demand (via Command.execute or named Proc) │
+│  ┌────────────┐ ┌───────────┐ ┌────────────────────┐   │
+│  │wifiListProc│ │rescanProc │ │  activeDetailProc   │   │
+│  │nmcli list  │ │nmcli      │ │  nmcli dev wifi     │   │
+│  └────────────┘ │--rescan   │ └────────────────────┘   │
+│                 └───────────┘                           │
+│  All public action functions → Command.execute()        │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Reactive Properties (subscribe, don't poll)
+
+These update automatically whenever NetworkManager emits a DBus signal.
+Bind to them directly in your UI — no timers needed.
+
+| Property | Type | Description |
+|---|---|---|
+| `isRunning` | `bool` | `true` while the `gdbus monitor` is receiving output from NM |
+| `connectivity` | `int` | NM global connectivity level: `0` unknown · `1` none · `2` captive portal · `3` limited · `4` full |
+| `activeSsid` | `string` | SSID of the currently connected Wi-Fi AP, or `""` when wired / offline |
+| `signalStrength` | `int` | Signal strength of the active AP (0–100), pushed by the per-AP DBus monitor |
+| `isWired` | `bool` | `true` when `PrimaryConnectionType` is `802-3-ethernet` |
+| `wifiEnabled` | `bool` | `true` when the Wi-Fi radio is on |
+| `networkingEnabled` | `bool` | `true` when global `nmcli networking` is enabled |
+
+#### Typical UI binding
+
+```qml
+Text {
+    text: Networking.activeSsid !== ""
+        ? `${Networking.activeSsid} (${Networking.signalStrength}%)`
+        : Networking.isWired ? "Wired" : "Offline"
+    color: Networking.connectivity >= 4 ? "green" : "red"
+}
+```
+
+#### Connectivity value reference
+
+| Value | Meaning |
+|---|---|
+| `0` | Unknown |
+| `1` | No connectivity (offline) |
+| `2` | Captive portal — login required |
+| `3` | Limited — local network only, no internet |
+| `4` | Full internet access |
+
+---
+
+### On-Demand Properties (need explicit refresh)
+
+These are populated only when you call their corresponding refresh function.
+Call them when your UI panel opens, not on a timer.
+
+| Property | Type | Populated by | Each entry shape |
+|---|---|---|---|
+| `availableWifi` | `var[]` | `rescanWifi()` / `refreshWifiList()` | `{ ssid, strength, security, bars, active }` |
+| `knownNetworks` | `var[]` | `refreshKnownNetworks()` | `{ name, type, uuid }` |
+| `scanning` | `bool` | Automatically `true` while any scan is in-flight | — |
+
+---
+
+### Signals
+
+Subscribe to these for events that need UI feedback.
+
+| Signal | Arguments | When emitted |
+|---|---|---|
+| `captivePortalDetected()` | — | `connectivity` becomes `2`; `xdg-open` is also launched automatically |
+| `connectionFailed(ssid)` | `string ssid` | A `connectTo` attempt exits non-zero and is not a password issue |
+| `passwordRequired(ssid)` | `string ssid` | NM rejects the connection because no / wrong PSK was supplied |
+
+#### Example
+
+```qml
+Connections {
+    target: Networking
+
+    function onPasswordRequired(ssid) {
+        passwordPrompt.ssid = ssid;
+        passwordPrompt.visible = true;
+    }
+
+    function onConnectionFailed(ssid) {
+        notificationBanner.show(`Failed to connect to ${ssid}`);
+    }
+
+    function onCaptivePortalDetected() {
+        notificationBanner.show("Login required — browser opened");
+    }
+}
+```
+
+---
+
+### Public Functions
+
+#### Wi-Fi Scanning
+
+```qml
+// Full rescan (slow, triggers radio scan) → then calls refreshWifiList()
+Networking.rescanWifi()
+
+// Fast list refresh from NM cache (no radio activity)
+Networking.refreshWifiList()
+
+// Refresh the saved-profiles list
+Networking.refreshKnownNetworks()
+```
+
+Call `rescanWifi()` when the panel opens. Bind the list to `Networking.availableWifi`.
+
+---
+
+#### Connecting
+
+```qml
+// New or open network
+Networking.connectTo("MySSID", "", (result) => {
+    console.log(result.success, result.output);
+});
+
+// Secured network with password
+Networking.connectTo("MySSID", "hunter2", (result) => {
+    if (!result.success && result.needsPassword) {
+        // passwordRequired signal was also emitted
+    }
+});
+
+// Known / saved profile by UUID (from knownNetworks)
+Networking.up("a1b2c3-uuid", (result) => { ... });
+```
+
+**Password flow:** If `connectTo` is called with an empty password on a
+secured network, NM will fail and the `passwordRequired(ssid)` signal fires.
+Show a password prompt in response and call `connectTo` again with the
+credential.
+
+---
+
+#### Disconnecting
+
+```qml
+// Disconnect a specific interface (prevents auto-reconnect)
+Networking.disconnect("wlan0", (result) => { ... });
+
+// Omit ifname to default to "wlan0"
+Networking.disconnect("", null);
+```
+
+Uses `nmcli dev disconnect` (not `connection down`) so NM does not
+immediately re-establish the connection.
+
+---
+
+#### Radio & Networking Toggles
+
+```qml
+// Hard Wi-Fi radio toggle (flight-mode style)
+Networking.toggleWifi(false, (result) => { ... }); // off
+Networking.toggleWifi(true,  null);                 // on, no callback
+
+// Enable / disable global networking (controls auto-retry on resume)
+Networking.enableNetworking(false, null); // stops reconnect attempts
+Networking.enableNetworking(true,  null);
+```
+
+---
+
+#### Advanced Queries
+
+```qml
+// Check if a profile is on a metered (mobile hotspot) connection
+Networking.isMetered("Hotspot Profile", (metered) => {
+    if (metered) warningBanner.show("Metered connection — updates paused");
+});
+
+// Delete a saved profile
+Networking.forgetNetwork("OldNetwork", (result) => {
+    console.log(result.success);
+});
+```
+
+---
+
+### Internal Processes at a Glance
+
+> These run automatically. You do not need to start or stop them.
+
+| ID | Command | Lifecycle | Purpose |
+|---|---|---|---|
+| `globalMonitor` | `gdbus monitor … /org/freedesktop/NetworkManager` | Always running, auto-restarts after 3 s | Tier 1 event source for connectivity, state, and connection changes |
+| `apStrengthMonitor` | `gdbus monitor … <AP object path>` | Starts when an AP becomes active; stops on disconnect | Tier 1-B: pushes `signalStrength` updates without polling |
+| `wifiListProc` | `nmcli -t -f SSID,SIGNAL,SECURITY,BARS,ACTIVE dev wifi list` | On-demand (triggered by `refreshWifiList`) | Populates `availableWifi` |
+| `rescanProc` | `nmcli dev wifi list --rescan yes` | On-demand (triggered by `rescanWifi`) | Forces a radio scan, then calls `refreshWifiList` on exit |
+| `knownProc` | `nmcli -t -f NAME,TYPE,UUID connection show` | On-demand (triggered by `refreshKnownNetworks`) | Populates `knownNetworks` |
+| `activeDetailProc` | `nmcli -t -f ACTIVE,SSID,SIGNAL dev wifi` | Triggered by Tier 1 events and on startup | Updates `activeSsid` + `signalStrength`; kicks off AP-path discovery |
+
+All **action** calls (`connectTo`, `up`, `disconnect`, `toggleWifi`, etc.) are
+routed through `Command.execute()` and are tracked in `Command.processes`.
+
+---
+
+### Advanced Hooks
+
+#### A — Captive Portal Detection
+When `connectivity` transitions to `2`, the service automatically:
+1. Emits `captivePortalDetected()`
+2. Calls `xdg-open http://nmcheck.gnome.org/check_network_status.txt`
+
+Subscribe to the signal if you want to show an in-shell notification instead
+of (or in addition to) the browser.
+
+#### B — Reactive Signal Strength
+On every active-connection change, the service:
+1. Queries `GetDevices` via `gdbus call`
+2. Probes each device's `DeviceType` to find the Wi-Fi adapter
+3. Reads `ActiveAccessPoint` object path
+4. Starts `apStrengthMonitor` on that path
+
+`signalStrength` is then updated by the DBus `Strength` byte property as the
+driver reports it — no polling at all.
+
+#### C — Metered Connections
+`isMetered(name, callback)` calls:
+```
+nmcli -f connection.metered connection show <name>
+```
+Returns `true` when the field is `1 (yes)`. Use this to gate large downloads
+or OS updates.
+
+#### D — Wired / Wireless Switching (Phase 4)
+`isWired` is a computed binding on `_primaryConnectionType`. When NM emits a
+`PrimaryConnectionType` change to `"802-3-ethernet"`, `isWired` flips
+immediately. Use it to swap signal-bar icons for an Ethernet icon in your bar.
+
+```qml
+icon: Networking.isWired ? "" : strengthIcon(Networking.signalStrength)
+```
+
 ## NMCLI Service
 
 The `NMCLI.qml` service is a singleton providing a comprehensive interface for managing network connections via the `nmcli` command-line tool. It supports both wireless (Wi-Fi) and wired (Ethernet) interfaces, connection monitoring, and network scanning.
