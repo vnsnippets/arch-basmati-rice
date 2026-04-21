@@ -35,28 +35,30 @@ Networking.connectTo("MySSID", "password", callback)
 ### Architecture Overview
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                     Networking.qml                       │
-│                                                          │
-│  TIER 1 – Persistent Streaming (bare Process objects)    │
-│  ┌──────────────────┐   ┌────────────────────────────┐   │
-│  │  globalMonitor   │   │    apStrengthMonitor        │  │
-│  │  gdbus monitor   │   │    gdbus monitor (per-AP)   │  │
-│  │  /NM root path   │   │    dynamic object-path      │  │
-│  └────────┬─────────┘   └───────────┬────────────────┘   │
-│           │ events                  │ Strength byte      │
-│           ▼                         ▼                    │
-│     parse + update             _signalStrength           │
-│     reactive properties                                  │
-│                                                          │
-│  TIER 2 – On-Demand (via Command.execute or named Proc)  │
-│  ┌────────────┐ ┌───────────┐ ┌────────────────────┐     │
-│  │wifiListProc│ │rescanProc │ │  activeDetailProc   │    │
-│  │nmcli list  │ │nmcli      │ │  nmcli dev wifi     │    │
-│  └────────────┘ │--rescan   │ └────────────────────┘     │
-│                 └───────────┘                            │
-│  All public action functions → Command.execute()         │
-└──────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                                                                │
+│                          Networking.qml                        │
+│                                                                │
+│     TIER 1 – Persistent Streaming (bare Process objects)       │
+│     ┌──────────────────┐   ┌────────────────────────────┐      │
+│     │  globalMonitor   │   │    apStrengthMonitor       │      │
+│     │  gdbus monitor   │   │    gdbus monitor (per-AP)  │      │
+│     │  /NM root path   │   │    dynamic object-path     │      │
+│     └────────┬─────────┘   └─────────────┬──────────────┘      │
+│              │ events                    │ Strength byte       │
+│              ▼                           ▼                     │
+│        parse + update             _signalStrength              │
+│        reactive properties                                     │
+│                                                                │
+│     TIER 2 – On-Demand (via Command.execute or named Proc)     │
+│   ┌──────────────┐ ┌────────────────┐ ┌────────────────────┐   │
+│   │ wifiListProc │ │ rescanProc     │ │  activeDetailProc  │   │
+│   │ nmcli list   │ │ nmcli --rescan │ │  nmcli dev wifi    │   │
+│   └──────────────┘ └────────────────┘ └────────────────────┘   │
+│                                                                │
+│       All public action functions → Command.execute()          │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ---
