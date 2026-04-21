@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Command.qml
+// Daemon.qml
 // Centralised fire-and-forget process runner.
 //
 // Usage:
