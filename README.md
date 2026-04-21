@@ -1,14 +1,14 @@
 # Services
 
-## Network Service
+## Network Service 
 
-**Network Service** `NetworkService.qml` is a reactive, event-driven singleton for monitoring and controlling network connectivity through NetworkManager.
+A reactive, event-driven singleton for monitoring and controlling network connectivity through NetworkManager.
 
 It follows a **Two-Tier architecture**:
 - Tier 1: A persistent DBus stream provides instant change notifications
 - Tier 2: On-demand `nmcli` and `gdbus` calls handle data-heavy queries and actions.
 
-All Tier-2 one-shot commands are routed through the `Daemon.qml` singleton so process lifetimes are managed in one place.
+> All Tier-2 one-shot commands are routed through the `Daemon.qml` singleton so process lifetimes are managed in one place.
 
 ---
 
