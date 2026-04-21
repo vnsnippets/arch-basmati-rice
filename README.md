@@ -63,7 +63,7 @@ Networking.connectTo("MySSID", "password", callback)
 
 ### Reactive Properties (Subscribe, don't poll)
 
-These update automatically whenever NetworkManager emits a DBus signal.
+These update automatically whenever NetworkManager emits a DBus signal.   
 Bind to them directly in your UI — no timers needed.
 
 | Property | Type | Description |
