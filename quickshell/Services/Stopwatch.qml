@@ -11,10 +11,9 @@ QtObject {
             property var _callback: null
 
             onTriggered: {
-                if (_callback) _callback();
+                if (root && _callback) _callback();
                 _callback = null;
-                // Optional: auto-destroy to save memory
-                // this.destroy(); 
+                this.destroy(); 
             }
 
             function begin(delay, cb) {

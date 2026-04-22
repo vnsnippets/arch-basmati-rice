@@ -9,11 +9,12 @@ import qs.Style
 Rectangle {
     id: container
 
+    default property alias content: content_container.data
+
     property string icon: ""
     property string label: ""
     property string tooltip: ""
     property bool interactive: true
-
 
     property QtObject locks: QtObject {
         property bool hover: false
@@ -41,7 +42,7 @@ Rectangle {
         spacing: Theme.spacing
 
         Text {
-            id: icontext
+            id: icon_text
             text: icon
             color: container.style.foreground.idle
             font.pixelSize: Theme.font_size
@@ -53,7 +54,7 @@ Rectangle {
         }
 
         Text {
-            id: labeltext
+            id: label_text
             text: label
             color: container.style.foreground.idle
             font.pixelSize: Theme.font_size
@@ -62,6 +63,13 @@ Rectangle {
             Layout.margins: 0
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
+        }
+
+        RowLayout {
+            id: content_container
+            visible: children.length > 0
+            spacing: Theme.spacing
+            Layout.alignment: Qt.AlignVCenter
         }
     }
 
@@ -85,20 +93,20 @@ Rectangle {
         State {
             name: "idle"
             PropertyChanges { target: container; scale: 1.0; color: style.background.idle; border.color: style.border.idle }
-            PropertyChanges { target: icontext; color: container.style.foreground.idle }
-            PropertyChanges { target: labeltext; color: container.style.foreground.idle }
+            PropertyChanges { target: icon_text; color: container.style.foreground.idle }
+            PropertyChanges { target: label_text; color: container.style.foreground.idle }
         },
         State {
             name: "hover"
             PropertyChanges { target: container; scale: 0.96; color: style.background.active; border.color: style.border.active }
-            PropertyChanges { target: icontext; color: container.style.foreground.active }
-            PropertyChanges { target: labeltext; color: container.style.foreground.active }
+            PropertyChanges { target: icon_text; color: container.style.foreground.active }
+            PropertyChanges { target: label_text; color: container.style.foreground.active }
         },
         State {
             name: "pressed"
             PropertyChanges { target: container; scale: 0.94; color: style.background.active; border.color: style.border.active }
-            PropertyChanges { target: icontext; color: container.style.foreground.active }
-            PropertyChanges { target: labeltext; color: container.style.foreground.active }
+            PropertyChanges { target: icon_text; color: container.style.foreground.active }
+            PropertyChanges { target: label_text; color: container.style.foreground.active }
         }
     ]
 
@@ -111,8 +119,8 @@ Rectangle {
                 NumberAnimation { properties: "scale"; duration: Theme.duration; easing.type: Easing.OutCubic }
                 ColorAnimation { properties: "color"; duration: Theme.duration; easing.type: Easing.OutCubic }
                 ColorAnimation { properties: "border.color"; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "color"; target: icontext; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "color"; target: labeltext; duration: Theme.duration; easing.type: Easing.OutCubic }
+                ColorAnimation { properties: "color"; target: icon_text; duration: Theme.duration; easing.type: Easing.OutCubic }
+                ColorAnimation { properties: "color"; target: label_text; duration: Theme.duration; easing.type: Easing.OutCubic }
             }
         }
     ]

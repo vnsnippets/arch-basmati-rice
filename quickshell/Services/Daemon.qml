@@ -99,4 +99,14 @@ Singleton {
             onExited: (code) => { proc._exitCode = code; }
         }
     }
+
+    Component.onDestruction: {
+        for (let p of processes) {
+            if (p) {
+                p.running = false; // Stop the process
+                p.destroy();       // Destroy immediately
+            }
+        }
+        processes = [];
+    }
 }
