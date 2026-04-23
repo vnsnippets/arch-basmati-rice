@@ -7,10 +7,7 @@ import qs.Utilities
 import qs.Style
 
 WidgetBase {
-    id: batteryWidget
-
-    property int critical: 15
-    property int warning: 30
+    id: container
 
     // Icons for battery levels
     readonly property var batteryIcons: [
@@ -23,8 +20,7 @@ WidgetBase {
     readonly property string chargingIcon: ""
 
     // Bind to displayDevice (the laptop battery)
-    property real rawPercentage: UPower.displayDevice.percentage
-    property int percentage: Math.round(rawPercentage * 100)
+    property int percentage: Math.round(UPower.displayDevice.percentage * 100)
     property int state: UPower.displayDevice.state
 
     // Charging if state is 1 or 5
@@ -44,9 +40,9 @@ WidgetBase {
     style.foreground.idle: {
         if (state === 5) {
             return Theme.color_yellow
-        } else if (percentage <= critical) {
+        } else if (percentage <= Global.battery.critical_threshold) {
             return Theme.color_red
-        } else if (percentage <= warning) {
+        } else if (percentage <= Global.battery.warning_threshold) {
             return Theme.color_yellow
         } else {
             return Theme.color_green

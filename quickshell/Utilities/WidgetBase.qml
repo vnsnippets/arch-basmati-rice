@@ -39,35 +39,39 @@ Rectangle {
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: Theme.spacing
+        spacing: 0
 
-        Text {
-            id: icon_text
-            text: icon
-            color: container.style.foreground.idle
-            font.pixelSize: Theme.font_size
-            font.family: Theme.font_family
-            visible: text !== ""
-            Layout.margins: 0
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
+        Row {
+            spacing: Theme.spacing
+            Text {
+                id: icon_text
+                text: icon
+                color: container.style.foreground.idle
+                font.pixelSize: Theme.font_size
+                font.family: Theme.font_family
+                visible: text !== ""
+                Layout.margins: 0
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
 
-        Text {
-            id: label_text
-            text: label
-            color: container.style.foreground.idle
-            font.pixelSize: Theme.font_size
-            font.family: Theme.font_family
-            visible: text !== ""
-            Layout.margins: 0
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            Text {
+                id: label_text
+                text: label
+                color: container.style.foreground.idle
+                font.pixelSize: Theme.font_size
+                font.family: Theme.font_family
+                visible: text !== ""
+                Layout.margins: 0
+                Layout.alignment: Qt.AlignVCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         RowLayout {
             id: content_container
-            visible: children.length > 0
+            visible: children.length > 0 && children.some((c) => c.width > 0)
             spacing: Theme.spacing
             Layout.alignment: Qt.AlignVCenter
         }
@@ -76,7 +80,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: interactive ? Qt.PointingHandCursor : Qt.ArrowCursor
+        cursorShape: (interactive) ? Qt.PointingHandCursor : Qt.ArrowCursor
 
         onClicked: if (interactive) container.clicked()
         onDoubleClicked: if (interactive) container.doubleClicked()

@@ -19,7 +19,7 @@ ShellRoot {
         model: Quickshell.screens
 
         PanelWindow {
-            id: taskbar
+            id: status_bar
             property var modelData: modelData
             screen: modelData
 
@@ -36,27 +36,65 @@ ShellRoot {
                 spacing: Theme.spacing
 
                 // --- LEFT: Clock ---
-                Clock { id: clock }
 
-                Item { Layout.fillWidth: true } // Spacer
-
-                // --- MIDDLE: Workspace Dots ---
-                Row {
+                RowLayout {
+                    id: container_left
                     spacing: Theme.spacing
-                    Layout.alignment: Qt.AlignCenter
+                    Clock { 
+                        Layout.alignment: Qt.AlignCenter
+                    }
                 }
 
-                Item { Layout.fillWidth: true }
+                // --- MIDDLE: Workspace Dots ---
+                Rectangle {
+                    readonly property int offset: container_right.width - container_left.width
+
+                    Layout.fillWidth: true
+                    height: status_bar.height
+                    Layout.leftMargin: Math.max(offset, 0)
+                    Layout.rightMargin: Math.max(-offset, 0)
+
+                    color: "transparent"
+
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: Theme.spacing
+                        Layout.alignment: Qt.AlignCenter
+                        Workspaces {
+                            variant: modelData
+                            Layout.alignment: Qt.AlignCenter
+                        }
+                    }
+                }
 
                 // --- RIGHT --- //
                 RowLayout {
+                    id: container_right
                     spacing: Theme.spacing
-                    Network { id: connectivity }
-                    Volume { id: audio }
-                    Battery { id: battery }
-                    Profile { id: mode }
-                    Caffeine { id: caffeine }
-                    Power { id: shutdown }
+                    
+                    Network {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    
+                    Volume {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    
+                    Battery {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    
+                    Profile {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    
+                    Caffeine {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    
+                    Power {
+                        Layout.alignment: Qt.AlignCenter
+                    }
                 }
             }
         }

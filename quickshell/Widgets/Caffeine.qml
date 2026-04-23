@@ -8,31 +8,30 @@ import qs.Utilities
 import qs.Services
 
 WidgetBase {
-    id: widget
+    id: container
 
-    property var state: StateProvider.caffeine_widget
-    readonly property bool active: state.prevent_lock_process !== null
+    readonly property bool active: Global.process.prevent_lock !== null
 
     // (Active: True)   - Caffeine active (System won't lock)
     // (Active: False)  - Auto-lock is active (System will lock)
     icon: (active) ? "" : ""
-    label: (active) ? `[${state.prevent_lock_process.processId}]` : ""
+    label: (active) ? `[${Global.process.prevent_lock.processId}]` : ""
     style.foreground.idle: (active) ? Theme.color_red : Theme.color_green
     
     onClicked: () => {
         if (active) {
-            state.prevent_lock_process.running = false;
-            state.prevent_lock_process = null;
+            Global.process.prevent_lock.running = false;
+            Global.process.prevent_lock = null;
         } else {
             // Start and save the reference
             var cmd = ["systemd-inhibit", "--what=idle", "sleep", "infinity"]
-            state.prevent_lock_process = Daemon.execute(cmd);
+            Global.process.prevent_lock = Daemon.execute(cmd);
 
             // Process dies unexpectedly (crashes), reset our state
-            state.prevent_lock_process.runningChanged.connect(() => {
-                if (state.prevent_lock_process && !state.prevent_lock_process.running) {
-                    state.prevent_lock_process.running = false;
-                    state.prevent_lock_process = null;
+            Global.process.prevent_lock.runningChanged.connect(() => {
+                if (Global.process.prevent_lock && !Global.process.prevent_lock.running) {
+                    Global.process.prevent_lock.running = false;
+                    Global.process.prevent_lock = null;
                 }
             });
         }

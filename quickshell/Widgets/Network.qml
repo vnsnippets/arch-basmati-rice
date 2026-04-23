@@ -22,86 +22,166 @@ import qs.Utilities
 *        • Offline but retrying connections in background
 *
 * Icons and colors vary based on state changes and ongoing actions
-* "" "" "" "" "󰑓"
+*     󰑓  
+*
+* Device Types
+* | Value | Constant Name | Description                                      |
+* | ----- | ------------- | ------------------------------------------------ |
+* | 0     | UNKNOWN       | Unknown device type.                             |
+* | 1     | ETHERNET      | Standard wired Ethernet device.                  |
+* | 2     | WIFI          | 802.11 Wi-Fi device.                             |
+* | 3     | UNUSED1       | Unused (historically related to old hardware).   |
+* | 4     | UNUSED2       | Unused (historically related to old hardware).   |
+* | 5     | BT            | Bluetooth device (PAN/DUN).                      |
+* | 6     | OLPC_MESH     | OLPC Mesh networking (802.11s).                  |
+* | 7     | WIMAX         | WiMAX device.                                    |
+* | 8     | MODEM         | Mobile broadband modem (GSM, CDMA, LTE, 5G).     |
+* | 9     | INFINIBAND    | InfiniBand network device.                       |
+* | 10    | BOND          | Bonded interface (software aggregation).         |
+* | 11    | VLAN          | 802.1Q VLAN interface.                           |
+* | 12    | ADSL          | ADSL modem.                                      |
+* | 13    | BRIDGE        | Software bridge device.                          |
+* | 14    | GENERIC       | Generic device (unrecognized by NM but visible). |
+* | 15    | TEAM          | Teamed interface (similar to bonding).           |
+* | 16    | TUN           | TUN/TAP virtual interface.                       |
+* | 17    | IP_TUNNEL     | IP tunnel (GRE, IPIP, SIT, etc.).                |
+* | 18    | MACVLAN       | MACVLAN interface.                               |
+* | 19    | VXLAN         | VXLAN interface.                                 |
+* | 20    | VETH          | Virtual Ethernet pair.                           |
+* | 21    | MACSEC        | MACsec (IEEE 802.1AE) interface.                 |
+* | 22    | DUMMY         | Dummy/loopback-style software interface.         |
+* | 23    | PPP           | PPP interface (Point-to-Point).                  |
+* | 24    | OVS_INTERFACE | Open vSwitch interface.                          |
+* | 25    | OVS_PORT      | Open vSwitch port.                               |
+* | 26    | OVS_BRIDGE    | Open vSwitch bridge.                             |
+* | 27    | WPAN          | IEEE 802.15.4 (Low-Rate Wireless PAN).           |
+* | 28    | 6LOWPAN       | 6LoWPAN interface.                               |
+* | 29    | WIREGUARD     | WireGuard VPN interface.                         |
+* | 30    | WIFI_P2P      | Wi-Fi Direct (P2P) device.                       |
+* | 31    | VRF           | Virtual Routing and Forwarding interface.        |
+* | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
 WidgetBase {
-    id: widget
+    id: container
 
-    readonly property QtObject state: StateProvider.network_widget
-
-    property int critical_threshold: 25
+    readonly property int critical_threshold: 25
     readonly property int degraded_threshold: 60
-    readonly property int recency_threshold : 2592000 // 30 days
+    readonly property int recency_threshold : 2592000 // 15 days
 
     readonly property int strength_levels: 5
 
     readonly property int global_offline_index: 40
-
-    property int global_state_index: NetworkMonitor.GlobalState ?? 0
-    property var active_device: NetworkMonitor.ActiveDevice
-    property var active_access_point: NetworkMonitor.ActiveAccessPoint
+    readonly property int global_online_index: 70
 
     readonly property var ui: {
-        return (() => {
-            switch (global_state_index) {
-                case 10: return { icon: "", label: "Asleep", color: Theme.color_slate };
-                case 20: return { icon: "", label: "Disconnected", color: Theme.color_slate };
-                case 30: return { icon: "", label: "Disconnecting", color: Theme.color_yellow };
-                case 40: return { icon: "", label: "Connecting", color: Theme.color_yellow };
-                case 50: return { icon: "", label: "Limited (Site)", color: Theme.color_green };
-                case 60: return { icon: "", label: `${active_access_point.Ssid} (Limited)`, color: Theme.color_blue };
-                case 70: 
-                    const e = { 
-                        icon: "", 
-                        label: active_access_point.Ssid, 
-                        color: Theme.color_red
-                    };
-                    const _strength = active_access_point?.Strength;
-                    if (!_strength) return e;
-                    
-                    e.color = 
-                        (_strength < critical_threshold) ? Theme.color_red 
-                            : (_strength < degraded_threshold) ? Theme.color_yellow 
+        switch (NetworkMonitor.GlobalState) {
+            case 10: return { icon: "", label: "Asleep", color: Theme.color_slate };
+            case 20: return { icon: "", label: "Disconnected", color: Theme.color_slate };
+            case 30: return { icon: "", label: "Disconnecting", color: Theme.color_yellow };
+            case 40: return { icon: "", label: "Connecting", color: Theme.color_yellow };
+            case 50: return { icon: "", label: "Limited (Site)", color: Theme.color_green };
+            case 60: return { icon: "", label: `${NetworkMonitor.ActiveAccessPoint.Ssid} (Limited)`, color: Theme.color_blue };
+            case 70: 
+                const _strength = NetworkMonitor.ActiveAccessPoint?.Strength;
+                const baseColor = (!_strength || _strength < critical_threshold) ? Theme.color_red 
+                                : (_strength < degraded_threshold) ? Theme.color_yellow 
                                 : Theme.color_green;
-                    return e;
-                default: return { icon: "", label: "Unknown", color: Theme.color_red };
-            }
-        })();
+                return { 
+                    icon: "", 
+                    label: NetworkMonitor.ActiveAccessPoint?.Ssid || "Unknown", 
+                    color: baseColor
+                };
+            default: return { icon: "", label: "Unknown", color: Theme.color_red };
+        }
     }
 
-    icon: state.scan_with_stopwatch?.running ? "󰑓" : ui.icon
-    label: ui.label
+    icon: Global.stopwatch.scan_networks?.running ? "󰑓" : ui.icon
+    label: `${ui.label}`
     style.foreground.idle: ui.color
 
     Row {
+        id: strength_row
         spacing: 2
-        Layout.leftMargin: 1 // The "break" from the label
-        Layout.alignment: Qt.AlignVCenter
+        Layout.leftMargin: Theme.spacing
+
         Repeater {
             id: strength_meter_container
             model: strength_levels
+            
             Rectangle {
-                width: 4
-                height: 12
+                id: strength_bar
+
+                readonly property int animation_duration: 150
+                readonly property bool is_online: NetworkMonitor.GlobalState === global_online_index
+                readonly property bool is_active: NetworkMonitor.ActiveAccessPoint?.Strength > (index * 100/strength_levels)
+                readonly property bool is_scanning: Global.stopwatch.scan_networks?.running ?? false
+                
                 radius: 2
-                color: (state.scan_with_stopwatch?.running) ? Theme.color_slate : 
-                    (active_access_point?.Strength > (index * 100/strength_levels)) ? ui.color : Theme.color_slate
-                opacity: (active_access_point.Strength > (index * 100/strength_levels)) ? 1.0 : 0.3
+
+                height: 12
+                width: 0     // Start at 0
+                opacity: (is_active ? 1.0 : 0.3) 
+
+                clip: true
+
+                color: (!NetworkMonitor.ActiveAccessPoint || is_scanning) ? Theme.color_slate : is_active ? ui.color : Theme.color_slate
+                
+                states: [
+                    State {
+                        name: "visible"
+                        when: strength_bar.is_online
+                        PropertyChanges { target: strength_bar; width: 4; }
+                    },
+                    State {
+                        name: "hidden"
+                        when: !strength_bar.is_online
+                        PropertyChanges { target: strength_bar; width: 0; }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "hidden"; to: "visible"
+                        SequentialAnimation {
+                            PauseAnimation { duration: (index * animation_duration + animation_duration) } // The Stagger
+                            ParallelAnimation {
+                                NumberAnimation { properties: "width"; duration: 0; easing.type: Easing.OutBack }
+                                // NumberAnimation { property: "opacity"; duration: 400 }
+                            }
+                        }
+                    },
+                    Transition {
+                        from: "visible"; to: "hidden"
+                        SequentialAnimation {
+                            // Reverse stagger: last bar disappears first
+                            PauseAnimation { duration: (strength_levels - index) * animation_duration } 
+                            ParallelAnimation {
+                                NumberAnimation { properties: "width"; duration: 0; easing.type: Easing.InBack }
+                                // NumberAnimation { property: "opacity"; duration: 200 }
+                            }
+                        }
+                    }
+                ]
+
+                // Maintain color reactivity while visible
                 Behavior on color { ColorAnimation { duration: Theme.duration } }
-                Behavior on opacity { NumberAnimation { duration: Theme.duration } }
             }
         }
     }
 
     onClicked: () => {
-        if (global_state_index > global_offline_index) {
-            active_device && active_device.DevicePath && NetworkControl.DisconnectDevice(active_device.DevicePath);
+        if (NetworkMonitor.GlobalState > global_offline_index) {
+            NetworkMonitor.ActiveDevice && NetworkMonitor.ActiveDevice.DevicePath && NetworkControl.DisconnectDevice(NetworkMonitor.ActiveDevice.DevicePath);
         } else {
+            if (Global.stopwatch?.scan_networks?.running) return;
+
+            Global.stopwatch.scan_networks = Stopwatch.create(container);
+
             const _devices = NetworkControl.GetAllDevices();
             const _network_device = _devices.find((e) => e.DeviceType === 2) ?? _devices.find((e) => e.DeviceType === 30);
 
-            state.scan_with_stopwatch.begin(2000, () => {
+            Global.stopwatch.scan_networks.begin(2000, () => {
                 const _known_networks = NetworkControl.GetKnownNetworksInRange(_network_device.DevicePath);
                 _known_networks.sort((a, b) => {
                     // 1. Primary: Always prioritize Saved networks over guest/random ones
@@ -141,10 +221,6 @@ WidgetBase {
 
     Connections {
         target: NetworkMonitor
-        function onScanFinished() { state.scan_with_stopwatch.end(); }
-    }
-
-    Component.onCompleted: () => {
-        widget.state.scan_with_stopwatch =  Stopwatch.create(widget);
+        function onScanFinished() { Global.stopwatch.scan_networks.end(); }
     }
 }

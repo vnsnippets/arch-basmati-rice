@@ -5,7 +5,7 @@ import qs
 import qs.Utilities
 
 WidgetBase {
-    id: clockWidget
+    id: container
 
     property string format: "yyyy-MM-dd HH:mm:ss"
 
