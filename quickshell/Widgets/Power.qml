@@ -6,7 +6,7 @@ import qs
 import qs.Utilities
 import qs.Services
 
-WidgetBase {
+Widget {
     id: widget
     icon: ""
 

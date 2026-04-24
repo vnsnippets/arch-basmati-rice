@@ -62,7 +62,7 @@ import qs.Utilities
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-WidgetBase {
+Widget {
     id: container
 
     readonly property int critical_threshold: 25
@@ -89,6 +89,7 @@ WidgetBase {
                                 : Theme.color_green;
                 return { 
                     icon: "", 
+                    // label: `${NetworkMonitor.ActiveAccessPoint?.Ssid} (${_strength}%)` || "Unknown", 
                     label: NetworkMonitor.ActiveAccessPoint?.Ssid || "Unknown", 
                     color: baseColor
                 };

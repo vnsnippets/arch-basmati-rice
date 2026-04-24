@@ -7,7 +7,7 @@ import qs
 import qs.Utilities
 import qs.Services
 
-WidgetBase {
+Widget {
     id: container
 
     readonly property bool active: Global.process.prevent_lock !== null

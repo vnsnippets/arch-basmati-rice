@@ -60,10 +60,29 @@ ShellRoot {
                         anchors.fill: parent
                         spacing: Theme.spacing
                         Layout.alignment: Qt.AlignCenter
-                        Workspaces {
-                            variant: modelData
-                            Layout.alignment: Qt.AlignCenter
+
+                        Item { Layout.fillWidth: true }
+
+                        Repeater {
+                            model: 9
+
+                            Widget {
+                                property var workspace: Hyprland.workspaces.values.find(ws => ws.id === index + 1) ?? null
+                                property bool is_active: Hyprland.focusedWorkspace?.id === (index + 1)
+                                property bool has_windows: workspace !== null
+
+                                Layout.preferredHeight: 24
+                                implicitWidth: is_active ? 40 : 24
+
+                                radius: 20
+                                visible: has_windows
+                                style.border.idle: Theme.color_light
+
+                                onClicked: Hyprland.dispatch("workspace " + (index + 1))
+                            }
                         }
+
+                        Item { Layout.fillWidth: true }
                     }
                 }
 

@@ -6,7 +6,7 @@ import qs
 import qs.Utilities
 import qs.Style
 
-WidgetBase {
+Widget {
     id: container
 
     // Icons

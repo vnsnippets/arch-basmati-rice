@@ -5,7 +5,7 @@ import Quickshell.Io
 import qs
 import qs.Utilities
 
-WidgetBase {
+Widget {
     id: container
     readonly property string defaultIncrement: "+5%"
     readonly property string defaultDecrement: "-5%"

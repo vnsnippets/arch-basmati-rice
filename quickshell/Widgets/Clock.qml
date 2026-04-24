@@ -4,7 +4,7 @@ import Quickshell
 import qs
 import qs.Utilities
 
-WidgetBase {
+Widget {
     id: container
 
     property string format: "yyyy-MM-dd HH:mm:ss"

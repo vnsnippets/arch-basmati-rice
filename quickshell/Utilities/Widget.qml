@@ -32,9 +32,11 @@ Rectangle {
     border.color: style.border.idle
     border.width: Theme.border
     radius: height / Theme.roundness
-    Layout.preferredHeight: Theme.size
-    implicitWidth: label === "" ? Theme.size : content.width + Theme.padding
     width: implicitWidth
+
+    implicitWidth: label === "" ? Theme.size : content.width + Theme.padding
+
+    Layout.preferredHeight: Theme.size
 
     RowLayout {
         id: content
