@@ -3,10 +3,9 @@ import Quickshell
 import Quickshell.Services.UPower
 
 import qs
-import qs.Utilities
 import qs.Style
 
-Widget {
+Base {
     id: container
 
     // Icons for battery levels

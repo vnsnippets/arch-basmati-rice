@@ -7,11 +7,10 @@ import NetworkMonitorPlugin
 import qs
 import qs.Style
 import qs.Services
-import qs.Utilities
 
 /**
 * Network.qml
-* Status bar widget for network information and quick actions
+* Status bar Base for network information and quick actions
 *
 * States:
 *   • Connected to internet via wired connection
@@ -62,7 +61,7 @@ import qs.Utilities
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-Widget {
+Base {
     id: container
 
     readonly property int critical_threshold: 25

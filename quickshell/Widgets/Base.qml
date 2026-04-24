@@ -41,10 +41,10 @@ Rectangle {
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: 0
 
-        Row {
+        RowLayout {
             spacing: Theme.spacing
+
             Text {
                 id: icon_text
                 text: icon

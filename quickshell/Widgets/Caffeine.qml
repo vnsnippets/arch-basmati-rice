@@ -4,10 +4,9 @@ import Quickshell
 import Quickshell.Io
 
 import qs
-import qs.Utilities
 import qs.Services
 
-Widget {
+Base {
     id: container
 
     readonly property bool active: Global.process.prevent_lock !== null

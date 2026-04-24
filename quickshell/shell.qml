@@ -9,7 +9,6 @@ import Quickshell.Services.UPower
 import Quickshell.Widgets
 
 import qs
-import qs.Utilities
 import qs.Widgets
 
 ShellRoot {
@@ -66,7 +65,7 @@ ShellRoot {
                         Repeater {
                             model: 9
 
-                            Widget {
+                            Base {
                                 property var workspace: Hyprland.workspaces.values.find(ws => ws.id === index + 1) ?? null
                                 property bool is_active: Hyprland.focusedWorkspace?.id === (index + 1)
                                 property bool has_windows: workspace !== null
@@ -76,7 +75,7 @@ ShellRoot {
 
                                 radius: 20
                                 visible: has_windows
-                                style.border.idle: Theme.color_light
+                                style.border.idle: Theme.color_slate
 
                                 onClicked: Hyprland.dispatch("workspace " + (index + 1))
                             }

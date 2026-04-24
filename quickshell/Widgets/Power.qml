@@ -3,10 +3,9 @@ import Quickshell
 import Quickshell.Io
 
 import qs
-import qs.Utilities
 import qs.Services
 
-Widget {
+Base {
     id: widget
     icon: ""
 

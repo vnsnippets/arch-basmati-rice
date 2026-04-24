@@ -3,9 +3,8 @@ import Quickshell
 import Quickshell.Io
 
 import qs
-import qs.Utilities
 
-Widget {
+Base {
     id: container
     readonly property string defaultIncrement: "+5%"
     readonly property string defaultDecrement: "-5%"
