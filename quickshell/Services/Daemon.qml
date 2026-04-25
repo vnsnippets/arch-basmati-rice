@@ -5,20 +5,17 @@ import Quickshell
 import Quickshell.Io
 
 Singleton {
-    id: command
+    id: daemon_container
 
     property var processes: []
 
     function execute(args, callback) {
-        const p = _shell.createObject(command, {
+        const p = _shell.createObject(daemon_container, {
             "command":  args,
-            "callbackHandle": callback 
+            "callbackHandle": callback
         });
 
-        let current = processes;
-        current.push(p);
-        processes = current;
-
+        processes.push(p);
         p.running = true;
         return p;
     }
@@ -40,17 +37,16 @@ Singleton {
 
             onExited: (code) => { _exitCode = code; }
 
-            // Using the signal handler instead of .connect() in the singleton
             onRunningChanged: {
                 if (running) return;
 
                 // 1. Remove from parent list safely
-                if (command) {
-                    let list = command.processes;
+                if (daemon_container) {
+                    let list = daemon_container.processes;
                     const idx = list.indexOf(proc);
                     if (idx >= 0) {
                         list.splice(idx, 1);
-                        command.processes = list;
+                        daemon_container.processes = list;
                     }
                 }
 
@@ -65,7 +61,6 @@ Singleton {
                     callbackHandle(result, _exitCode);
                 }
 
-                // 3. Immediate destruction - NEVER use destroy(100) in Quickshell
                 proc.destroy(); 
             }
         }
