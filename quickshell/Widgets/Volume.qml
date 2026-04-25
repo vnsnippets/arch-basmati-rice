@@ -54,7 +54,5 @@ Base {
         throttle_timer.restart();
     }
 
-    Component.onCompleted: () => {
-        console.log(JSON.stringify(Pipewire.defaultAudioSink));
-    }
+    Component.onCompleted: () => {}
 }
