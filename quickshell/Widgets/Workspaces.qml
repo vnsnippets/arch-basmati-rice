@@ -15,33 +15,28 @@ RowLayout {
     Layout.alignment: Qt.AlignCenter
 
     property var screen: null
+    readonly property var allWindows: Hyprland.toplevels.values
 
     Item { Layout.fillWidth: true }
 
     Repeater {
-        model: 9
-        // model: Hyprland.workspaces.values
+        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === screen?.name).sort((a, b) => a.id - b.id);
 
         Base {
-            // required property var modelData
-
-            property var workspace: Hyprland.workspaces.values.find(ws => ws.id === index + 1) ?? null
-            property bool is_active: Hyprland.focusedWorkspace?.id === (index + 1)
-            property bool has_windows: workspace !== null
-
-
-            // Access properties directly from the Hyprland Workspace object
-            // readonly property bool is_active: Hyprland.focusedWorkspace?.id === modelData.id
-            // readonly property bool has_windows: modelData.windows > 0
+            id: dot
+            required property var modelData
+            readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData.id
+            readonly property bool hasWindows: allWindows.some((e) => e.workspace.id === modelData.id)
 
             Layout.preferredHeight: 24
-            implicitWidth: (is_active) ? 40 : 24
+            implicitWidth: (isActive) ? 40 : 24
             radius: 20
 
-            visible: has_windows || is_active
-            style.border.idle: (is_active) ? Theme.color_light : Theme.color_dark
+            onClicked: modelData.activate()
 
-            onClicked: Hyprland.dispatch(`workspace ${modelData.id}`)
+            Behavior on implicitWidth {
+                NumberAnimation { duration: 200; easing.type: Easing.OutQuint }
+            }
         }
     }
 

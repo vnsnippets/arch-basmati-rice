@@ -1,4 +1,6 @@
 import QtQuick
 import Quickshell
 
-ShellRoot { Index { id: root } }
+ShellRoot {
+    Index { id: root }
+}
