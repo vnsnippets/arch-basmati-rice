@@ -41,34 +41,31 @@ Rectangle {
     RowLayout {
         id: content
         anchors.centerIn: parent
+        spacing: Theme.spacing
 
-        RowLayout {
-            spacing: Theme.spacing
+        Text {
+            id: icon_text
+            text: icon
+            color: container.style.foreground.idle
+            font.pixelSize: Theme.font_size
+            font.family: Icons.nerd
+            visible: text !== ""
+            Layout.margins: 0
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
 
-            Text {
-                id: icon_text
-                text: icon
-                color: container.style.foreground.idle
-                font.pixelSize: Theme.font_size
-                font.family: Theme.font_family
-                visible: text !== ""
-                Layout.margins: 0
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Text {
-                id: label_text
-                text: label
-                color: container.style.foreground.idle
-                font.pixelSize: Theme.font_size
-                font.family: Theme.font_family
-                visible: text !== ""
-                Layout.margins: 0
-                Layout.alignment: Qt.AlignVCenter
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
+        Text {
+            id: label_text
+            text: label
+            color: container.style.foreground.idle
+            font.pixelSize: Theme.font_size
+            font.family: Theme.font_family
+            visible: text !== ""
+            Layout.margins: 0
+            Layout.alignment: Qt.AlignVCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
         }
 
         RowLayout {
