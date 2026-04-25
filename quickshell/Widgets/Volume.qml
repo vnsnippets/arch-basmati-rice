@@ -1,87 +1,60 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Pipewire
 
 import qs
+import qs.Services
 
 Base {
     id: container
-    readonly property string defaultIncrement: "+5%"
-    readonly property string defaultDecrement: "-5%"
 
-    property int volume: 0
-    property bool isMuted: false
-    property bool changeLocked: false
+    readonly property real increment_diff: 0.05
+    property bool change_lock: false
 
-    // Helper function to safely restart a process
-    function execute(proc) {
-        proc.running = false;
-        proc.running = true;
-    }
-
-    Process {
-        id: eventListener
-        command: ["pactl", "subscribe"]
-        running: true
-        stdout: SplitParser {
-            onRead: (data) => {
-                if (String(data).includes("sink")) {
-                    execute(volFetcher);
-                    execute(muteFetcher);
-                }
-            }
-        }
-    }
-
-    Process {
-        id: volFetcher
-        command: ["sh", "-c", "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1"]
-        stdout: SplitParser { onRead: (data) => volume = parseInt(String(data).trim()) }
-    }
-
-    Process {
-        id: muteFetcher
-        command: ["pactl", "get-sink-mute", "@DEFAULT_SINK@"]
-        stdout: SplitParser { onRead: (data) => isMuted = String(data).includes("yes") }
-    }
-
-    Process { id: volUp; command: ["pactl", "set-sink-volume", "@DEFAULT_SINK@", defaultIncrement] }
-    Process { id: volDown; command: ["pactl", "set-sink-volume", "@DEFAULT_SINK@", defaultDecrement] }
-    Process { id: muteToggler; command: ["pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle"] }
-    Process { id: mixerLauncher; command: ["pavucontrol"] }
-
-    // Timer locks volume change
-    // Prevents race conditions when changing too fast
     Timer {
-        id: throttleTimer
+        id: throttle_timer
         interval: 50 
-        onTriggered: container.changeLocked = false
+        onTriggered: container.change_lock = false
     }
 
-    Component.onCompleted: {
-        execute(volFetcher);
-        execute(muteFetcher);
+    PwObjectTracker {
+        objects: [Pipewire.defaultAudioSink]
     }
-
-    // Style: Idle
-    style.foreground.idle: Theme.color_teal
     
-    icon: isMuted ? "" : ""
-    label: volume + "%"
+    icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
+    // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
+    label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
+    style.foreground.idle: Pipewire?.defaultAudioSink?.audio ? Theme.color_teal : Theme.color_slate
 
-    onClicked: execute(muteToggler)
-    onDoubleClicked: execute(mixerLauncher)
+    onClicked: () => {
+        Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
+    }
+
+    onDoubleClicked: Daemon.execute(["pavucontrol"])
+
     onScrolled: (event) => {
-        if (changeLocked) return;
+        if (change_lock || !Pipewire.defaultAudioSink?.audio) return;
 
-        if (event.angleDelta.y > 0 && volume < 100) {
-            changeLocked = true;
-            execute(volUp);
-            throttleTimer.start();
-        } else if (event.angleDelta.y < 0) {
-            changeLocked = true;
-            execute(volDown);
-            throttleTimer.start();
+        change_lock = true;
+        let current_vol = Pipewire.defaultAudioSink.audio.volume;
+        let updated_vol = current_vol;
+
+        // Use a small epsilon or Math.min/max to prevent overshooting
+        if (event.angleDelta.y > 0) {
+            updated_vol = Math.min(1.0, current_vol + increment_diff);
+        } else {
+            updated_vol = Math.max(0.0, current_vol - increment_diff);
         }
+
+        if (Math.abs(updated_vol - current_vol) > 0.001) {
+            Pipewire.defaultAudioSink.audio.volume = updated_vol;
+        }
+        
+        throttle_timer.restart();
+    }
+
+    Component.onCompleted: () => {
+        console.log(JSON.stringify(Pipewire.defaultAudioSink));
     }
 }
