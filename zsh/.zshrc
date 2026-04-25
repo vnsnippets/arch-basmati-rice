@@ -1,4 +1,4 @@
-HISTFILE=~/.zsh_history
+HISTFILE=$HOME/.config/zsh/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -e
@@ -74,7 +74,7 @@ done
 export EDITOR="/usr/bin/nano"
 
 # Inline auto-suggestion
-source $HOME/.config/zsh/auto-suggestion.zsh
+source $HOME/.config/zsh/suggestion.zsh
 
 # Starship
 eval "$(starship init zsh)"

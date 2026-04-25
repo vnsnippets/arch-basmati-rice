@@ -20,13 +20,13 @@ RowLayout {
     Item { Layout.fillWidth: true }
 
     Repeater {
-        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === screen?.name).sort((a, b) => a.id - b.id);
-
+        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === screen?.name).sort((a, b) => a.id - b.id) ?? []
+        
         Base {
             id: dot
             required property var modelData
-            readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData.id
-            readonly property bool hasWindows: allWindows.some((e) => e.workspace.id === modelData.id)
+            readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData?.id ?? false
+            readonly property bool hasWindows: allWindows.some((e) => e.workspace?.id === modelData?.id) ?? false
 
             Layout.preferredHeight: 24
             implicitWidth: (isActive) ? 40 : 24

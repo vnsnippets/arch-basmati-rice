@@ -79,3 +79,5 @@ compile_commands.json
 
 */**/Plugins
 .shell.debug
+.zsh_history
+.zcompdump
