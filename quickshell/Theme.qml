@@ -4,7 +4,7 @@ import QtQuick
 
 QtObject {
     readonly property int font_size: 14
-    readonly property string font_family: "Noto Sans Nerd Font"
+    readonly property string font_family: "Noto Sans"
 
     // readonly property color color_dark: '#2e3244'
     readonly property color color_dark: '#1a1d2a'
