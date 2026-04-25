@@ -1,6 +1,7 @@
 import QtQuick
 
 import qs
+import qs.Utilities
 
 QtObject {
     property ClickableColorStyle background: ClickableColorStyle {
@@ -14,7 +15,7 @@ QtObject {
     }
 
     property ClickableColorStyle border: ClickableColorStyle {
-        idle: Theme.color_slate
+        idle: Theme.color_dark
         active: Theme.color_light
     }
 }

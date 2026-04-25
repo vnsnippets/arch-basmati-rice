@@ -2,18 +2,16 @@ import QtQuick
 import Quickshell
 
 import qs
+import qs.Utilities
 
 Base {
     id: container
 
-    property string format: "yyyy-MM-dd HH:mm:ss"
-
-    style.foreground.idle: Theme.color_light
-    style.border.idle: Theme.color_slate
+    property string format: "yyyy-MM-dd HH:mm"
 
     SystemClock {
         id: clock
-        precision: SystemClock.Seconds
+        precision: SystemClock.Minutes
     }
 
     label: Qt.formatDateTime(clock.date, format)

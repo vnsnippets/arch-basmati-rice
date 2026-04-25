@@ -4,7 +4,8 @@ import Quickshell
 import Quickshell.Widgets
 
 import qs
-import qs.Style
+import qs.Styles
+import qs.Utilities
 
 Rectangle {
     id: container
@@ -36,6 +37,7 @@ Rectangle {
 
     implicitWidth: label === "" ? Theme.size : content.width + Theme.padding
 
+    Layout.alignment: Qt.AlignCenter
     Layout.preferredHeight: Theme.size
 
     RowLayout {

@@ -3,7 +3,8 @@ import Quickshell
 import Quickshell.Services.UPower
 
 import qs
-import qs.Style
+import qs.Styles
+import qs.Utilities
 
 Base {
     id: container

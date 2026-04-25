@@ -4,9 +4,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-import qs
-import qs.Services
-
 Singleton {
     id: dataprovider
     

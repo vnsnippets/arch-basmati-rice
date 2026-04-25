@@ -4,7 +4,7 @@ import QtQuick
 Item {
     FontLoader {
         id: solar_bold_ttf
-        source: "./Assets/Solar-Bold-Icons.ttf"
+        source: "../Assets/Solar-Bold-Icons.ttf"
     }
 
     readonly property string nerd: "Symbols Nerd Font"

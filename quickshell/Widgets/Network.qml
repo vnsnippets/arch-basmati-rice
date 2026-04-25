@@ -5,8 +5,8 @@ import Quickshell
 import NetworkMonitorPlugin
 
 import qs
-import qs.Style
-import qs.Services
+import qs.Styles
+import qs.Utilities
 
 /**
 * Network.qml

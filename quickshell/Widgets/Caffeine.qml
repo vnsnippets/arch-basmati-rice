@@ -4,16 +4,16 @@ import Quickshell
 import Quickshell.Io
 
 import qs
-import qs.Services
+import qs.Utilities
 
 Base {
     id: container
 
     readonly property bool active: Global.process.prevent_lock !== null
 
-    // (Active: True)   - Caffeine active (System won't lock)
-    // (Active: False)  - Auto-lock is active (System will lock)
-    icon: (active) ? "" : ""
+    // (Active: True)   - Caffeine active (System won't lock)
+    // (Active: False)  - Auto-lock is active (System will lock)
+    icon: (active) ? "" : ""
     label: (active) ? `[${Global.process.prevent_lock.processId}]` : ""
     style.foreground.idle: (active) ? Theme.color_red : Theme.color_green
     

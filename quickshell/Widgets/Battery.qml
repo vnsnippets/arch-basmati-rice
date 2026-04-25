@@ -3,7 +3,8 @@ import Quickshell
 import Quickshell.Services.UPower
 
 import qs
-import qs.Style
+import qs.Styles
+import qs.Utilities
 
 Base {
     id: container
@@ -37,7 +38,7 @@ Base {
 
     // Style logic
     style.foreground.idle: {
-        if (state === 5) {
+        if (charging) {
             return Theme.color_yellow
         } else if (percentage <= Global.battery.critical_threshold) {
             return Theme.color_red

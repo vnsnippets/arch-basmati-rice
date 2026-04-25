@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Io
 
 import qs
-import qs.Services
+import qs.Utilities
 
 Base {
     id: widget

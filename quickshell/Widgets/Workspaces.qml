@@ -2,30 +2,48 @@ import QtQuick
 import QtQuick.Layouts
 
 import Quickshell
-import Quickshell.Io
-import Quickshell.Wayland
 import Quickshell.Hyprland
 
 import qs
+import qs.Utilities
 
- Repeater {
+RowLayout {
     id: container
-    model: 9
 
-    Layout.preferredWidth: parent.width
-    Layout.preferredHeight: parent.height
+    anchors.fill: parent
+    spacing: Theme.spacing
+    Layout.alignment: Qt.AlignCenter
 
-    readonly property int default_size: 12
-    readonly property int active_size:  24
+    property var screen: null
 
-    property var workspace: null;
-    property var is_active: null;
+    Item { Layout.fillWidth: true }
 
-    Base {
-        height: default_size
-        width: variant.active ? active_size : default_size
-        radius: default_size/2
+    Repeater {
+        model: 9
+        // model: Hyprland.workspaces.values
 
-        onClicked: Hyprland.dispatch("workspace " + (index + 1))
+        Base {
+            // required property var modelData
+
+            property var workspace: Hyprland.workspaces.values.find(ws => ws.id === index + 1) ?? null
+            property bool is_active: Hyprland.focusedWorkspace?.id === (index + 1)
+            property bool has_windows: workspace !== null
+
+
+            // Access properties directly from the Hyprland Workspace object
+            // readonly property bool is_active: Hyprland.focusedWorkspace?.id === modelData.id
+            // readonly property bool has_windows: modelData.windows > 0
+
+            Layout.preferredHeight: 24
+            implicitWidth: (is_active) ? 40 : 24
+            radius: 20
+
+            visible: has_windows || is_active
+            style.border.idle: (is_active) ? Theme.color_light : Theme.color_dark
+
+            onClicked: Hyprland.dispatch(`workspace ${modelData.id}`)
+        }
     }
+
+    Item { Layout.fillWidth: true }
 }
