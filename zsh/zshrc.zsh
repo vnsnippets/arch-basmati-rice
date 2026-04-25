@@ -53,13 +53,17 @@ command_not_found_handler () {
 }
 
 # Keybindings
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey "^[[1~" beginning-of-line
-bindkey "^[[4~" end-of-line
-bindkey "^[[3~" delete-char
+bindkey "^[[1;5C" forward-word       # Ctrl + Right Arrow: Jump a word forward
+bindkey "^[[1;5D" backward-word      # Ctrl + Left Arrow: Jump a word backward
+bindkey "^[[H" beginning-of-line     # Home: Jump to start of line
+bindkey "^[[1~" beginning-of-line    # Home (Alternative Code): Jump to start of line
+bindkey "^[[F" end-of-line           # End: Jump to end of line
+bindkey "^[[4~" end-of-line          # End (Alternative Code): Jump to end of line
+bindkey "^[[3~" delete-char          # Delete: Delete character in front of cursor
+bindkey '^H' backward-kill-word      # Ctrl + Backspace: Delete a segment
+bindkey "^[[3;5~" kill-word          # Ctrl + Delete: Delete word in front of cursor
+bindkey "^H" backward-kill-line      # Ctrl + Shift + Backspace: Delete to start of line
+bindkey "^[[3;6~" kill-line               # Ctrl + Shift + Delete: Delete to end of line
 
 # Auto-load aliases
 for aliases_file in $(\ls -a $HOME | \grep -E "\.aliases.*\.zsh"); do
