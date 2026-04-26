@@ -12,6 +12,9 @@ Base {
     readonly property real increment_diff: 0.05
     property bool change_lock: false
 
+    property color color_inactive: null
+    property color color_default: null
+
     Timer {
         id: throttle_timer
         interval: 50 
@@ -25,7 +28,7 @@ Base {
     icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
     label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
-    style.text.idle: Pipewire?.defaultAudioSink?.audio ? Theme.color_teal : Theme.color_slate
+    style.text.idle: Pipewire?.defaultAudioSink?.audio ? color_default : color_inactive
 
     onClicked: () => {
         Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;

@@ -4,33 +4,37 @@ import Quickshell
 import Quickshell.Io
 
 import qs
+import qs.Styles
 import qs.Utilities
 
 Base {
     id: container
 
-    readonly property bool active: Global.process.prevent_lock !== null
+    readonly property bool active: Context.process.prevent_screen_lock !== null
+
+    property color color_caffeineon: DefaultStyle.color_red
+    property color color_caffeineoff: DefaultStyle.color_light
 
     // (Active: True)   - Caffeine active (System won't lock)
     // (Active: False)  - Auto-lock is active (System will lock)
     icon: (active) ? "" : ""
-    label: (active) ? `[${Global.process.prevent_lock.processId}]` : ""
-    style.text.idle: (active) ? Theme.color_red : Theme.color_green
+    label: (active) ? `[${Context.process.prevent_screen_lock.processId}]` : ""
+    style.text.idle: (active) ? color_caffeineon : color_caffeineoff
     
     onClicked: () => {
         if (active) {
-            Global.process.prevent_lock.running = false;
-            Global.process.prevent_lock = null;
+            Context.process.prevent_screen_lock.running = false;
+            Context.process.prevent_screen_lock = null;
         } else {
             // Start and save the reference
             var cmd = ["systemd-inhibit", "--what=idle", "sleep", "infinity"]
-            Global.process.prevent_lock = Daemon.execute(cmd);
+            Context.process.prevent_screen_lock = Daemon.execute(cmd);
 
             // Process dies unexpectedly (crashes), reset our state
-            Global.process.prevent_lock.runningChanged.connect(() => {
-                if (Global.process.prevent_lock && !Global.process.prevent_lock.running) {
-                    Global.process.prevent_lock.running = false;
-                    Global.process.prevent_lock = null;
+            Context.process.prevent_screen_lock.runningChanged.connect(() => {
+                if (Context.process.prevent_screen_lock && !Context.process.prevent_screen_lock.running) {
+                    Context.process.prevent_screen_lock.running = false;
+                    Context.process.prevent_screen_lock = null;
                 }
             });
         }

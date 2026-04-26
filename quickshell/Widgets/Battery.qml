@@ -4,7 +4,6 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Utilities
 
 Base {
     id: container
@@ -18,6 +17,11 @@ Base {
         ""  // 81–100%
     ]
     readonly property string chargingIcon: ""
+
+    property color color_critical: null
+    property color color_warning: null
+    property color color_charging: null
+    property color color_default: null
 
     // Bind to displayDevice (the laptop battery)
     property int percentage: Math.round(UPower.displayDevice.percentage * 100)
@@ -39,13 +43,13 @@ Base {
     // Style logic
     style.text.idle: {
         if (charging) {
-            return Theme.color_yellow
-        } else if (percentage <= Global.battery.critical_threshold) {
-            return Theme.color_red
-        } else if (percentage <= Global.battery.warning_threshold) {
-            return Theme.color_yellow
+            return color_charging
+        } else if (percentage <= Context.battery.critical_threshold) {
+            return color_critical
+        } else if (percentage <= Context.battery.warning_threshold) {
+            return color_warning
         } else {
-            return Theme.color_green
+            return color_default
         }
     }    
 }

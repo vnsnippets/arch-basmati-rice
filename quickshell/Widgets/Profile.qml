@@ -16,11 +16,14 @@ Base {
         [PowerProfile.Performance]: ""
     })
 
-    // Colors
+    property color color_powersave: null
+    property color color_balanced:  null
+    property color color_performance: null
+
     readonly property var color_map: ({
-        [PowerProfile.PowerSaver]:  Theme.color_green,
-        [PowerProfile.Balanced]:    Theme.color_yellow,
-        [PowerProfile.Performance]: Theme.color_red
+        [PowerProfile.PowerSaver]:  color_powersave,
+        [PowerProfile.Balanced]:    color_balanced,
+        [PowerProfile.Performance]: color_performance
     })
 
     // Bind directly to the service

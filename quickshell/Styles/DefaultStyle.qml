@@ -3,10 +3,10 @@ pragma Singleton
 import QtQuick
 
 Item {
-    readonly property color color_dark: '#1a1d2a'
-    readonly property color color_light: "#DDE4FB"
-    readonly property color color_slate: "#627386"
-    readonly property color color_blue: "#3498db"
+    readonly property color color_dark: "#1a1d2a"
+    readonly property color color_light: "#c6d0f5"
+    readonly property color color_slate: "#51576d"
+    readonly property color color_blue: "#8caaee"
     readonly property color color_teal: "#81c8be"
     readonly property color color_green: "#a6d189"
     readonly property color color_yellow: "#e5c890"

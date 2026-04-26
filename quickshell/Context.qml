@@ -8,7 +8,7 @@ Singleton {
     id: dataprovider
     
     readonly property QtObject process: QtObject {
-        property var prevent_lock: null
+        property var prevent_screen_lock: null
         property var shutdown: null
     }
 
