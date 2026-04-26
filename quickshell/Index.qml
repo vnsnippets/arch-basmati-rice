@@ -7,7 +7,7 @@ import Quickshell.Services.Pipewire
 import Quickshell.Services.UPower
 import Quickshell.Widgets
 
-import qs.Utilities
+import qs.Styles
 import qs.Widgets
 
 Variants {
@@ -19,21 +19,26 @@ Variants {
         required property var modelData
         screen: modelData
 
-        implicitHeight: Theme.size
+        implicitHeight: DefaultStyle.widgets.size
 
         anchors { top: true; left: true; right: true; }
-        margins { top: Theme.margin; bottom: 0; left: Theme.margin; right: Theme.margin; }
+        margins { 
+            top: DefaultStyle.widgets.margin
+            bottom: 0
+            left: DefaultStyle.widgets.margin
+            right: DefaultStyle.widgets.margin
+        }
         
         color: "transparent"
 
         RowLayout {
             anchors.fill: parent
-            spacing: Theme.spacing
+            spacing: DefaultStyle.widgets.spacing
 
             // --- LEFT ---
             RowLayout {
                 id: section_start
-                spacing: Theme.spacing
+                spacing: DefaultStyle.widgets.spacing
                 Clock { format: "yyyy-MM-dd HH:mm" }
             }
 
@@ -50,13 +55,14 @@ Variants {
 
                 Workspaces { 
                     screen: statusbar.screen
+                    style.border.active: DefaultStyle.color_light
                 }
             }
 
             // --- RIGHT ---
             RowLayout {
                 id: section_end
-                spacing: Theme.spacing
+                spacing: DefaultStyle.widgets.spacing
 
                 Network  { }
                 Volume   { }

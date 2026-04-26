@@ -98,12 +98,12 @@ Base {
 
     icon: Global.stopwatch.scan_networks?.running ? "󰑓" : ui.icon
     label: `${ui.label}`
-    style.foreground.idle: ui.color
+    style.text.idle: ui.color
 
     Row {
         id: strength_row
         spacing: 2
-        Layout.leftMargin: Theme.spacing
+        Layout.leftMargin: DefaultStyle.widgets.spacing
 
         Repeater {
             id: strength_meter_container
@@ -165,7 +165,11 @@ Base {
                 ]
 
                 // Maintain color reactivity while visible
-                Behavior on color { ColorAnimation { duration: Theme.duration } }
+                Behavior on color { 
+                    ColorAnimation { 
+                        duration: DefaultStyle.animations.duration 
+                    }
+                }
             }
         }
     }

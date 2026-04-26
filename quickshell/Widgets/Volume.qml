@@ -25,7 +25,7 @@ Base {
     icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
     label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
-    style.foreground.idle: Pipewire?.defaultAudioSink?.audio ? Theme.color_teal : Theme.color_slate
+    style.text.idle: Pipewire?.defaultAudioSink?.audio ? Theme.color_teal : Theme.color_slate
 
     onClicked: () => {
         Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;

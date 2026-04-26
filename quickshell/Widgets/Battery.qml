@@ -37,7 +37,7 @@ Base {
     tooltip: charging ? "Charging (" + percentage + "%)" : "Battery " + percentage + "%"
 
     // Style logic
-    style.foreground.idle: {
+    style.text.idle: {
         if (charging) {
             return Theme.color_yellow
         } else if (percentage <= Global.battery.critical_threshold) {

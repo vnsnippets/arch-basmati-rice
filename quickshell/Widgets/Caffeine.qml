@@ -15,7 +15,7 @@ Base {
     // (Active: False)  - Auto-lock is active (System will lock)
     icon: (active) ? "" : ""
     label: (active) ? `[${Global.process.prevent_lock.processId}]` : ""
-    style.foreground.idle: (active) ? Theme.color_red : Theme.color_green
+    style.text.idle: (active) ? Theme.color_red : Theme.color_green
     
     onClicked: () => {
         if (active) {

@@ -8,9 +8,9 @@ import qs.Styles
 import qs.Utilities
 
 Rectangle {
-    id: container
+    id: root
 
-    default property alias content: content_container.data
+    default property alias content: custom.data
 
     property string icon: ""
     property string label: ""
@@ -22,7 +22,7 @@ Rectangle {
         property bool pressed: false
     }
 
-    property ClickableStyle style: ClickableStyle {}
+    property ColorScheme style: ColorScheme {}
     
     signal clicked()
     signal doubleClicked()
@@ -31,26 +31,27 @@ Rectangle {
     scale: 1.0
     color: style.background.idle
     border.color: style.border.idle
-    border.width: Theme.border
-    radius: height / Theme.roundness
+    border.width: DefaultStyle.widgets.border
+
+    radius: height / DefaultStyle.widgets.roundness
     width: implicitWidth
 
-    implicitWidth: label === "" ? Theme.size : content.width + Theme.padding
+    implicitWidth: label === "" ? DefaultStyle.widgets.size : content.width + DefaultStyle.widgets.padding
 
     Layout.alignment: Qt.AlignCenter
-    Layout.preferredHeight: Theme.size
+    Layout.preferredHeight: DefaultStyle.widgets.size
 
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: Theme.spacing
+        spacing: DefaultStyle.widgets.spacing
 
         Text {
             id: icon_text
             text: icon
-            color: container.style.foreground.idle
-            font.pixelSize: Theme.font_size
-            font.family: Icons.nerd
+            color: root.style.icon.idle
+            font.pixelSize: DefaultStyle.fonts.size
+            font.family: DefaultStyle.fonts.icon
             visible: text !== ""
             Layout.margins: 0
             verticalAlignment: Text.AlignVCenter
@@ -60,9 +61,9 @@ Rectangle {
         Text {
             id: label_text
             text: label
-            color: container.style.foreground.idle
-            font.pixelSize: Theme.font_size
-            font.family: Theme.font_family
+            color: root.style.text.idle
+            font.pixelSize: DefaultStyle.fonts.size
+            font.family: DefaultStyle.fonts.family
             visible: text !== ""
             Layout.margins: 0
             Layout.alignment: Qt.AlignVCenter
@@ -71,9 +72,9 @@ Rectangle {
         }
 
         RowLayout {
-            id: content_container
+            id: custom
             visible: children.length > 0 && children.some((c) => c.width > 0)
-            spacing: Theme.spacing
+            spacing: DefaultStyle.widgets.spacing
             Layout.alignment: Qt.AlignVCenter
         }
     }
@@ -83,35 +84,68 @@ Rectangle {
         hoverEnabled: true
         cursorShape: (interactive) ? Qt.PointingHandCursor : Qt.ArrowCursor
 
-        onClicked: if (interactive) container.clicked()
-        onDoubleClicked: if (interactive) container.doubleClicked()
-        onWheel: (wheel) => { if (interactive) container.scrolled(wheel) }
+        onClicked: if (interactive) root.clicked()
+        onDoubleClicked: if (interactive) root.doubleClicked()
+        onWheel: (wheel) => { if (interactive) root.scrolled(wheel) }
 
-        onPressed: if (interactive) container.state = "pressed"
-        onReleased: if (interactive) container.state = "hover"
-        onEntered: if (interactive) container.state = "hover"
-        onExited: container.state = "idle"
+        onPressed: if (interactive) root.state = "pressed"
+        onReleased: if (interactive) root.state = "hover"
+        onEntered: if (interactive) root.state = "hover"
+        onExited: root.state = "idle"
     }
 
     // --- states ---
     states: [
         State {
             name: "idle"
-            PropertyChanges { target: container; scale: 1.0; color: style.background.idle; border.color: style.border.idle }
-            PropertyChanges { target: icon_text; color: container.style.foreground.idle }
-            PropertyChanges { target: label_text; color: container.style.foreground.idle }
+            // PropertyChanges { 
+            //     target: root
+            //     scale: 1.0
+            //     color: root.style.background.idle
+            //     border.color: root.style.border.idle
+            // }
+            PropertyChanges { 
+                target: icon_text
+                color: root.style.icon.idle
+            }
+            PropertyChanges {
+                target: label_text
+                color: root.style.text.idle
+            }
         },
         State {
             name: "hover"
-            PropertyChanges { target: container; scale: 0.96; color: style.background.active; border.color: style.border.active }
-            PropertyChanges { target: icon_text; color: container.style.foreground.active }
-            PropertyChanges { target: label_text; color: container.style.foreground.active }
+            PropertyChanges { 
+                target: root
+                scale: 0.96
+                color: root.style.background.active
+                border.color: root.style.border.active
+            }
+            PropertyChanges {
+                target: icon_text
+                color: root.style.icon.active
+            }
+            PropertyChanges { 
+                target: label_text
+                color: root.style.text.active
+            }
         },
         State {
             name: "pressed"
-            PropertyChanges { target: container; scale: 0.94; color: style.background.active; border.color: style.border.active }
-            PropertyChanges { target: icon_text; color: container.style.foreground.active }
-            PropertyChanges { target: label_text; color: container.style.foreground.active }
+            PropertyChanges {
+                target: root
+                scale: 0.94
+                color: root.style.background.active
+                border.color: root.style.border.active
+            }
+            PropertyChanges { 
+                target: icon_text
+                color: root.style.icon.active
+            }
+            PropertyChanges {
+                target: label_text
+                color: root.style.text.active
+            }
         }
     ]
 
@@ -121,11 +155,33 @@ Rectangle {
             from: "*"
             to: "*"
             ParallelAnimation {
-                NumberAnimation { properties: "scale"; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "color"; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "border.color"; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "color"; target: icon_text; duration: Theme.duration; easing.type: Easing.OutCubic }
-                ColorAnimation { properties: "color"; target: label_text; duration: Theme.duration; easing.type: Easing.OutCubic }
+                NumberAnimation { 
+                    properties: "scale"
+                    duration: DefaultStyle.animations.duration
+                    easing.type: Easing.OutCubic 
+                }
+                ColorAnimation { 
+                    properties: "color"
+                    duration: DefaultStyle.animations.duration
+                    easing.type: Easing.OutCubic
+                }
+                ColorAnimation { 
+                    properties: "border.color"
+                    duration: DefaultStyle.animations.duration
+                    easing.type: Easing.OutCubic
+                }
+                ColorAnimation { 
+                    properties: "color"
+                    target: icon_text
+                    duration: DefaultStyle.animations.duration
+                    easing.type: Easing.OutCubic
+                }
+                ColorAnimation { 
+                    properties: "color"
+                    target: label_text
+                    duration: DefaultStyle.animations.duration
+                    easing.type: Easing.OutCubic
+                }
             }
         }
     ]
@@ -137,5 +193,5 @@ Rectangle {
         }
     }
 
-    Component.onCompleted: container.state = "idle"
+    Component.onCompleted: root.state = "idle"
 }

@@ -28,7 +28,7 @@ Base {
 
     // Live bindings: these re‑evaluate whenever current_profile changes
     icon: icon_map[current_profile]
-    style.foreground.idle: color_map[current_profile]
+    style.text.idle: color_map[current_profile]
 
     // Rotate profiles on click
     onClicked: {

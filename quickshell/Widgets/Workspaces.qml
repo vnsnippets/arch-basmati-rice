@@ -5,17 +5,20 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs
-import qs.Utilities
+import qs.Styles
 
 RowLayout {
-    id: container
+    id: root
 
     anchors.fill: parent
-    spacing: Theme.spacing
+    spacing: DefaultStyle.widgets.spacing
     Layout.alignment: Qt.AlignCenter
 
-    property var screen: null
     readonly property var allWindows: Hyprland.toplevels.values
+
+    property var screen: null
+
+    property ColorScheme style: ColorScheme {}
 
     Item { Layout.fillWidth: true }
 
@@ -31,6 +34,8 @@ RowLayout {
             Layout.preferredHeight: 24
             implicitWidth: (isActive) ? 40 : 24
             radius: 20
+
+            style: root.style
 
             onClicked: modelData.activate()
 
