@@ -78,3 +78,8 @@ source $HOME/.config/zsh/suggestion.zsh
 
 # Starship
 eval "$(starship init zsh)"
+
+# Fast fetch on open
+if command -v fastfetch &> /dev/null; then
+    fastfetch
+fi
