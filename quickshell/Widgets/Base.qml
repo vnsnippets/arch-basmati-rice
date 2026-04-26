@@ -98,12 +98,12 @@ Rectangle {
     states: [
         State {
             name: "idle"
-            // PropertyChanges { 
-            //     target: root
-            //     scale: 1.0
-            //     color: root.style.background.idle
-            //     border.color: root.style.border.idle
-            // }
+            PropertyChanges { 
+                target: root
+                scale: 1.0
+                color: root.style.background.idle
+                border.color: root.style.border.idle
+            }
             PropertyChanges { 
                 target: icon_text
                 color: root.style.icon.idle
