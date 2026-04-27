@@ -16,14 +16,12 @@ RowLayout {
 
     readonly property var allWindows: Hyprland.toplevels.values
 
-    property var screen: null
-
     property ColorScheme style: ColorScheme {}
 
     Item { Layout.fillWidth: true }
 
     Repeater {
-        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === screen?.name).sort((a, b) => a.id - b.id) ?? []
+        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === statusbar.screen?.name).sort((a, b) => a.id - b.id) ?? []
         
         Base {
             id: dot

@@ -10,7 +10,7 @@ Base {
     icon: ""
 
     onClicked: () => {
-        var cmd = ["poweroff"]
+        var cmd = ["pkill", "-9", "quickshell"]
         Context.process.shutdown = Daemon.execute(cmd);
     }
 }

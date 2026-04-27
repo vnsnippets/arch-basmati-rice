@@ -2,28 +2,34 @@ import QtQuick
 import Quickshell
 
 import qs
+import qs.Styles
 import qs.Utilities
 
 Base {
-    id: container
+    id: w_clock
+    objectName: "w_clock"
 
     property string format: "yyyy-MM-dd HH:mm"
 
     SystemClock {
-        id: clock
+        id: system_clock
         precision: SystemClock.Minutes
     }
 
-    label: Qt.formatDateTime(clock.date, format)
+    label: Qt.formatDateTime(system_clock.date, format)
 
-    // property string tooltipformat: "D dd MMMyyyy-MM-dd HH:mm:ss"
+    Component {
+        id: w_popup
 
-    // function ordinalDay(day) {
-    //     if (day % 10 === 1 && day % 100 !== 11) return day + "st";
-    //     if (day % 10 === 2 && day % 100 !== 12) return day + "nd";
-    //     if (day % 10 === 3 && day % 100 !== 13) return day + "rd";
-    //     return day + "th";
-    // }
+        Text {
+            id: popup_text
+            text: "Hello World"
+            color: DefaultStyle.color_light
+            font.family: DefaultStyle.fonts.family
+            font.pixelSize: DefaultStyle.fonts.size
+            anchors.centerIn: parent
+        }
+    }
 
-    // tooltip: Qt.formatDate(new Date(), "MMMM") + " " + ordinalDay(new Date()) + ", " + Qt.formatDate(new Date(), "yyyy");
+    onClicked: panel_group.delegateWidgetPopup(this, w_popup);
 }

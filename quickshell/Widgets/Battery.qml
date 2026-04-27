@@ -6,7 +6,8 @@ import qs
 import qs.Styles
 
 Base {
-    id: container
+    id: w_battery
+    objectName: "w_battery"
 
     // Icons for battery levels
     readonly property var batteryIcons: [
@@ -51,5 +52,20 @@ Base {
         } else {
             return color_default
         }
-    }    
+    }
+
+    Component {
+        id: w_popup
+
+        Text {
+            id: popup_text
+            text: "Hello World XX"
+            color: DefaultStyle.color_light
+            font.family: DefaultStyle.fonts.family
+            font.pixelSize: DefaultStyle.fonts.size
+            anchors.centerIn: parent
+        }
+    }
+
+    onClicked: panel_group.delegateWidgetPopup(this, w_popup);
 }
