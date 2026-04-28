@@ -5,8 +5,9 @@ import Quickshell.Services.Pipewire
 
 import qs
 import qs.Utilities
+import qs.Widgets
 
-Base {
+Clickable {
     id: container
 
     readonly property real increment_diff: 0.05

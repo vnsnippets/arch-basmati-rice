@@ -7,7 +7,13 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 
 import qs.Styles
-import qs.Widgets
+import qs.Widgets.Audio
+import qs.Widgets.Battery
+import qs.Widgets.Caffeine
+import qs.Widgets.Clock
+import qs.Widgets.Network
+import qs.Widgets.Power
+import qs.Widgets.Workspaces
 
 RowLayout {
     id: root
@@ -18,7 +24,7 @@ RowLayout {
     RowLayout {
         id: section_start
         spacing: DefaultStyle.widgets.spacing
-        Clock { 
+        ClockWidget { 
             format: "yyyy-MM-dd HH:mm"
         }
     }
@@ -34,7 +40,7 @@ RowLayout {
 
         color: "transparent"
 
-        Workspaces { 
+        WorkspaceControl { 
             style.border.active: DefaultStyle.color_light
         }
     }
@@ -44,7 +50,7 @@ RowLayout {
         id: section_end
         spacing: DefaultStyle.widgets.spacing
 
-        Network  {
+        NetworkWidget  {
             color_disconnected: DefaultStyle.color_slate
             color_connecting: DefaultStyle.color_yellow
             color_connected_default: DefaultStyle.color_green
@@ -52,30 +58,24 @@ RowLayout {
             color_connected_limited: DefaultStyle.color_yellow
         }
 
-        Volume {
+        AudioWidget {
             color_inactive: DefaultStyle.color_slate
             color_default: DefaultStyle.color_teal    
         }
 
-        Battery {
+        BatteryWidget {
             color_critical: DefaultStyle.color_red
             color_warning: DefaultStyle.color_yellow
             color_charging: DefaultStyle.color_yellow
             color_default: DefaultStyle.color_green
         }
-        
-        Profile {
-            color_powersave: DefaultStyle.color_green
-            color_balanced: DefaultStyle.color_yellow
-            color_performance: DefaultStyle.color_red
-        }
 
-        Caffeine {
+        CaffeineWidget {
             color_caffeineon: DefaultStyle.color_red
             color_caffeineoff: DefaultStyle.color_blue
         }
 
-        Power {
+        PowerWidget {
             style.text.idle: DefaultStyle.color_red
             style.background.active: DefaultStyle.color_red
             style.text.active: DefaultStyle.color_dark

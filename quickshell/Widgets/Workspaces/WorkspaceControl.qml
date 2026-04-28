@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 
 import qs
 import qs.Styles
+import qs.Widgets
 
 RowLayout {
     id: root
@@ -23,7 +24,7 @@ RowLayout {
     Repeater {
         model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === statusbar.screen?.name).sort((a, b) => a.id - b.id) ?? []
         
-        Base {
+        Clickable {
             id: dot
             required property var modelData
             readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData?.id ?? false

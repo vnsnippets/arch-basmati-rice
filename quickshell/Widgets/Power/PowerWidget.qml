@@ -4,8 +4,9 @@ import Quickshell.Io
 
 import qs
 import qs.Utilities
+import qs.Widgets
 
-Base {
+Clickable {
     id: widget
     icon: ""
 

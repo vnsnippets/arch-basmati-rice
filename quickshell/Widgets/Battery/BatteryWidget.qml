@@ -4,10 +4,11 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
+import qs.Widgets
 
-Base {
-    id: w_battery
-    objectName: "w_battery"
+Clickable {
+    id: root
+    readonly property Component flyout: popup
 
     // Icons for battery levels
     readonly property var batteryIcons: [
@@ -54,18 +55,7 @@ Base {
         }
     }
 
-    Component {
-        id: w_popup
+    BatteryPopup { id: popup }
 
-        Text {
-            id: popup_text
-            text: "Hello World XX"
-            color: DefaultStyle.color_light
-            font.family: DefaultStyle.fonts.family
-            font.pixelSize: DefaultStyle.fonts.size
-            anchors.centerIn: parent
-        }
-    }
-
-    onClicked: panel_group.delegateWidgetPopup(this, w_popup);
+    onClicked: panel_group.delegateWidgetPopup(this);
 }

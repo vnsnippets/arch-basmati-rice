@@ -7,6 +7,7 @@ import NetworkMonitorPlugin
 import qs
 import qs.Styles
 import qs.Services
+import qs.Widgets
 
 /**
 * Network.qml
@@ -61,8 +62,8 @@ import qs.Services
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-Base {
-    id: container
+Clickable {
+    id: root
 
     // Use required properties for better performance/type safety
     readonly property int critical_threshold: 25

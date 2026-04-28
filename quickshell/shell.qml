@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
 
@@ -38,15 +39,12 @@ ShellRoot {
                 id: master_window
                 screen: panel_group.modelData
 
-                property bool isVisible: active_popup_content !== null
-
-                WlrLayershell.namespace: "qs-master"
-                // WlrLayershell.layer: WlrLayer.Overlay
-
+                property bool isVisible: open_widget !== null
+                
+                // WlrLayershell.namespace: "qs-master"
                 color: "transparent"
 
                 exclusionMode: ExclusionMode.Ignore
-                focusable: false
 
                 implicitHeight: master_window.screen.height
                 implicitWidth: master_window.screen.width
@@ -55,73 +53,110 @@ ShellRoot {
 
                 surfaceFormat.opaque: false
 
-                mask: Region {
-                    item: statusbar_container
-                    intersection: Intersection.Xor
-                }
-
                 Item {
-                    id: statusbar_container
+                    id: statusbar_offset
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: DefaultStyle.widgets.size
+                    height: DefaultStyle.widgets.size + DefaultStyle.widgets.margin * 2
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    enabled: master_window.isVisible
-                    onClicked: {
-                        master_window.toggleWidgetPopup(master_window.active_widget);
+                focusable: false
+
+                // Only works if window is focusable
+                // HyprlandFocusGrab {
+                //     active: master_window.open_widget !== null
+                //     windows: [master_window, statusbar] // Include both windows as "safe"
+                    
+                //     // This allows clicks to pass through to windows behind
+                //     // while still triggering the 'onCleared' signal
+                //     onCleared: {
+                //         if (flyout_container.item) flyout_container.item.active = false;
+                //         animate_close_flyout.start();
+                //     }
+                // }
+
+                Connections {
+                    target: Hyprland
+                    enabled: master_window.open_widget !== null
+                    
+                    // Emitted for every event from Hyprland's socket2
+                    function onRawEvent(event) {
+                        // 'activewindowv2' triggers whenever focus shifts to a new window
+                        if (event.name === "activewindowv2") {
+                            console.log("Focus changed to window address:", event.data)
+                            master_window.toggleWidgetPopup(master_window.open_widget);
+                        }
+
+                        // 'mousebutton' triggers on any click (requires activewindowv2 usually)
+                        // Useful if you want to detect a click anywhere on the screen
+                        if (event.name === "mousebutton") {
+                            console.log("User clicked somewhere")
+                        }
                     }
                 }
 
-                property Item active_widget: null
-                property Component active_popup_content: null
 
-                function toggleWidgetPopup(calling_component, content, pos) {
-                    if (!calling_component) return;
+                mask: Region {
+                    Region { item: flyout_container }
+                    // Region { item: statusbar_offset }
+                }
 
-                    if (active_widget === calling_component) {
-                        active_popup_content = active_widget = null;
+                property Item open_widget: null
+
+                function toggleWidgetPopup(source) {
+                    if (!source || !source.flyout) return;
+
+                    // 1. If clicking the SAME widget, start the close sequence
+                    if (open_widget === source) {
+                        if (flyout_container.item) flyout_container.item.active = false;
+                        animate_close_flyout.start();
                         return;
                     }
 
-                    active_widget = calling_component;
-                    active_popup_content = content;
+                    // 2. If clicking a DIFFERENT widget, just update the reference
+                    // The Loader stays active, so the 'BaseFlyout' doesn't die; it just moves and swaps content
+                    flyout_container.enable_glide = (open_widget !== null); 
+                    open_widget = source;
                 }
 
                 Loader {
-                    id: popup_container
-                    active: master_window.active_widget !== null
-                    anchors.top: statusbar_container.bottom 
-                    anchors.topMargin: DefaultStyle.widgets.margin * 2
+                    id: flyout_container
+                    active: master_window.open_widget !== null
+                    anchors.top: statusbar_offset.bottom
 
-                    // AUTOMATIC CENTERING BINDING
-                    x: if (master_window.active_widget) {
-                        var widgetX = master_window.active_widget.mapToItem(null, 0, 0).x + statusbar.margins.left;
-                        var centerX = widgetX + (master_window.active_widget.width / 2)- (implicitWidth / 2);
-                        return centerX;
+                    property bool enable_glide: false
+
+                    // AUTOMATIC CENTERING WITH CLAMPING
+                    x: if (master_window.open_widget) {
+                        var widgetX = master_window.open_widget.mapToItem(null, 0, 0).x + statusbar.margins.left;
+                        var centerX = widgetX + (master_window.open_widget.width / 2) - (implicitWidth / 2);
+                        
+                        // --- CLAMP LOGIC ---
+                        var margin = DefaultStyle.widgets.margin;
+                        var minX = margin;
+                        var maxX = master_window.width - implicitWidth - margin;
+                        
+                        return Math.max(minX, Math.min(centerX, maxX));
                     } else {
                         return 0;
                     }
 
-                    sourceComponent: Component {
-                        Rectangle {
-                            id: container
-                            implicitWidth: popup_content.item?.implicitWidth + DefaultStyle.widgets.padding
-                            implicitHeight: popup_content.item?.implicitHeight + DefaultStyle.widgets.padding
+                    // THE GLIDE: Any change to 'x' will now slide over 300ms
+                    // Only animate x if we're switching between widgets
+                    Behavior on x {
+                        enabled: flyout_container.enable_glide
+                        SpringAnimation { duration: 200; spring: 5.0; damping: 0.375; epsilon: 0.25; }
+                    }
 
-                            color: DefaultStyle.color_dark
-                            border.color: DefaultStyle.color_slate
-                            radius: DefaultStyle.widgets.size / DefaultStyle.widgets.roundness
+                    sourceComponent: master_window.open_widget?.flyout
+                }
 
-                            Loader {
-                                id: popup_content
-                                sourceComponent: master_window.active_popup_content
-                                anchors.centerIn: parent
-                            }
-                        }
+                Timer {
+                    id: animate_close_flyout
+                    interval: 250
+                    onTriggered: {
+                        master_window.open_widget = null;
                     }
                 }
             }
@@ -134,7 +169,7 @@ ShellRoot {
                 screen: panel_group.modelData
 
                 implicitHeight: DefaultStyle.widgets.size
-                WlrLayershell.layer: WlrLayer.Overlay
+                // WlrLayershell.layer: WlrLayer.Overlay
 
                 anchors { top: true; left: true; right: true; }
                 margins { 
@@ -145,12 +180,16 @@ ShellRoot {
                 }
                 
                 color: "transparent"
-                StatusBar {}
+                Dock {}
             }
 
-            function delegateWidgetPopup(calling_component, popup_content) {
-                var pos = calling_component.mapToItem(null, 0, 0);
-                master_window.toggleWidgetPopup(calling_component, popup_content, pos);
+            function delegateWidgetPopup(source) {
+                master_window.toggleWidgetPopup(source);
+            }
+
+            function dismissPopup() {
+                if (!master_window.open_widget) return;
+                master_window.toggleWidgetPopup(master_window.open_widget);
             }
         }
     }

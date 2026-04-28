@@ -3,11 +3,14 @@ pragma Singleton
 import QtQuick
 
 Item {
-    readonly property color color_overlay: "#BA1a1d2a"
+    readonly property color color_overlay: "#CC090c19"
+    // readonly property color color_overlay: "#BA1a1d2a"
+    // readonly property color color_overlay: "#BA51576d"
 
     readonly property color color_dark: "#1a1d2a"
+    // readonly property color color_slate: "#51576d"
+    readonly property color color_slate: "#090c19"
     readonly property color color_light: "#c6d0f5"
-    readonly property color color_slate: "#51576d"
     readonly property color color_blue: "#8caaee"
     readonly property color color_teal: "#81c8be"
     readonly property color color_green: "#a6d189"
@@ -20,7 +23,11 @@ Item {
         readonly property int margin: 10
         readonly property int padding: 24
         readonly property int border: 1
-        readonly property real roundness: 3
+        readonly property real radius: 8
+    }
+
+    readonly property QtObject popup: QtObject {
+        readonly property real radius: 8
     }
 
     readonly property QtObject animations: QtObject {

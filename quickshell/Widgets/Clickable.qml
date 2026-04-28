@@ -33,13 +33,15 @@ Rectangle {
     border.color: style.border.idle
     border.width: DefaultStyle.widgets.border
 
-    radius: height / DefaultStyle.widgets.roundness
+    // radius: height / DefaultStyle.widgets.roundness
+    radius: DefaultStyle.widgets.radius
     width: implicitWidth
 
     implicitWidth: label === "" ? DefaultStyle.widgets.size : content.width + DefaultStyle.widgets.padding
+    implicitHeight: DefaultStyle.widgets.size
 
     Layout.alignment: Qt.AlignCenter
-    Layout.preferredHeight: DefaultStyle.widgets.size
+    // Layout.preferredHeight: DefaultStyle.widgets.size
 
     RowLayout {
         id: content
@@ -155,12 +157,12 @@ Rectangle {
             from: "*"
             to: "*"
             ParallelAnimation {
-                NumberAnimation { 
+                NumberAnimation {
                     properties: "scale"
                     duration: DefaultStyle.animations.duration
                     easing.type: Easing.OutCubic 
                 }
-                ColorAnimation { 
+                ColorAnimation {
                     properties: "color"
                     duration: DefaultStyle.animations.duration
                     easing.type: Easing.OutCubic
