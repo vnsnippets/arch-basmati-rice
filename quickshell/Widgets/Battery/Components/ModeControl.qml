@@ -12,11 +12,11 @@ Clickable {
 
     property color color: DefaultStyle.color_light
 
-    style.background.idle: (is_active) ? color : DefaultStyle.color_dark
-    style.text.idle: (is_active) ? DefaultStyle.color_dark : DefaultStyle.color_light
+    style.background.idle: (is_active) ? color : DefaultStyle.popup.button.background.idle
+    style.text.idle: (is_active) ? DefaultStyle.color_slate : DefaultStyle.color_light
     
     style.background.active: color
-    style.text.active: DefaultStyle.color_dark
+    style.text.active: DefaultStyle.color_slate
 
     onClicked: PowerProfiles.profile = target
 }

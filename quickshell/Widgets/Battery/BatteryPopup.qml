@@ -19,10 +19,10 @@ Popup {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 20
+        spacing: DefaultStyle.popup.spacing
 
         RowLayout {
-            spacing: 20
+            spacing: DefaultStyle.popup.spacing
             Layout.fillWidth: true
 
             BatteryControl {}
@@ -32,21 +32,18 @@ Popup {
             Clickable {
                 Layout.alignment: Qt.AlignTop
                 icon: ""
+                style.background.idle: DefaultStyle.popup.button.background.idle
+                style.background.active: DefaultStyle.popup.button.background.active
             }
         }
         
-        BrightnessControl {
-            Layout.fillWidth: true
-        }
-
-        PowerControl {
-            Layout.fillWidth: true
-        }
+        BrightnessControl { Layout.fillWidth: true }
+        PowerControl { Layout.fillWidth: true }
 
         // --- Power Profiles Selector ---
         RowLayout {
             Layout.fillWidth: true
-            spacing: DefaultStyle.widgets.spacing
+            spacing: 4
             
             ModeControl { icon: ""; label: "Performance"; target: PowerProfile.Performance; color: DefaultStyle.color_red; }
             ModeControl { icon: ""; label: "Balanced"; target: PowerProfile.Balanced; color: DefaultStyle.color_yellow; }

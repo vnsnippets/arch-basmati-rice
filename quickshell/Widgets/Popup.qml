@@ -12,7 +12,7 @@ Rectangle {
 
     readonly property int animation_duration: 300
 
-    color: DefaultStyle.color_overlay
+    color: DefaultStyle.popup.background
     radius: DefaultStyle.popup.radius
     border.width: 1
     border.color:DefaultStyle.color_slate
