@@ -3,19 +3,19 @@ pragma Singleton
 import QtQuick
 
 Item {
-    readonly property color color_overlay: "#CC090c19"
+    readonly property color color_overlay: "#F511111b"
     // readonly property color color_overlay: "#BA1a1d2a"
     // readonly property color color_overlay: "#BA51576d"
 
-    readonly property color color_dark: "#1a1d2a"
+    readonly property color color_dark: "#181825"
     // readonly property color color_slate: "#51576d"
-    readonly property color color_slate: "#090c19"
-    readonly property color color_light: "#c6d0f5"
-    readonly property color color_blue: "#8caaee"
-    readonly property color color_teal: "#81c8be"
-    readonly property color color_green: "#a6d189"
-    readonly property color color_yellow: "#e5c890"
-    readonly property color color_red: "#e78284"
+    readonly property color color_slate: "#1e1e2e"
+    readonly property color color_light: "#cdd6f4"
+    readonly property color color_blue: "#89b4fa"
+    readonly property color color_teal: "#94e2d5"
+    readonly property color color_green: "#a6e3a1"
+    readonly property color color_yellow: "#f9e2af"
+    readonly property color color_red: "#f38ba8"
 
     readonly property QtObject widgets: QtObject {
         readonly property int size: 40

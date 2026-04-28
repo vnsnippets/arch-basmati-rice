@@ -86,7 +86,7 @@ ShellRoot {
                     }
 
                     // 2. If clicking a DIFFERENT widget, just update the reference
-                    // The Loader stays active, so the 'BaseFlyout' doesn't die; it just moves and swaps content
+                    // The Loader stays active, so the popup doesn't die; it just moves and swaps content
                     flyout_container.enable_glide = (open_widget !== null); 
                     open_widget = source;
                 }
@@ -118,7 +118,7 @@ ShellRoot {
                     // Only animate x if we're switching between widgets
                     Behavior on x {
                         enabled: flyout_container.enable_glide
-                        SpringAnimation { duration: 200; spring: 5.0; damping: 0.375; epsilon: 0.25; }
+                        SpringAnimation { spring: 5.0; damping: 0.375; epsilon: 0.25; }
                     }
 
                     sourceComponent: master_window.open_widget?.flyout

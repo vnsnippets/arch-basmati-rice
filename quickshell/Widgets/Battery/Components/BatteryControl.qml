@@ -30,12 +30,10 @@ RowLayout {
         border.width: 1
 
         // Note: UPower.displayDevice.percentage is 0 to 1
-        readonly property real battery_level: UPower.displayDevice.percentage
-        readonly property real battery_percent: battery_level * 100
-        readonly property int battery_state: UPower.displayDevice.state
-        readonly property bool battery_is_charging: battery_state === 1 || battery_state === 5
+        readonly property real battery_percent: UPower.displayDevice.percentage * 100
+        readonly property bool battery_is_charging: UPower.displayDevice.state === 1 || UPower.displayDevice.state === 5
 
-        property real animated_value: 0
+        property real animated_percentage: 0
 
         readonly property color arc_color: {
             if (battery_is_charging) {
@@ -49,8 +47,10 @@ RowLayout {
             }
         }
 
-        NumberAnimation on animated_value {
-            from: 0; to: root.battery_level; duration: 800;
+        NumberAnimation on animated_percentage {
+            from: 0
+            to: root.battery_percent.toFixed(0) // Uses the battery_percent property (0-100)
+            duration: 800
             easing.type: Easing.OutCubic 
         }
 
@@ -93,14 +93,14 @@ RowLayout {
                     centerX: root.arc_center; centerY: root.arc_center;
                     radiusX: root.arc_radius; radiusY: root.arc_radius;
                     startAngle: -90
-                    sweepAngle: 360 * root.animated_value
+                    sweepAngle: 360 * (root.animated_percentage / 100)
                 }
             }
         }
 
         Text {
             anchors.centerIn: parent
-            text: (UPower.displayDevice.percentage * 100).toFixed(0) + "%"
+            text: root.animated_percentage.toFixed(0) + "%"
             font.pixelSize: 16
             font.bold: true
             color: DefaultStyle.color_light

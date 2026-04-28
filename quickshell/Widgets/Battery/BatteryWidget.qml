@@ -8,7 +8,7 @@ import qs.Widgets
 
 Clickable {
     id: root
-    readonly property Component flyout: popup
+    readonly property Component flyout: BatteryPopup {}
 
     // Icons for battery levels
     readonly property list<string> batteryIcons: [
@@ -54,8 +54,6 @@ Clickable {
             return color_default
         }
     }
-
-    BatteryPopup { id: popup }
 
     onClicked: panel_group.delegateWidgetPopup(this);
 }

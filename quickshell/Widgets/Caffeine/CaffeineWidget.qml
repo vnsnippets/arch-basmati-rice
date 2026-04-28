@@ -16,9 +16,9 @@ Clickable {
     property color color_caffeineon: DefaultStyle.color_red
     property color color_caffeineoff: DefaultStyle.color_light
 
-    // (Active: True)   - Caffeine active (System won't lock)
-    // (Active: False)  - Auto-lock is active (System will lock)
-    icon: (active) ? "" : ""
+    // (Active: True)   - Caffeine active (System won't lock)
+    // (Active: False)  - Auto-lock is active (System will lock)
+    icon: (active) ? "󱂟" : ""
     label: (active) ? `[${Context.process.prevent_screen_lock.processId}]` : ""
     style.text.idle: (active) ? color_caffeineon : color_caffeineoff
     

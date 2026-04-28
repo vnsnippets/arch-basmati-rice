@@ -3,7 +3,7 @@ import QtQuick
 QtObject {
     property ClickableStyle background: ClickableStyle {
         idle: DefaultStyle.color_dark
-        active: DefaultStyle.color_dark
+        active: DefaultStyle.color_slate
     }
 
     property ClickableStyle text: ClickableStyle {

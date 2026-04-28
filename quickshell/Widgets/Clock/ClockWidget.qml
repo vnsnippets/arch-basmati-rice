@@ -8,7 +8,7 @@ import qs.Widgets
 
 Clickable {
     id: root
-    readonly property Component flyout: popup
+    readonly property Component flyout: ClockPopup {}
     property string format: "yyyy-MM-dd HH:mm"
 
     SystemClock {
@@ -18,6 +18,5 @@ Clickable {
 
     label: Qt.formatDateTime(system_clock.date, format)
 
-    ClockFlyout { id: popup }
     onClicked: panel_group.delegateWidgetPopup(this);
 }
