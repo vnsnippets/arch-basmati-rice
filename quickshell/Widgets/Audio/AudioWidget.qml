@@ -58,5 +58,4 @@ Clickable {
         throttle_timer.restart();
     }
 
-    Component.onCompleted: () => {}
 }

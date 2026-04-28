@@ -78,9 +78,11 @@ Clickable {
     property color color_connected_default: null
     property color color_connected_critical: null
     property color color_connected_limited: null
+
+    readonly property bool isScanning: Context.stopwatch.scan_networks?.running ?? false
     
     readonly property color status_color: {
-        if (Context.stopwatch.scan_networks?.running) return color_connecting;
+        if (isScanning) return color_connecting;
         if (network_state <= 20) return color_disconnected;
         if (network_state <= 50) return color_connecting;
         if (network_state < 70) return color_connected_limited;
@@ -90,7 +92,7 @@ Clickable {
         return color_connected_default;
     }
 
-    icon: (network_state >= 60) ? "": (network_state >= 30 || Context.stopwatch.scan_networks?.running) ? "" : ""
+    icon: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
     label: (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
     style.text.idle: status_color
 

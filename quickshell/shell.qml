@@ -1,7 +1,7 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
-import QtQuick.Effects
 
 import Quickshell
 import Quickshell.Io
@@ -53,45 +53,17 @@ ShellRoot {
 
                 surfaceFormat.opaque: false
 
-                Item {
-                    id: statusbar_offset
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: DefaultStyle.widgets.size + DefaultStyle.widgets.margin * 2
-                }
+
 
                 focusable: false
-
-                // Only works if window is focusable
-                // HyprlandFocusGrab {
-                //     active: master_window.open_widget !== null
-                //     windows: [master_window, statusbar] // Include both windows as "safe"
-                    
-                //     // This allows clicks to pass through to windows behind
-                //     // while still triggering the 'onCleared' signal
-                //     onCleared: {
-                //         if (flyout_container.item) flyout_container.item.active = false;
-                //         animate_close_flyout.start();
-                //     }
-                // }
 
                 Connections {
                     target: Hyprland
                     enabled: master_window.open_widget !== null
-                    
-                    // Emitted for every event from Hyprland's socket2
-                    function onRawEvent(event) {
-                        // 'activewindowv2' triggers whenever focus shifts to a new window
-                        if (event.name === "activewindowv2") {
-                            console.log("Focus changed to window address:", event.data)
-                            master_window.toggleWidgetPopup(master_window.open_widget);
-                        }
 
-                        // 'mousebutton' triggers on any click (requires activewindowv2 usually)
-                        // Useful if you want to detect a click anywhere on the screen
-                        if (event.name === "mousebutton") {
-                            console.log("User clicked somewhere")
+                    function onRawEvent(event) {
+                        if (event.name === "activewindowv2") {
+                            master_window.toggleWidgetPopup(master_window.open_widget);
                         }
                     }
                 }
@@ -99,7 +71,6 @@ ShellRoot {
 
                 mask: Region {
                     Region { item: flyout_container }
-                    // Region { item: statusbar_offset }
                 }
 
                 property Item open_widget: null
@@ -123,7 +94,8 @@ ShellRoot {
                 Loader {
                     id: flyout_container
                     active: master_window.open_widget !== null
-                    anchors.top: statusbar_offset.bottom
+                    anchors.top: parent.top
+                    anchors.topMargin: DefaultStyle.widgets.size + DefaultStyle.widgets.margin * 2
 
                     property bool enable_glide: false
 

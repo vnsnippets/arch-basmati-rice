@@ -11,7 +11,7 @@ Clickable {
     readonly property Component flyout: popup
 
     // Icons for battery levels
-    readonly property var batteryIcons: [
+    readonly property list<string> batteryIcons: [
         "", // 0–20%
         "", // 21–40%
         "", // 41–60%

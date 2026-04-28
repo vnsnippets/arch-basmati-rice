@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -163,12 +165,7 @@ Rectangle {
                     easing.type: Easing.OutCubic 
                 }
                 ColorAnimation {
-                    properties: "color"
-                    duration: DefaultStyle.animations.duration
-                    easing.type: Easing.OutCubic
-                }
-                ColorAnimation { 
-                    properties: "border.color"
+                    properties: "color,border.color"
                     duration: DefaultStyle.animations.duration
                     easing.type: Easing.OutCubic
                 }
@@ -195,5 +192,4 @@ Rectangle {
         }
     }
 
-    Component.onCompleted: root.state = "idle"
 }

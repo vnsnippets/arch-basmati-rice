@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -15,20 +17,25 @@ RowLayout {
     spacing: DefaultStyle.widgets.spacing
     Layout.alignment: Qt.AlignCenter
 
-    readonly property var allWindows: Hyprland.toplevels.values
+    readonly property var filteredWorkspaces: {
+        const screenName = statusbar.screen?.name;
+        if (!screenName) return [];
+        return Hyprland.workspaces.values
+            .filter(ws => ws.monitor?.name === screenName)
+            .sort((a, b) => a.id - b.id);
+    }
 
     property ColorScheme style: ColorScheme {}
 
     Item { Layout.fillWidth: true }
 
     Repeater {
-        model: Hyprland.workspaces.values.filter((ws) => ws.monitor?.name === statusbar.screen?.name).sort((a, b) => a.id - b.id) ?? []
-        
+        model: root.filteredWorkspaces
+
         Clickable {
             id: dot
             required property var modelData
             readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData?.id ?? false
-            readonly property bool hasWindows: allWindows.some((e) => e.workspace?.id === modelData?.id) ?? false
 
             Layout.preferredHeight: 24
             implicitWidth: (isActive) ? 40 : 24

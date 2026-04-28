@@ -62,7 +62,7 @@ RowLayout {
         Shape {
             anchors.fill: parent
             layer.enabled: true
-            layer.samples: 8 // High samples for smooth rounded edges on CachyOS
+            layer.samples: 6 // High samples for smooth rounded edges on CachyOS
 
             scale: 1 / root.scale 
             

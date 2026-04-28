@@ -40,17 +40,13 @@ Singleton {
             onRunningChanged: {
                 if (running) return;
 
-                // 1. Remove from parent list safely
                 if (daemon_container) {
-                    let list = daemon_container.processes;
-                    const idx = list.indexOf(proc);
+                    const idx = daemon_container.processes.indexOf(proc);
                     if (idx >= 0) {
-                        list.splice(idx, 1);
-                        daemon_container.processes = list;
+                        daemon_container.processes.splice(idx, 1);
                     }
                 }
 
-                // 2. Execute callback
                 if (callbackHandle) {
                     const result = { 
                         success: _exitCode === 0, 

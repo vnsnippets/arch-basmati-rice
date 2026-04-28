@@ -34,7 +34,7 @@ Rectangle {
         anchors.centerIn: parent
 
         opacity: root.active ? 1 : 0
-        scale: 1 / root.scale 
+        //scale: 1 / root.scale  // Enable for counter scaling
 
         y: root.active ? 0 : 10 
         Behavior on y { NumberAnimation { duration: animation_duration; easing.type: Easing.OutCubic } }
