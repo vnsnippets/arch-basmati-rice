@@ -25,7 +25,9 @@ Popup {
             spacing: Style.popup.spacing
             Layout.fillWidth: true
 
-            BatteryControl {}
+            BatteryControl {
+                enable_monitoring: active
+            }
 
             Item { Layout.fillWidth: true }
 
