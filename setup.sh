@@ -13,16 +13,52 @@ STARSHIP_SOURCE="$CURRENT_DIR/starship"
 # Mode tracking: "none", "modules", or "sddm"
 MODE="none"
 
+symlink_module() {
+    local folder="$1"
+    
+    # Folder Existence Check
+    if [ ! -d "$CURRENT_DIR/$folder" ]; then
+        echo "  Skipping: '$folder' folder not found."
+        return 1
+    fi
+
+    local dest_path="$TARGET_DIR/$folder"
+    local link_existed=false
+
+    # Folder preservation logic (Backup real directories)
+    if [ -d "$dest_path" ] && [ ! -L "$dest_path" ]; then
+        local backup_path="${dest_path}.${CURRENT_DATE}.bak"
+        echo "󰆓  Backing up: $dest_path > $backup_path"
+        mv "$dest_path" "$backup_path"
+    fi
+
+    # Refresh symlink if it exists
+    if [ -L "$dest_path" ]; then
+        link_existed=true
+        rm "$dest_path"
+    fi
+
+    # Create the fresh symlink
+    ln -s "$CURRENT_DIR/$folder" "$dest_path"
+    # Conditional success message
+    if [ "$link_existed" = true ]; then
+        echo "  Updated Link: $folder > $dest_path"
+    else
+        echo "  Folder Linked: $folder > $dest_path"
+    fi
+}
+
 # --- HELP MESSAGE ---
 show_help() {
     echo "Usage: ./$SCRIPT_NAME [FLAGS] [FOLDERS...]"
     echo ""
     echo "Flags:"
-    echo "  --modules   Symlink specified folder(s) as whole directories into $TARGET_DIR."
-    echo "  --starship  Inline files from ./starship/ directly into $TARGET_DIR."
+    echo "  --modules   Symlink specified folder(s) into $TARGET_DIR."
+    echo "  --starship  Symlink files from ./starship/ directly into $TARGET_DIR."
+    echo "  --rofi      Symlink folder ./rofi as a module and customize launcher applications"
     echo "  --sddm      Install SDDM theme to system directory (requires sudo)."
     echo ""
-    echo "Example: ./$SCRIPT_NAME --modules nvim kitty --starship --sddm"
+    echo "Example: ./$SCRIPT_NAME --modules hypr kitty --starship --rofi --sddm"
     exit 0
 }
 
@@ -34,12 +70,79 @@ mkdir -p "$TARGET_DIR"
 
 for param in "$@"; do
     case "$param" in
+        --rofi)
+            echo ""
+            echo "󰀻  Setting up rofi (System access will be required)"
+            symlink_module "rofi"
+
+            echo ""
+            echo "󰀻  Scanning applications in /usr/share/applications..."
+            sudo -v
+            echo "Skipping the prompt (y/n) will keep the current application setup unchanged."
+                
+            for file in /usr/share/applications/*.desktop; do
+                [ -e "$file" ] || continue
+                
+                # Extract details
+                app_filename=$(basename "$file")
+                app_name=$(grep "^Name=" "$file" | head -1 | cut -d'=' -f2)
+                app_desc=$(grep "^Comment=" "$file" | head -1 | cut -d'=' -f2)
+                
+                # Check current NoDisplay status
+                if grep -q "NoDisplay=true" "$file"; then
+                    current_status="󰈈  Hidden"
+                else
+                    current_status="󰈈  Visible"
+                fi
+
+                echo "------------------------------------------------"
+                echo "  File:   $app_filename"
+                echo "󱓞  Name:   $app_name"
+                echo "󰛨  Desc:   ${app_desc:-No description available}"
+                echo "󰂵  Status: $current_status"
+                
+                while true; do
+                    read -p "󰗚  Show in application list? (y/n): " choice
+                    
+                    # If the user just presses Enter, choice is empty
+                    if [[ -z "$choice" ]]; then
+                        echo "  󰒲  No changes made."
+                        break
+                    fi
+                    
+                    case "${choice,,}" in
+                        y)
+                            echo "   Setting to visible..."
+                            sudo sed -i '/^NoDisplay=/d' "$file"
+                            break
+                            ;;
+                        n)
+                            echo "  󰈈  Setting to hidden..."
+                            # Remove existing and append to ensure it exists
+                            sudo sed -i '/^NoDisplay=/d' "$file"
+                            echo "NoDisplay=true" | sudo tee -a "$file" > /dev/null
+                            break
+                            ;;
+                        *)
+                            echo "    Invalid input. Please enter y or n or nothing"
+                            echo "        (yes) y: Show in Launcher"
+                            echo "        (no)  n: Hide in Launcher"
+                            echo "        (enter): Leave unchanged"
+                            ;;
+                    esac
+                done
+            done
+            sudo -k
+            echo "  Rofi setup complete."
+            continue
+            ;;
         --sddm)
             # Logic strictly targeting the ./sddm folder
+            echo ""
             if [ ! -d "$SDDM_SOURCE" ]; then
                 echo "  Error: SDDM source folder '$SDDM_SOURCE' not found."
             else
-                echo "󰑨  Processing SDDM Theme (System access required)..."
+                echo "󰑨  Setting up SDDM Theme (System access required)..."
                 sudo -v
                 if [ -d "$SDDM_TARGET" ]; then
                     BACKUP_SDDM="${SDDM_TARGET}.${CURRENT_DATE}"
@@ -55,6 +158,7 @@ for param in "$@"; do
             continue
             ;;
         --starship)
+            echo ""
             # Logic strictly targeting the ./starship folder
             if [ ! -d "$STARSHIP_SOURCE" ]; then
                 echo "  Error: Starship source folder '$STARSHIP_SOURCE' not found."
@@ -82,7 +186,8 @@ for param in "$@"; do
             ;;
         --modules)
             MODE="modules"
-            echo "󱂬  Mode Switch: Symlinking folders to $TARGET_DIR"
+            echo ""
+            echo "󱂬  Symlinking folders to $TARGET_DIR"
             continue
             ;;
         -h|--help)
@@ -92,23 +197,7 @@ for param in "$@"; do
 
     # Logic execution based on active MODE
     if [[ "$MODE" == "modules" ]]; then
-        if [ ! -d "$CURRENT_DIR/$param" ]; then
-            echo "  Skipping: '$param' folder not found."
-            continue
-        fi
-
-        DEST_PATH="$TARGET_DIR/$param"
-        
-        # Folder preservation logic
-        if [ -d "$DEST_PATH" ] && [ ! -L "$DEST_PATH" ]; then
-            BACKUP_FULL_PATH="${DEST_PATH}.${CURRENT_DATE}.bak"
-            echo "󰆓  Backing up: $DEST_PATH > $BACKUP_FULL_PATH"
-            mv "$DEST_PATH" "$BACKUP_FULL_PATH"
-        fi
-
-        [ -L "$DEST_PATH" ] && rm "$DEST_PATH"
-        ln -s "$CURRENT_DIR/$param" "$DEST_PATH"
-        echo "  Folder Linked: $param > $DEST_PATH"
+        symlink_module "$param"
     fi
 done
 
