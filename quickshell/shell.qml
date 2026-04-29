@@ -95,7 +95,7 @@ ShellRoot {
                     id: flyout_container
                     active: master_window.open_widget !== null
                     anchors.top: parent.top
-                    anchors.topMargin: DefaultStyle.widgets.size + DefaultStyle.widgets.margin * 2
+                    anchors.topMargin: Style.dock.height + Style.dock.margin * 2
 
                     property bool enable_glide: false
 
@@ -105,7 +105,7 @@ ShellRoot {
                         var centerX = widgetX + (master_window.open_widget.width / 2) - (implicitWidth / 2);
                         
                         // --- CLAMP LOGIC ---
-                        var margin = DefaultStyle.widgets.margin;
+                        var margin = Style.dock.margin;
                         var minX = margin;
                         var maxX = master_window.width - implicitWidth - margin;
                         
@@ -140,14 +140,14 @@ ShellRoot {
                 id: statusbar
                 screen: panel_group.modelData
 
-                implicitHeight: DefaultStyle.widgets.size
+                implicitHeight: Style.dock.height
                 // WlrLayershell.layer: WlrLayer.Overlay
 
                 anchors { top: true; left: true; right: true; }
                 margins { 
-                    top: DefaultStyle.widgets.margin
-                    left: DefaultStyle.widgets.margin
-                    right: DefaultStyle.widgets.margin
+                    top: Style.dock.margin
+                    left: Style.dock.margin
+                    right: Style.dock.margin
                     bottom: 0
                 }
                 

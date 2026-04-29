@@ -20,12 +20,12 @@ import qs.Widgets.Workspaces
 RowLayout {
     id: root
     anchors.fill: parent
-    spacing: DefaultStyle.widgets.spacing
+    spacing: Style.dock.spacing
 
     // --- LEFT ---
     RowLayout {
         id: section_start
-        spacing: DefaultStyle.widgets.spacing
+        spacing: Style.dock.spacing
         ClockWidget { 
             format: "yyyy-MM-dd HH:mm"
         }
@@ -43,45 +43,45 @@ RowLayout {
         color: "transparent"
 
         WorkspaceControl { 
-            style.border.active: DefaultStyle.color_light
+            style.border.active: Style.color_light
         }
     }
 
     // --- RIGHT ---
     RowLayout {
         id: section_end
-        spacing: DefaultStyle.widgets.spacing
+        spacing: Style.dock.spacing
 
         NetworkWidget  {
-            color_disconnected: DefaultStyle.color_slate
-            color_connecting: DefaultStyle.color_yellow
-            color_connected_default: DefaultStyle.color_green
-            color_connected_critical: DefaultStyle.color_red
-            color_connected_limited: DefaultStyle.color_yellow
+            color_disconnected: Style.color_slate
+            color_connecting: Style.color_yellow
+            color_connected_default: Style.color_green
+            color_connected_critical: Style.color_red
+            color_connected_limited: Style.color_yellow
         }
 
         AudioWidget {
-            color_inactive: DefaultStyle.color_slate
-            color_default: DefaultStyle.color_teal    
+            color_inactive: Style.color_slate
+            color_default: Style.color_teal    
         }
 
         BatteryWidget {
-            color_critical: DefaultStyle.color_red
-            color_warning: DefaultStyle.color_yellow
-            color_charging: DefaultStyle.color_yellow
-            color_default: DefaultStyle.color_green
+            color_critical: Style.color_red
+            color_warning: Style.color_yellow
+            color_charging: Style.color_yellow
+            color_default: Style.color_green
         }
 
         CaffeineWidget {
-            color_caffeineon: DefaultStyle.color_red
-            color_caffeineoff: DefaultStyle.color_blue
+            color_caffeineon: Style.color_red
+            color_caffeineoff: Style.color_blue
         }
 
         PowerWidget {
-            style.text.idle: DefaultStyle.color_red
-            style.background.active: DefaultStyle.color_red
-            style.text.active: DefaultStyle.color_dark
-            style.border.active: DefaultStyle.color_red
+            style.text.idle: Style.color_red
+            style.background.active: Style.color_red
+            style.text.active: Style.color_dark
+            style.border.active: Style.color_red
         }
     }
 }

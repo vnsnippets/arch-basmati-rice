@@ -37,13 +37,13 @@ RowLayout {
 
         readonly property color arc_color: {
             if (battery_is_charging) {
-                return DefaultStyle.color_yellow
+                return Style.color_yellow
             } else if (battery_percent <= Context.battery.critical_threshold) {
-                return DefaultStyle.color_red
+                return Style.color_red
             } else if (battery_percent <= Context.battery.warning_threshold) {
-                return DefaultStyle.color_yellow
+                return Style.color_yellow
             } else {
-                return DefaultStyle.color_green
+                return Style.color_green
             }
         }
 
@@ -103,7 +103,7 @@ RowLayout {
             text: root.animated_percentage.toFixed(0) + "%"
             font.pixelSize: 16
             font.bold: true
-            color: DefaultStyle.color_light
+            color: Style.color_light
         }
     }
 
@@ -112,13 +112,13 @@ RowLayout {
         Text {
             text: `AC: ${root.battery_is_charging ? "Connected" : "Disconnected"}`
             font.pixelSize: 16
-            color: DefaultStyle.color_light
+            color: Style.color_light
         }
 
         Text {
             text: "7 Hours 15 Minutes"
             font.pixelSize: 16
-            color: DefaultStyle.color_light
+            color: Style.color_light
             opacity: 0.6
         }
     }

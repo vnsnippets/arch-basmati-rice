@@ -14,7 +14,7 @@ RowLayout {
     id: root
 
     anchors.fill: parent
-    spacing: DefaultStyle.widgets.spacing
+    spacing: Style.widgets.spacing
     Layout.alignment: Qt.AlignCenter
 
     readonly property var filteredWorkspaces: {

@@ -19,10 +19,10 @@ Popup {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: DefaultStyle.popup.spacing
+        spacing: Style.popup.spacing
 
         RowLayout {
-            spacing: DefaultStyle.popup.spacing
+            spacing: Style.popup.spacing
             Layout.fillWidth: true
 
             BatteryControl {}
@@ -32,8 +32,8 @@ Popup {
             Clickable {
                 Layout.alignment: Qt.AlignTop
                 icon: ""
-                style.background.idle: DefaultStyle.popup.button.background.idle
-                style.background.active: DefaultStyle.popup.button.background.active
+                style.background.idle: Style.popup.button.background.idle
+                style.background.active: Style.popup.button.background.active
             }
         }
         
@@ -45,9 +45,9 @@ Popup {
             Layout.fillWidth: true
             spacing: 4
             
-            ModeControl { icon: ""; label: "Performance"; target: PowerProfile.Performance; color: DefaultStyle.color_red; }
-            ModeControl { icon: ""; label: "Balanced"; target: PowerProfile.Balanced; color: DefaultStyle.color_yellow; }
-            ModeControl { icon: ""; label: "Power Saver"; target: PowerProfile.PowerSaver; color: DefaultStyle.color_green; }
+            ModeControl { icon: ""; label: "Performance"; target: PowerProfile.Performance; color: Style.color_red; }
+            ModeControl { icon: ""; label: "Balanced"; target: PowerProfile.Balanced; color: Style.color_yellow; }
+            ModeControl { icon: ""; label: "Power Saver"; target: PowerProfile.PowerSaver; color: Style.color_green; }
         }
     }
 }

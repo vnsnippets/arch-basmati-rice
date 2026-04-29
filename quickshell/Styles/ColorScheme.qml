@@ -2,13 +2,13 @@ import QtQuick
 
 QtObject {
     property ClickableStyle background: ClickableStyle {
-        idle: DefaultStyle.color_dark
-        active: DefaultStyle.color_slate
+        idle: Style.color_dark
+        active: Style.color_dark
     }
 
     property ClickableStyle text: ClickableStyle {
-        idle: DefaultStyle.color_light
-        active: DefaultStyle.color_light
+        idle: Style.color_light
+        active: Style.color_light
     }
 
     property ClickableStyle icon: ClickableStyle {

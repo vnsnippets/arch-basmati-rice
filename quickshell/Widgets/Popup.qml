@@ -12,13 +12,13 @@ Rectangle {
 
     readonly property int animation_duration: 300
 
-    color: DefaultStyle.popup.background
-    radius: DefaultStyle.popup.radius
+    color: Style.popup.background
+    radius: Style.popup.border_radius
     border.width: 1
-    border.color:DefaultStyle.color_slate
+    border.color:Style.color_slate
 
-    implicitWidth: content_container.childrenRect.width + (DefaultStyle.widgets.padding * 2)
-    implicitHeight: content_container.childrenRect.height + (DefaultStyle.widgets.padding * 2)
+    implicitWidth: content_container.childrenRect.width + (Style.widgets.padding * 2)
+    implicitHeight: content_container.childrenRect.height + (Style.widgets.padding * 2)
     
     clip: true
 

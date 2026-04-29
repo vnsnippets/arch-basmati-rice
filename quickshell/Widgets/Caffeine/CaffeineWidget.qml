@@ -13,8 +13,8 @@ Clickable {
 
     readonly property bool active: Context.process.prevent_screen_lock !== null
 
-    property color color_caffeineon: DefaultStyle.color_red
-    property color color_caffeineoff: DefaultStyle.color_light
+    property color color_caffeineon: Style.color_red
+    property color color_caffeineoff: Style.color_light
 
     // (Active: True)   - Caffeine active (System won't lock)
     // (Active: False)  - Auto-lock is active (System will lock)

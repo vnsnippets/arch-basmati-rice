@@ -33,29 +33,27 @@ Rectangle {
     scale: 1.0
     color: style.background.idle
     border.color: style.border.idle
-    border.width: DefaultStyle.widgets.border
+    border.width: Style.border_width
 
-    // radius: height / DefaultStyle.widgets.roundness
-    radius: DefaultStyle.widgets.radius
+    radius: Style.border_radius
     width: implicitWidth
 
-    implicitWidth: label === "" ? DefaultStyle.widgets.size : content.width + DefaultStyle.widgets.padding
-    implicitHeight: DefaultStyle.widgets.size
+    implicitWidth: label === "" ? Style.widgets.height : content.width + Style.widgets.padding
+    implicitHeight: Style.widgets.height
 
     Layout.alignment: Qt.AlignCenter
-    // Layout.preferredHeight: DefaultStyle.widgets.size
 
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: DefaultStyle.widgets.spacing
+        spacing: Style.widgets.spacing
 
         Text {
             id: icon_text
             text: icon
             color: root.style.icon.idle
-            font.pixelSize: DefaultStyle.fonts.size
-            font.family: DefaultStyle.fonts.icon
+            font.pixelSize: Style.fonts.size
+            font.family: Style.fonts.icon
             visible: text !== ""
             Layout.margins: 0
             verticalAlignment: Text.AlignVCenter
@@ -66,8 +64,8 @@ Rectangle {
             id: label_text
             text: label
             color: root.style.text.idle
-            font.pixelSize: DefaultStyle.fonts.size
-            font.family: DefaultStyle.fonts.family
+            font.pixelSize: Style.fonts.size
+            font.family: Style.fonts.family
             visible: text !== ""
             Layout.margins: 0
             Layout.alignment: Qt.AlignVCenter
@@ -78,7 +76,7 @@ Rectangle {
         RowLayout {
             id: custom
             visible: children.length > 0 && children.some((c) => c.width > 0)
-            spacing: DefaultStyle.widgets.spacing
+            spacing: Style.widgets.spacing
             Layout.alignment: Qt.AlignVCenter
         }
     }
@@ -161,24 +159,24 @@ Rectangle {
             ParallelAnimation {
                 NumberAnimation {
                     properties: "scale"
-                    duration: DefaultStyle.animations.duration
+                    duration: Style.animations.duration
                     easing.type: Easing.OutCubic 
                 }
                 ColorAnimation {
                     properties: "color,border.color"
-                    duration: DefaultStyle.animations.duration
+                    duration: Style.animations.duration
                     easing.type: Easing.OutCubic
                 }
                 ColorAnimation { 
                     properties: "color"
                     target: icon_text
-                    duration: DefaultStyle.animations.duration
+                    duration: Style.animations.duration
                     easing.type: Easing.OutCubic
                 }
                 ColorAnimation { 
                     properties: "color"
                     target: label_text
-                    duration: DefaultStyle.animations.duration
+                    duration: Style.animations.duration
                     easing.type: Easing.OutCubic
                 }
             }
