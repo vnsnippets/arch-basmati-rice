@@ -55,5 +55,5 @@ Clickable {
         }
     }
 
-    onClicked: panel_group.delegateWidgetPopup(this);
+    onClicked: canvas.handleWidgetPopup(this);
 }

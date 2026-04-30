@@ -18,5 +18,5 @@ Clickable {
 
     label: Qt.formatDateTime(system_clock.date, format)
 
-    onClicked: panel_group.delegateWidgetPopup(this);
+    onClicked: canvas.handleWidgetPopup(this);
 }

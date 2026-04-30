@@ -17,7 +17,7 @@ RowLayout {
         Layout.preferredWidth: 0
         icon: "󰌾"
         label: "Lock"
-        onClicked: Daemon.execute(["loginctl", "lock-session"], () => panel_group.dismissPopup())
+        onClicked: Daemon.execute(["loginctl", "lock-session"])
         style.background.idle: Style.popup.button.background.idle
         style.background.active: Style.popup.button.background.active
     }
@@ -27,7 +27,7 @@ RowLayout {
         Layout.preferredWidth: 0
         icon: "󰒲"
         label: "Sleep"
-        onClicked: Daemon.execute(["systemctl", "suspend"], () => panel_group.dismissPopup())
+        onClicked: Daemon.execute(["systemctl", "suspend"])
         style.background.idle: Style.popup.button.background.idle
         style.background.active: Style.popup.button.background.active
     }

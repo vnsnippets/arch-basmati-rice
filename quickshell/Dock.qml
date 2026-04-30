@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 
 import qs.Styles
+import qs.Widgets
 import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
@@ -19,13 +20,17 @@ import qs.Widgets.Workspaces
 
 RowLayout {
     id: root
-    anchors.fill: parent
     spacing: Style.dock.spacing
+
+    anchors.topMargin: Style.dock.margin
+    anchors.leftMargin: Style.dock.margin
+    anchors.rightMargin: Style.dock.margin
 
     // --- LEFT ---
     RowLayout {
         id: section_start
         spacing: Style.dock.spacing
+
         ClockWidget { 
             format: "yyyy-MM-dd HH:mm"
         }
@@ -37,6 +42,7 @@ RowLayout {
 
         Layout.fillWidth: true
         implicitHeight: parent.height
+
         Layout.leftMargin: Math.max(offset, 0)
         Layout.rightMargin: Math.max(-offset, 0)
 
@@ -53,7 +59,7 @@ RowLayout {
         spacing: Style.dock.spacing
 
         NetworkWidget  {
-            color_disconnected: Style.color_slate
+            color_disconnected: Style.color_muted
             color_connecting: Style.color_yellow
             color_connected_default: Style.color_green
             color_connected_critical: Style.color_red
@@ -78,6 +84,7 @@ RowLayout {
         }
 
         PowerWidget {
+            Layout.alignment: Qt.AlignTop
             style.text.idle: Style.color_red
             style.background.active: Style.color_red
             style.text.active: Style.color_dark

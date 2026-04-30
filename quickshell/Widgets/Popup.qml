@@ -21,9 +21,10 @@ Rectangle {
     implicitHeight: content_container.childrenRect.height + (Style.widgets.padding * 2)
     
     clip: true
+    transformOrigin: Item.Top
 
     // Background Animations
-    scale: (active) ? 1.0 : 0.5
+    scale: (active) ? 1.0 : 0
     opacity: (active) ? 1.0 : 0
 
     Behavior on scale { NumberAnimation { duration: animation_duration; easing.type: Easing.OutCubic } }

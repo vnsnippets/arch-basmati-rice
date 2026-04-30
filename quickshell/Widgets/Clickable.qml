@@ -38,7 +38,7 @@ Rectangle {
     radius: Style.border_radius
     width: implicitWidth
 
-    implicitWidth: label === "" ? Style.widgets.height : content.width + Style.widgets.padding
+    implicitWidth: label === "" ? Style.widgets.width : content.width + Style.widgets.padding
     implicitHeight: Style.widgets.height
 
     Layout.alignment: Qt.AlignCenter

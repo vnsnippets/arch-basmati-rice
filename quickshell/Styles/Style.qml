@@ -5,6 +5,7 @@ import QtQuick
 Item {
     readonly property color color_dark: "#181825"
     readonly property color color_slate: "#313244"
+    readonly property color color_muted: "#B1B2C4"
     readonly property color color_light: "#cdd6f4"
     readonly property color color_blue: "#89b4fa"
     readonly property color color_teal: "#94e2d5"
@@ -22,6 +23,7 @@ Item {
     }
 
     readonly property QtObject widgets: QtObject {
+        readonly property int width: 40
         readonly property int height: 40
         readonly property int spacing: 4
         readonly property int padding: 24
