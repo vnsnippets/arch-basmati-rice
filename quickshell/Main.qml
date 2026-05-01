@@ -52,7 +52,7 @@ ShellRoot {
                 //            (used for the click-outside-to-close MouseArea).
                 mask: Region {
                     Region { item: dockMask }
-                    Region { item: popupContainer }
+                    Region { item: (canvas.expanded) ? popupContainer : null }
                 }
 
                 Item {

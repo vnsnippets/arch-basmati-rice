@@ -15,7 +15,7 @@ Rectangle {
     color: Style.popup.background
     radius: Style.popup.border_radius
     border.width: 1
-    border.color:Style.color_slate
+    border.color: Style.color_faded
 
     implicitWidth: content_container.childrenRect.width + (Style.widgets.padding * 2)
     implicitHeight: content_container.childrenRect.height + (Style.widgets.padding * 2)

@@ -11,7 +11,7 @@ Clickable {
     icon: ""
 
     onClicked: () => {
-        var cmd = ["pkill", "-9", "quickshell"]
+        var cmd = ["poweroff"]
         Context.process.shutdown = Daemon.execute(cmd);
     }
 }

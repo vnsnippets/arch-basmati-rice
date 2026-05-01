@@ -17,7 +17,7 @@ QtObject {
     }
 
     property ClickableStyle border: ClickableStyle {
-        idle: background.idle
-        active: background.active
+        idle: Style.color_faded
+        active: Style.color_faded
     }
 }

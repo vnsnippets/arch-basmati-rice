@@ -21,6 +21,7 @@ RowLayout {
         Layout.fillWidth: true
 
         property alias progress_width: progress.width
+        readonly property color trackColor: Qt.rgba(1, 1, 1, 0.1)
 
         // Custom Handle
         handle: Rectangle {
@@ -30,7 +31,8 @@ RowLayout {
 
             implicitWidth: 20
             implicitHeight: 20
-            radius: 10
+            radius: sd_root.availableHeight/2.5
+            border.width: 1
             border.color: Style.color_blue
             color: Style.color_light
             scale: sd_root.pressed ? 0.8 : 1
@@ -55,8 +57,8 @@ RowLayout {
             width: sd_root.availableWidth
             height: sd_root.availableHeight
 
-            radius: sd_root.availableHeight/2
-            color: Qt.rgba(1, 1, 1, 0.1)
+            radius: sd_root.availableHeight/2.5
+            color: sd_root.trackColor
 
             Rectangle {
                 id: progress

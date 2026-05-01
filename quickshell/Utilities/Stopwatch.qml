@@ -12,8 +12,11 @@ QtObject {
 
             onTriggered: {
                 if (root && _callback) _callback();
-                _callback = null;
-                this.destroy(); 
+                
+                if (!repeat) {
+                    _callback = null;
+                    this.destroy(); 
+                }
             }
 
             function begin(delay, cb) {
@@ -26,12 +29,15 @@ QtObject {
             function end() {
                 stop();
                 _callback = null;
+                if (!repeat) this.destroy();
             }
         }
     }
 
     // This creates and returns a UNIQUE instance
-    function create(parent_obj) {
-        return _timer_component.createObject(parent_obj);
+    function create(parent_obj, repeatEnabled) {
+        return _timer_component.createObject(parent_obj, {
+            "repeat": repeatEnabled
+        });
     }
 }

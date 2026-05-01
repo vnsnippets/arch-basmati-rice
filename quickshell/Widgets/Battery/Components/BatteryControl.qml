@@ -13,24 +13,25 @@ RowLayout {
     id: root
     spacing: 10
 
-    required property bool enable_monitoring
+    required property int refresh_interval
 
     readonly property real battery_percent: UPower.displayDevice.percentage * 100
     readonly property bool battery_is_charging: UPower.displayDevice.state === 1 || UPower.displayDevice.state === 5
 
-    property string runtime_label: enable_monitoring ? "Calculating..." : "Monitoring is disabled."
+    property string runtime_label: (refresh_interval <= 0) ? "Calculating..." : "Monitoring is disabled."
 
     Rectangle {
         id: arc_root
         
         width: 72
         height: 72
+        radius: width/2
 
-        readonly property var arc_center: width/2
-        readonly property var arc_radius: width/2 - width/10
-        readonly property var arc_stroke: width/18
+        // Smaller radius brings the arc inside the circle
+        readonly property var arc_center: radius
+        readonly property var arc_radius: radius - radius/5        
+        readonly property var arc_stroke: radius/8
 
-        radius: width / 2 // Makes the background a circle
 
         // Faint background color for the entire container circle
         color: Qt.rgba(1, 1, 1, 0.05) 
@@ -111,12 +112,11 @@ RowLayout {
             text: arc_root.animated_percentage.toFixed(0) + "%"
             font.pixelSize: 16
             font.bold: true
-            color: Style.color_light
+            color: arc_root.arc_color
         }
     }
 
-    ColumnLayout {
-        spacing: 4
+    Column {
         Text {
             text: `AC: ${root.battery_is_charging ? "Connected" : "Disconnected"}`
             font.pixelSize: 16
@@ -125,24 +125,17 @@ RowLayout {
 
         Text {
             text: (root.battery_is_charging) ? "Charging" : runtime_label
-            font.pixelSize: 16
+            font.pixelSize: 14
             color: Style.color_light
             opacity: 0.6
         }
     }
 
-    Timer {
-        id: monitoring_timer
-        interval: 10000
-        repeat: true
-        onTriggered: Daemon.execute(["sh", "-c", "upower -i $(upower -e | grep BAT) | grep 'time to' | awk '{print $4, $5}'"], (e) => {
-            calculateBatteryLife(e?.output);
-        })
-    }
-
     Component.onCompleted: Daemon.execute(["sh", "-c", "upower -i $(upower -e | grep BAT) | grep 'time to' | awk '{print $4, $5}'"], (e) => {
         calculateBatteryLife(e?.output);
-        if (enable_monitoring) monitoring_timer.start();
+        if (refresh_interval > 0) Stopwatch.create(arc_root, true).begin(refresh_interval, () => Daemon.execute(["sh", "-c", "upower -i $(upower -e | grep BAT) | grep 'time to' | awk '{print $4, $5}'"], (e) => {
+            calculateBatteryLife(e?.output);
+        }));
     })
 
     function calculateBatteryLife(e) {
