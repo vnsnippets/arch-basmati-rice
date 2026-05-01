@@ -8,7 +8,7 @@ import qs.Widgets
 
 Clickable {
     id: root
-    readonly property Component flyout: ClockPopup {}
+    readonly property Component popup: ClockPopup {}
     property string format: "yyyy-MM-dd HH:mm"
 
     SystemClock {

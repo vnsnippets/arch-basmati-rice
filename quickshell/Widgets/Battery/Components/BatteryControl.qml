@@ -13,15 +13,11 @@ RowLayout {
     id: root
     spacing: 10
 
-    required property int refresh_interval
-
-    readonly property real battery_percent: UPower.displayDevice.percentage * 100
-    readonly property bool battery_is_charging: UPower.displayDevice.state === 1 || UPower.displayDevice.state === 5
-
-    property string runtime_label: (refresh_interval <= 0) ? "Calculating..." : "Monitoring is disabled."
+    readonly property var device: UPower.displayDevice
+    readonly property real batteryPercentage: device.percentage * 100
 
     Rectangle {
-        id: arc_root
+        id: arcRoot
         
         width: 72
         height: 72
@@ -40,25 +36,22 @@ RowLayout {
         border.color: Qt.rgba(1, 1, 1, 0.1)
         border.width: 1
 
-        // Note: UPower.displayDevice.percentage is 0 to 1
-
-        property real animated_percentage: 0
-
-        readonly property color arc_color: {
-            if (root.battery_is_charging) {
+        property real animatedValue: 0
+        readonly property color arcColor: {
+            if (root.device.state === UPowerDeviceState.Charging) {
                 return Style.color_yellow
-            } else if (root.battery_percent <= Context.battery.critical_threshold) {
+            } else if (root.batteryPercentage <= Context.battery.criticalLimit) {
                 return Style.color_red
-            } else if (root.battery_percent <= Context.battery.warning_threshold) {
+            } else if (root.batteryPercentage <= Context.battery.warningLimit) {
                 return Style.color_yellow
             } else {
                 return Style.color_green
             }
         }
 
-        NumberAnimation on animated_percentage {
+        NumberAnimation on animatedValue {
             from: 0
-            to: root.battery_percent.toFixed(0) // Uses the battery_percent property (0-100)
+            to: root.batteryPercentage.toFixed(0) // Uses the batteryPercentage property (0-100)
             duration: 800
             easing.type: Easing.OutCubic 
         }
@@ -73,17 +66,17 @@ RowLayout {
             layer.enabled: true
             layer.samples: 6 // High samples for smooth rounded edges on CachyOS
 
-            scale: 1 / arc_root.scale 
+            scale: 1 / arcRoot.scale 
             
             // 1. THE TRACK (Faint background)
             ShapePath {
                 fillColor: "transparent"
                 strokeColor: Qt.rgba(1, 1, 1, 0.1) // White with 10% opacity
-                strokeWidth: arc_root.arc_stroke/2
+                strokeWidth: arcRoot.arc_stroke/2
 
                 PathAngleArc {
-                    centerX: arc_root.arc_center; centerY: arc_root.arc_center;
-                    radiusX: arc_root.arc_radius; radiusY: arc_root.arc_radius;
+                    centerX: arcRoot.arc_center; centerY: arcRoot.arc_center;
+                    radiusX: arcRoot.arc_radius; radiusY: arcRoot.arc_radius;
                     startAngle: 0
                     sweepAngle: 360 // Full circle track
                 }
@@ -92,77 +85,50 @@ RowLayout {
             // 2. THE ANIMATED ARC
             ShapePath {
                 fillColor: "transparent"
-                strokeColor: arc_root.arc_color
-                strokeWidth: arc_root.arc_stroke
+                strokeColor: arcRoot.arcColor
+                strokeWidth: arcRoot.arc_stroke
                 
                 // This property rounds the start and end of the arc
                 capStyle: ShapePath.RoundCap
 
                 PathAngleArc {
-                    centerX: arc_root.arc_center; centerY: arc_root.arc_center;
-                    radiusX: arc_root.arc_radius; radiusY: arc_root.arc_radius;
+                    centerX: arcRoot.arc_center; centerY: arcRoot.arc_center;
+                    radiusX: arcRoot.arc_radius; radiusY: arcRoot.arc_radius;
                     startAngle: -90
-                    sweepAngle: 360 * (arc_root.animated_percentage / 100)
+                    sweepAngle: 360 * (arcRoot.animatedValue / 100)
                 }
             }
         }
 
         Text {
             anchors.centerIn: parent
-            text: arc_root.animated_percentage.toFixed(0) + "%"
+            text: arcRoot.animatedValue.toFixed(0) + "%"
             font.pixelSize: 16
             font.bold: true
-            color: arc_root.arc_color
+            color: arcRoot.arcColor
         }
     }
 
     Column {
         Text {
-            text: `AC: ${root.battery_is_charging ? "Connected" : "Disconnected"}`
+            readonly property bool isCharging: root.device.state === UPowerDeviceState.Charging || root.device.state === UPowerDeviceState.PendingCharge
+            text: `AC: ${(isCharging) ? "Connected" : "Disconnected"}`
             font.pixelSize: 16
             color: Style.color_light
         }
 
         Text {
-            text: (root.battery_is_charging) ? "Charging" : runtime_label
+            text: {
+                if (root.device.state === UPowerDeviceState.Charging) return "Full in: " + formatTime(device.timeToFull);
+                if (root.device.state === UPowerDeviceState.Discharging) return "Left: " + formatTime(device.timeToEmpty);
+                return "Not Charging";
+            }
+            
+            visible: text !== ""
+
             font.pixelSize: 14
             color: Style.color_light
             opacity: 0.6
-        }
-    }
-
-    Component.onCompleted: Daemon.execute(["sh", "-c", "upower -i $(upower -e | grep BAT) | grep 'time to' | awk '{print $4, $5}'"], (e) => {
-        calculateBatteryLife(e?.output);
-        if (refresh_interval > 0) Stopwatch.create(arc_root, true).begin(refresh_interval, () => Daemon.execute(["sh", "-c", "upower -i $(upower -e | grep BAT) | grep 'time to' | awk '{print $4, $5}'"], (e) => {
-            calculateBatteryLife(e?.output);
-        }));
-    })
-
-    function calculateBatteryLife(e) {
-        if (e && e.length > 0) {
-            // e is expected to be something like "4.1 hours"
-            let parts = e.trim().split(" ");
-            let totalHours = parseFloat(parts[0]);
-
-            if (!isNaN(totalHours)) {
-                let hours = Math.floor(totalHours);
-                // Convert the decimal remainder into minutes
-                let minutes = Math.round((totalHours - hours) * 60);
-
-                // Handle cases where rounding might result in 60 minutes
-                if (minutes === 60) {
-                    hours += 1;
-                    minutes = 0;
-                }
-
-                const htext = `${hours} ${hours === 1 ? "Hour" : "Hours"}`
-                const mtext = (minutes > 0) ? `${minutes} ${minutes === 1 ? "Minute" : "Minutes"}` : ""
-                root.runtime_label = `${htext} ${mtext}`;
-            } else {
-                root.runtime_label = e.trim();
-            }
-        } else {
-            root.runtime_label = "Calculating...";
         }
     }
 }

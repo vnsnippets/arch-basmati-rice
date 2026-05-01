@@ -7,6 +7,7 @@ import Quickshell.Wayland
 
 import qs
 import qs.Styles
+import qs.Utilities
 
 ShellRoot {
     Variants {
@@ -40,6 +41,7 @@ ShellRoot {
 
                 exclusionMode: ExclusionMode.Ignore
                 WlrLayershell.layer: WlrLayer.Top
+                WlrLayershell.namespace: "qs-basmati-canvas"
 
                 color: "transparent"
                 surfaceFormat.opaque: false
@@ -120,31 +122,53 @@ ShellRoot {
                         SpringAnimation { spring: 5.0; damping: 0.375; epsilon: 0.25; }
                     }
 
-                    sourceComponent: canvas.activeWidget?.flyout
+                    sourceComponent: canvas.activeWidget?.popup
                 }
 
-                Timer {
-                    id: animate_close_flyout
-                    interval: 250
-                    onTriggered: {
-                        canvas.activeWidget = null;
-                    }
-                }
+                // function handleWidgetPopup(source) {
+                //     if (!source || !source.popup) return;
 
+                //     // 1. If clicking the SAME widget, start the close sequence
+                //     if (activeWidget === source) {
+                //         if (popupContainer.item) popupContainer.item.active = false;
+                //         Stopwatch.create(canvas, false).begin(Style.popup.animations.duration, () => canvas.activeWidget = null);
+                //         return;
+                //     }
+
+                //     // 2. If clicking a DIFFERENT widget, just update the reference
+                //     // The Loader stays active, so the popup doesn't die; it just moves and swaps content
+                //     popupContainer.enable_glide = (activeWidget !== null); 
+                //     activeWidget = source;
+                // }
+
+                readonly property var popupDestroyStopwatch: Stopwatch.create(popupContainer, false, false);
                 function handleWidgetPopup(source) {
-                    if (!source || !source.flyout) return;
+                    if (!source || !source.popup) return;
 
-                    // 1. If clicking the SAME widget, start the close sequence
-                    if (activeWidget === source) {
-                        if (popupContainer.item) popupContainer.item.active = false;
-                        animate_close_flyout.start();
+                    if (!activeWidget || !popupContainer.item) {
+                        // Display a new popup
+                        popupContainer.enable_glide = (activeWidget !== null); 
+                        activeWidget = source;
                         return;
                     }
 
-                    // 2. If clicking a DIFFERENT widget, just update the reference
-                    // The Loader stays active, so the popup doesn't die; it just moves and swaps content
-                    popupContainer.enable_glide = (activeWidget !== null); 
-                    activeWidget = source;
+                    // Toggle the active state
+                    // If it was animating out (false), this brings it back in (true)
+                    popupContainer.item.active = !popupContainer.item.active;
+                    
+                    if (popupContainer.item.active) {
+                        // If we brought it back, we don't want it to disappear anymore
+                        popupDestroyStopwatch.stop()
+                    } else {
+                        // If we are starting the close, set the timer
+                        popupDestroyStopwatch.begin(Style.popup.animations.duration, () => {
+                            // CRITICAL: Only nullify if the widget is STILL inactive 
+                            // after the timer finishes (prevents accidental closing)
+                            if (popupContainer.item && !popupContainer.item.active) {
+                                canvas.activeWidget = null;
+                            }
+                        });
+                    }
                 }
             }
         }

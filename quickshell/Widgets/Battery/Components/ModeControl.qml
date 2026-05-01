@@ -47,7 +47,7 @@ RowLayout {
             // Simplify style logic: if active, it stays its color even when idled
             style.background.idle: isActive ? modelData.color : Style.popup.button.background.idle
             style.text.idle:       isActive ? Style.color_dark : Style.color_light
-            style.border.idle:     isActive ? modelData.color : Style.color_faded
+            style.border.idle:     isActive ? modelData.color : Style.color_light
             
             style.background.active: modelData.color
             style.text.active:       Style.color_dark

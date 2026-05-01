@@ -3,10 +3,9 @@ pragma Singleton
 import QtQuick
 
 Item {
-    readonly property color color_dark: "#DF181825"
+    readonly property color color_dark: "#EA181825"
     readonly property color color_slate: "#313244"
     readonly property color color_muted: "#B1B2C4"
-    readonly property color color_faded: "#75cdd6f4"
     readonly property color color_light: "#cdd6f4"
     
     readonly property color color_blue: "#89b4fa"
@@ -34,12 +33,15 @@ Item {
     readonly property QtObject popup: QtObject {
         readonly property real border_radius: 12
         readonly property real spacing: 20
-        readonly property color background: "#F51e1e2e"
+        readonly property color background: color_dark
         readonly property QtObject button: QtObject {
             readonly property QtObject background: QtObject {
                 readonly property color idle: color_slate
                 readonly property color active: color_dark
             }
+        }
+        readonly property QtObject animations: QtObject {
+            readonly property int duration: 300
         }
     }
 

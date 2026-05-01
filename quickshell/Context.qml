@@ -17,7 +17,7 @@ Singleton {
     }
 
     readonly property QtObject battery: QtObject {
-        readonly property int critical_threshold: 20
-        readonly property int warning_threshold: 30
+        readonly property int criticalLimit: 20
+        readonly property int warningLimit: 30
     }
 }

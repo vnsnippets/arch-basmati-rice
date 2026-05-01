@@ -18,7 +18,7 @@ RowLayout {
     Layout.alignment: Qt.AlignCenter
 
     readonly property var filteredWorkspaces: {
-        const screenName = dock.screen?.name;
+        const screenName = canvas.screen?.name;
         if (!screenName) return [];
         return Hyprland.workspaces.values
             .filter(ws => ws.monitor?.name === screenName)

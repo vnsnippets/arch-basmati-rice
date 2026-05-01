@@ -8,51 +8,29 @@ import qs.Widgets
 
 Clickable {
     id: root
-    readonly property Component flyout: BatteryPopup {}
+    required property Component popup
 
-    // Icons for battery levels
-    readonly property list<string> batteryIcons: [
-        "", // 0–20%
-        "", // 21–40%
-        "", // 41–60%
-        "", // 61–80%
-        ""  // 81–100%
-    ]
-    readonly property string chargingIcon: ""
+    // Defaults to references
+    property color color_critical: Style.color_red
+    property color color_warning: Style.color_yellow
+    property color color_charging: Style.color_yellow
+    property color color_default: Style.color_green
 
-    property color color_critical: null
-    property color color_warning: null
-    property color color_charging: null
-    property color color_default: null
+    readonly property var device: UPower.displayDevice
+    property int batteryPercentage: Math.round(device.percentage * 100)
 
-    // Bind to displayDevice (the laptop battery)
-    property int percentage: Math.round(UPower.displayDevice.percentage * 100)
-    property int state: UPower.displayDevice.state
-
-    // Charging if state is 1 or 5
-    property bool charging: state === 1 || state === 5
-
-    // Icon selection
-    property string currentIcon: charging
-        ? chargingIcon
-        : batteryIcons[Math.min(4, Math.floor(percentage / 20))]
+    property bool isCharging: device.state === UPowerDeviceState.Charging || device.state === UPowerDeviceState.PendingCharge
 
     // Display
-    icon: currentIcon
-    label: percentage + "%"
-    tooltip: charging ? "Charging (" + percentage + "%)" : "Battery " + percentage + "%"
+    icon: isCharging ? "" : ["", "", "", "", ""][Math.min(4, Math.floor(batteryPercentage / 21))]
+    label: batteryPercentage + "%"
 
     // Style logic
     style.text.idle: {
-        if (charging) {
-            return color_charging
-        } else if (percentage <= Context.battery.critical_threshold) {
-            return color_critical
-        } else if (percentage <= Context.battery.warning_threshold) {
-            return color_warning
-        } else {
-            return color_default
-        }
+        if (root.device.state === UPowerDeviceState.Charging) return color_charging;
+        if (batteryPercentage <= Context.battery.criticalLimit) return color_critical;
+        if (batteryPercentage <= Context.battery.warningLimit) return color_yellow;
+        return color_default;
     }
 
     onClicked: canvas.handleWidgetPopup(this);

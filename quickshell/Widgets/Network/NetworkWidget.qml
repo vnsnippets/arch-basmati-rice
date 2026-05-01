@@ -66,7 +66,7 @@ Clickable {
     id: root
 
     // Use required properties for better performance/type safety
-    readonly property int critical_threshold: 25
+    readonly property int criticalLimit: 25
     readonly property int degraded_threshold: 60
     
     // Flattened properties to avoid object re-creation overhead
@@ -87,7 +87,7 @@ Clickable {
         if (network_state <= 50) return color_connecting;
         if (network_state < 70) return color_connected_limited;
         const s = active_device?.Strength ?? 0;
-        if (s < critical_threshold) return color_connected_critical;
+        if (s < criticalLimit) return color_connected_critical;
         if (s < degraded_threshold) return color_connected_limited;
         return color_connected_default;
     }

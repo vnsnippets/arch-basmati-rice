@@ -24,9 +24,7 @@ Popup {
             spacing: Style.popup.spacing
             Layout.fillWidth: true
 
-            BatteryControl {
-                refresh_interval: 10000
-            }
+            BatteryControl { Layout.fillWidth: true }
 
             Item { Layout.fillWidth: true }
 

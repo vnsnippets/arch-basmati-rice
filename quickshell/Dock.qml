@@ -72,6 +72,7 @@ RowLayout {
         }
 
         BatteryWidget {
+            popup: BatteryPopup {}
             color_critical: Style.color_red
             color_warning: Style.color_yellow
             color_charging: Style.color_yellow

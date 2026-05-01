@@ -35,8 +35,6 @@ Clickable {
         Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
     }
 
-    onDoubleClicked: Daemon.execute(["pavucontrol"])
-
     onScrolled: (event) => {
         if (change_lock || !Pipewire.defaultAudioSink?.audio) return;
 

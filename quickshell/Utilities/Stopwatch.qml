@@ -8,12 +8,14 @@ QtObject {
     property Component _timer_component: Component {
         Timer {
             repeat: false
+
+            property bool _autoDestroy: true
             property var _callback: null
 
             onTriggered: {
                 if (root && _callback) _callback();
                 
-                if (!repeat) {
+                if (!repeat && _autoDestroy) {
                     _callback = null;
                     this.destroy(); 
                 }
@@ -35,9 +37,10 @@ QtObject {
     }
 
     // This creates and returns a UNIQUE instance
-    function create(parent_obj, repeatEnabled) {
+    function create(parent_obj, repeat, autoDestroy) {
         return _timer_component.createObject(parent_obj, {
-            "repeat": repeatEnabled
+            "repeat": repeat,
+            "_autoDestroy": autoDestroy
         });
     }
 }

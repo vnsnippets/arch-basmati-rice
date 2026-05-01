@@ -44,7 +44,7 @@ Singleton {
         if (Context.stopwatch?.scan_networks?.running) return;
 
         // Initialize stopwatch on the global state object
-        Context.stopwatch.scan_networks = Stopwatch.create(logic, false);
+        Context.stopwatch.scan_networks = Stopwatch.create(logic, false, true);
 
         // Filter for Wireless (2) or WiFi (30) devices
         const devices = NetworkControl.GetAllDevices();

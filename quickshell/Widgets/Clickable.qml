@@ -27,7 +27,7 @@ Rectangle {
     property ColorScheme style: ColorScheme {}
     
     signal clicked()
-    signal doubleClicked()
+    // signal doubleClicked()
     signal scrolled(var wheel)
 
     scale: 1.0
@@ -87,7 +87,7 @@ Rectangle {
         cursorShape: (interactive) ? Qt.PointingHandCursor : Qt.ArrowCursor
 
         onClicked: if (interactive) root.clicked()
-        onDoubleClicked: if (interactive) root.doubleClicked()
+        // onDoubleClicked: if (interactive) root.doubleClicked()
         onWheel: (wheel) => { if (interactive) root.scrolled(wheel) }
 
         onPressed: if (interactive) root.state = "pressed"
