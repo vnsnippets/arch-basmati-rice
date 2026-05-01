@@ -125,22 +125,6 @@ ShellRoot {
                     sourceComponent: canvas.activeWidget?.popup
                 }
 
-                // function handleWidgetPopup(source) {
-                //     if (!source || !source.popup) return;
-
-                //     // 1. If clicking the SAME widget, start the close sequence
-                //     if (activeWidget === source) {
-                //         if (popupContainer.item) popupContainer.item.active = false;
-                //         Stopwatch.create(canvas, false).begin(Style.popup.animations.duration, () => canvas.activeWidget = null);
-                //         return;
-                //     }
-
-                //     // 2. If clicking a DIFFERENT widget, just update the reference
-                //     // The Loader stays active, so the popup doesn't die; it just moves and swaps content
-                //     popupContainer.enable_glide = (activeWidget !== null); 
-                //     activeWidget = source;
-                // }
-
                 readonly property var popupDestroyStopwatch: Stopwatch.create(popupContainer, false, false);
                 function handleWidgetPopup(source) {
                     if (!source || !source.popup) return;

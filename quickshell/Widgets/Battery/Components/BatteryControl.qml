@@ -11,7 +11,7 @@ import qs.Utilities
 
 RowLayout {
     id: root
-    spacing: 10
+    spacing: 12
 
     readonly property var device: UPower.displayDevice
     readonly property real batteryPercentage: device.percentage * 100
@@ -119,8 +119,8 @@ RowLayout {
 
         Text {
             text: {
-                if (root.device.state === UPowerDeviceState.Charging) return "Full in: " + formatTime(device.timeToFull);
-                if (root.device.state === UPowerDeviceState.Discharging) return "Left: " + formatTime(device.timeToEmpty);
+                if (root.device.state === UPowerDeviceState.Charging) return "Full in: " + secondsToHoursAndMinutesString(device.timeToFull);
+                if (root.device.state === UPowerDeviceState.Discharging) return secondsToHoursAndMinutesString(device.timeToEmpty);
                 return "Not Charging";
             }
             
@@ -129,6 +129,14 @@ RowLayout {
             font.pixelSize: 14
             color: Style.color_light
             opacity: 0.6
+
+            function secondsToHoursAndMinutesString(totalSeconds) {
+                const total = Math.floor(totalSeconds);
+                const hours = Math.floor(total / 3600);
+                const minutes = Math.floor((total % 3600) / 60);
+
+                return `${hours} ${hours > 1 ? "Hours" : "Hour"} ${minutes} ${minutes > 1 ? "Minutes" : "Minute"}`
+            }
         }
     }
 }
