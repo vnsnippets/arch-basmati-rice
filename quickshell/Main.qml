@@ -81,16 +81,16 @@ ShellRoot {
                 }
 
                 // ── Popup Logic  ───────────────────────────────────────────────
-                Connections {
-                    target: Hyprland
-                    enabled: canvas.activeWidget !== null
+                // Connections {
+                //     target: Hyprland
+                //     enabled: canvas.activeWidget !== null
 
-                    function onRawEvent(event) {
-                        if (event.name === "activewindowv2") {
-                            canvas.handleWidgetPopup(canvas.activeWidget);
-                        }
-                    }
-                }
+                //     function onRawEvent(event) {
+                //         if (event.name === "activewindowv2") {
+                //             canvas.handleWidgetPopup(canvas.activeWidget);
+                //         }
+                //     }
+                // }
 
                 Loader {
                     id: popupContainer
@@ -98,7 +98,7 @@ ShellRoot {
                     anchors.top: parent.top
                     anchors.topMargin: Style.dock.height + Style.dock.margin * 2
 
-                    property bool enable_glide: false
+                    property bool enableGlide: false
 
                     // AUTOMATIC CENTERING WITH CLAMPING
                     x: if (canvas.activeWidget) {
@@ -118,7 +118,7 @@ ShellRoot {
                     // THE GLIDE: Any change to 'x' will now slide over 300ms
                     // Only animate x if we're switching between widgets
                     Behavior on x {
-                        enabled: popupContainer.enable_glide
+                        enabled: popupContainer.enableGlide
                         SpringAnimation { spring: 5.0; damping: 0.375; epsilon: 0.25; }
                     }
 
@@ -129,30 +129,29 @@ ShellRoot {
                 function handleWidgetPopup(source) {
                     if (!source || !source.popup) return;
 
-                    if (!activeWidget || !popupContainer.item) {
-                        // Display a new popup
-                        popupContainer.enable_glide = (activeWidget !== null); 
-                        activeWidget = source;
-                        return;
+                    if (activeWidget === source) {
+                        // Toggle the active state
+                        // If it was animating out (false), this brings it back in (true)
+                        popupContainer.item.active = !popupContainer.item.active;
+                        
+                        if (popupContainer.item.active) {
+                            // If we brought it back, we don't want it to disappear anymore
+                            popupDestroyStopwatch.stop()
+                        } else {
+                            // If we are starting the close, set the timer
+                            popupDestroyStopwatch.begin(Style.popup.animations.duration, () => {
+                                // CRITICAL: Only nullify if the widget is STILL inactive 
+                                // after the timer finishes (prevents accidental closing)
+                                if (popupContainer.item && !popupContainer.item.active) {
+                                    canvas.activeWidget = null;
+                                }
+                            });
+                        }
                     }
 
-                    // Toggle the active state
-                    // If it was animating out (false), this brings it back in (true)
-                    popupContainer.item.active = !popupContainer.item.active;
-                    
-                    if (popupContainer.item.active) {
-                        // If we brought it back, we don't want it to disappear anymore
-                        popupDestroyStopwatch.stop()
-                    } else {
-                        // If we are starting the close, set the timer
-                        popupDestroyStopwatch.begin(Style.popup.animations.duration, () => {
-                            // CRITICAL: Only nullify if the widget is STILL inactive 
-                            // after the timer finishes (prevents accidental closing)
-                            if (popupContainer.item && !popupContainer.item.active) {
-                                canvas.activeWidget = null;
-                            }
-                        });
-                    }
+                    popupContainer.enableGlide = (activeWidget !== null); 
+                    activeWidget = source;
+                    return;
                 }
             }
         }

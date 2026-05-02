@@ -64,6 +64,7 @@ import qs.Widgets
 
 Clickable {
     id: root
+    required property Component popup
 
     // Use required properties for better performance/type safety
     readonly property int criticalLimit: 25
@@ -96,5 +97,6 @@ Clickable {
     label: (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
     style.text.idle: status_color
 
-    onClicked: Networking.handleConnectionToggle()
+    // onClicked: Networking.handleConnectionToggle()
+    onClicked: canvas.handleWidgetPopup(this);
 }

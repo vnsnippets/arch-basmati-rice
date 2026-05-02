@@ -29,7 +29,7 @@ Clickable {
     style.text.idle: {
         if (root.device.state === UPowerDeviceState.Charging) return color_charging;
         if (batteryPercentage <= Context.battery.criticalLimit) return color_critical;
-        if (batteryPercentage <= Context.battery.warningLimit) return color_yellow;
+        if (batteryPercentage <= Context.battery.warningLimit) return color_warning;
         return color_default;
     }
 

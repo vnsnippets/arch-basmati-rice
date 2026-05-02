@@ -59,6 +59,7 @@ RowLayout {
         spacing: Style.dock.spacing
 
         NetworkWidget  {
+            popup: NetworkPopup {}
             color_disconnected: Style.color_muted
             color_connecting: Style.color_yellow
             color_connected_default: Style.color_green

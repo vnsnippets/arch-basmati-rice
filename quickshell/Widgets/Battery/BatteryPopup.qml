@@ -3,14 +3,12 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Shapes
 
 import Quickshell
 
 import qs
 import qs.Styles
 import qs.Widgets
-import qs.Utilities
 import qs.Widgets.Battery.Components
 
 Popup {
