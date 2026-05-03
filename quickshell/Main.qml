@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 import qs
+import qs.Views
 import qs.Styles
 import qs.Utilities
 
@@ -36,6 +37,8 @@ ShellRoot {
                 property Item activeWidget: null
                 readonly property bool expanded: activeWidget !== null
 
+                property bool dashboardOpen: false
+
                 // Full screen — anchored to all four edges
                 anchors { top: true; left: true; right: true; bottom: true }
 
@@ -55,6 +58,7 @@ ShellRoot {
                 mask: Region {
                     Region { item: dockMask }
                     Region { item: (canvas.expanded) ? popupContainer : null }
+                    Region { item: (canvas.dashboardOpen) ? dashboard : null }
                 }
 
                 Item {
@@ -70,27 +74,19 @@ ShellRoot {
                 // ── Status bar  ───────────────────────────────────────────────
                 Dock {
                     id: dock
+                    z: 10
                     anchors {
                         top:   parent.top
                         left:  parent.left
                         right: parent.right
                     }
                     implicitHeight: Style.dock.height
-
-                    z: 10
                 }
 
-                // ── Popup Logic  ───────────────────────────────────────────────
-                // Connections {
-                //     target: Hyprland
-                //     enabled: canvas.activeWidget !== null
-
-                //     function onRawEvent(event) {
-                //         if (event.name === "activewindowv2") {
-                //             canvas.handleWidgetPopup(canvas.activeWidget);
-                //         }
-                //     }
-                // }
+                Dashboard {
+                    id: dashboard
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
                 Loader {
                     id: popupContainer
