@@ -13,6 +13,7 @@ import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
 import qs.Widgets.Clock
+import qs.Widgets.Dashboard
 import qs.Widgets.Network
 import qs.Widgets.Power
 import qs.Widgets.Workspaces
@@ -37,16 +38,13 @@ RowLayout {
 
     Item { Layout.fillWidth: true }
 
-    ControlCenter {
-
-    }
-
     // --- RIGHT ---
     RowLayout {
         spacing: Style.dock.spacing
 
         NetworkWidget  {
             popup: NetworkPopup {}
+            showLabel: false
             color_disconnected: Style.color_muted
             color_connecting: Style.color_yellow
             color_connected_default: Style.color_green

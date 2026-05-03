@@ -65,10 +65,12 @@ import qs.Types
 ClickableWithIconAndLabel {
     id: root
     required property Component popup
+    property bool showLabel: true
 
     // Use required properties for better performance/type safety
     readonly property int criticalLimit: 25
     readonly property int degraded_threshold: 60
+
     
     // Flattened properties to avoid object re-creation overhead
     readonly property int network_state: NetworkMonitor.GlobalState
@@ -94,7 +96,7 @@ ClickableWithIconAndLabel {
     }
 
     icon: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
-    label: (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
+    label: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
     style.text.idle: status_color
 
     // onClicked: Networking.handleConnectionToggle()

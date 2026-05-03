@@ -47,6 +47,16 @@ Item {
 
     readonly property QtObject dashboard: QtObject {
         readonly property int margin: 10
+        readonly property int width: 1920/2
+        readonly property int height: 1200/2
+        readonly property int spacing: 10
+        readonly property int radius: 32
+
+        readonly property QtObject colors: QtObject {
+            readonly property color background: color_dark
+            readonly property color border: color_light
+            readonly property color text: color_light
+        }
     }
 
     readonly property QtObject animations: QtObject {
