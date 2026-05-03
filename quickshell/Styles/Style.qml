@@ -45,6 +45,10 @@ Item {
         }
     }
 
+    readonly property QtObject dashboard: QtObject {
+        readonly property int margin: 10
+    }
+
     readonly property QtObject animations: QtObject {
         readonly property int duration: 250
     }

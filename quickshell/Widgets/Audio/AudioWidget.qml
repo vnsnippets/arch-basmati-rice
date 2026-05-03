@@ -5,9 +5,9 @@ import Quickshell.Services.Pipewire
 
 import qs
 import qs.Utilities
-import qs.Widgets
+import qs.Types
 
-Clickable {
+ClickableWithIconAndLabel {
     id: container
 
     readonly property real increment_diff: 0.05
@@ -35,7 +35,7 @@ Clickable {
         Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
     }
 
-    onScrolled: (event) => {
+    onWheel: (event) => {
         if (change_lock || !Pipewire.defaultAudioSink?.audio) return;
 
         change_lock = true;

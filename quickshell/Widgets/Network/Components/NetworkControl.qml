@@ -7,6 +7,7 @@ import qs
 import qs.Styles
 import qs.Widgets
 import qs.Utilities
+import qs.Types
 
 import NetworkMonitorPlugin
 
@@ -38,7 +39,7 @@ RowLayout {
     Row {
         spacing: 8
 
-        Clickable {
+        ClickableWithIconAndLabel {
             id: wifiToggle
             icon: ""
 
@@ -65,7 +66,7 @@ RowLayout {
             }
         }
 
-        Clickable {
+        ClickableWithIconAndLabel {
             id: bluetoothToggle
             icon: "󰂯"
         }

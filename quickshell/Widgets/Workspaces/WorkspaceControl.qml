@@ -8,14 +8,14 @@ import Quickshell.Hyprland
 
 import qs
 import qs.Styles
-import qs.Widgets
+import qs.Types
 
 RowLayout {
     id: root
-
-    anchors.fill: parent
     spacing: Style.widgets.spacing
     Layout.alignment: Qt.AlignCenter
+    Layout.leftMargin: 16
+    Layout.rightMargin: 16
 
     readonly property var filteredWorkspaces: {
         const screenName = canvas.screen?.name;
@@ -26,8 +26,6 @@ RowLayout {
     }
 
     property ColorScheme style: ColorScheme {}
-
-    Item { Layout.fillWidth: true }
 
     Repeater {
         model: root.filteredWorkspaces
@@ -50,6 +48,4 @@ RowLayout {
             }
         }
     }
-
-    Item { Layout.fillWidth: true }
 }

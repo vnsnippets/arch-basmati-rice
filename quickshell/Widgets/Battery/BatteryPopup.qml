@@ -8,8 +8,8 @@ import Quickshell
 
 import qs
 import qs.Styles
-import qs.Widgets
 import qs.Widgets.Battery.Components
+import qs.Types
 
 Popup {
     id: root
@@ -26,7 +26,7 @@ Popup {
 
             Item { Layout.fillWidth: true }
 
-            Clickable {
+            ClickableWithIconAndLabel {
                 Layout.alignment: Qt.AlignTop
                 icon: ""
                 style.background.idle: Style.popup.button.background.idle
@@ -35,7 +35,7 @@ Popup {
         }
         
         BrightnessControl { Layout.fillWidth: true }
-        // PowerControl { Layout.fillWidth: true }
+        PowerControl { Layout.fillWidth: true }
 
         // --- Power Profiles Selector ---
         ModeControl { Layout.fillWidth: true }

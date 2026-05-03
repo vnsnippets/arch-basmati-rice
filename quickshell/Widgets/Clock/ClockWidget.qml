@@ -4,9 +4,9 @@ import Quickshell
 import qs
 import qs.Styles
 import qs.Utilities
-import qs.Widgets
+import qs.Types
 
-Clickable {
+ClickableWithIconAndLabel {
     id: root
     readonly property Component popup: ClockPopup {}
     property string format: "yyyy-MM-dd HH:mm"

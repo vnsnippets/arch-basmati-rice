@@ -9,7 +9,6 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 
 import qs.Styles
-import qs.Widgets
 import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
@@ -17,6 +16,8 @@ import qs.Widgets.Clock
 import qs.Widgets.Network
 import qs.Widgets.Power
 import qs.Widgets.Workspaces
+
+import qs.Views
 
 RowLayout {
     id: root
@@ -28,34 +29,20 @@ RowLayout {
 
     // --- LEFT ---
     RowLayout {
-        id: section_start
         spacing: Style.dock.spacing
 
-        ClockWidget { 
-            format: "yyyy-MM-dd HH:mm"
-        }
+        ClockWidget { format: "yyyy-MM-dd HH:mm" }
+        WorkspaceControl { style.border.active: Style.color_light }
     }
 
-    // --- MIDDLE: Workspace Dots ---
-    Rectangle {
-        readonly property int offset: section_end.width - section_start.width
+    Item { Layout.fillWidth: true }
 
-        Layout.fillWidth: true
-        implicitHeight: parent.height
+    ControlCenter {
 
-        Layout.leftMargin: Math.max(offset, 0)
-        Layout.rightMargin: Math.max(-offset, 0)
-
-        color: "transparent"
-
-        WorkspaceControl { 
-            style.border.active: Style.color_light
-        }
     }
 
     // --- RIGHT ---
     RowLayout {
-        id: section_end
         spacing: Style.dock.spacing
 
         NetworkWidget  {

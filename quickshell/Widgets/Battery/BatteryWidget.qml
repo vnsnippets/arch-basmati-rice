@@ -4,9 +4,9 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Widgets
+import qs.Types
 
-Clickable {
+ClickableWithIconAndLabel {
     id: root
     required property Component popup
 

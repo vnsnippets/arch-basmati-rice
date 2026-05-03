@@ -5,7 +5,7 @@ import Quickshell
 
 import qs
 import qs.Styles
-import qs.Widgets
+import qs.Types
 
 Popup {
     id: root

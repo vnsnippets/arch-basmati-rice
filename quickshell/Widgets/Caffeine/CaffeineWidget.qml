@@ -6,9 +6,9 @@ import Quickshell.Io
 import qs
 import qs.Styles
 import qs.Utilities
-import qs.Widgets
+import qs.Types
 
-Clickable {
+ClickableWithIconAndLabel {
     id: root
 
     readonly property bool active: Context.process.prevent_screen_lock !== null

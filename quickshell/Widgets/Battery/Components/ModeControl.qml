@@ -6,7 +6,7 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Widgets
+import qs.Types
 
 RowLayout {
     id: root
@@ -40,9 +40,11 @@ RowLayout {
     Repeater {
         model: root.profileMap
 
-        delegate: Clickable {
+        delegate: ClickableWithIconAndLabel {
             required property var modelData
             readonly property bool isActive: PowerProfiles.profile === modelData.target
+
+            implicitWidth: Style.widgets.width
 
             // Simplify style logic: if active, it stays its color even when idled
             style.background.idle: isActive ? modelData.color : Style.popup.button.background.idle

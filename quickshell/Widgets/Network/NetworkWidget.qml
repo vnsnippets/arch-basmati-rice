@@ -7,7 +7,7 @@ import NetworkMonitorPlugin
 import qs
 import qs.Styles
 import qs.Services
-import qs.Widgets
+import qs.Types
 
 /**
 * Network.qml
@@ -62,7 +62,7 @@ import qs.Widgets
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-Clickable {
+ClickableWithIconAndLabel {
     id: root
     required property Component popup
 

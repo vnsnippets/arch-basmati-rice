@@ -5,16 +5,15 @@ import Quickshell
 
 import qs
 import qs.Styles
-import qs.Widgets
 import qs.Utilities
+import qs.Types
 
 RowLayout {
     Layout.fillWidth: true
     spacing: Style.widgets.spacing
 
-    Clickable { 
+    ClickableWithIconAndLabel {
         Layout.fillWidth: true
-        Layout.preferredWidth: 0
         icon: "󰌾"
         label: "Lock"
         onClicked: Daemon.execute(["loginctl", "lock-session"])
@@ -22,9 +21,8 @@ RowLayout {
         style.background.active: Style.popup.button.background.active
     }
 
-    Clickable {
+    ClickableWithIconAndLabel {
         Layout.fillWidth: true
-        Layout.preferredWidth: 0
         icon: "󰒲"
         label: "Sleep"
         onClicked: Daemon.execute(["systemctl", "suspend"])
@@ -32,9 +30,8 @@ RowLayout {
         style.background.active: Style.popup.button.background.active
     }
 
-    Clickable {
+    ClickableWithIconAndLabel {
         Layout.fillWidth: true
-        Layout.preferredWidth: 0
         icon: "󰑓"
         label: "Reboot"
         onClicked: Daemon.execute(["systemctl", "reboot"])
@@ -42,9 +39,8 @@ RowLayout {
         style.background.active: Style.popup.button.background.active
     }
     
-    Clickable {
+    ClickableWithIconAndLabel {
         Layout.fillWidth: true
-        Layout.preferredWidth: 0
         icon: "󰐥"
         label: "Power"
         onClicked: Daemon.execute(["systemctl", "poweroff"])
