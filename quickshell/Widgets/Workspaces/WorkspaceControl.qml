@@ -23,7 +23,7 @@ RowLayout {
     readonly property int dotActiveSize: dotSize
     readonly property int fontSize: 14
 
-    readonly property color activeColor: Style.colors.blue
+    readonly property color activeColor: Style.colors.green
 
     readonly property var filteredWorkspaces: {
         const screenName = canvas.screen?.name;

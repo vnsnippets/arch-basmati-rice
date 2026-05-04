@@ -18,6 +18,7 @@ import qs.Widgets.Power
 import qs.Widgets.Workspaces
 
 import qs.Views
+import qs.Types.Components
 
 Item {
     id: root
@@ -35,6 +36,10 @@ Item {
         anchors.left: parent.left;
         anchors.verticalCenter: parent.verticalCenter;
 
+        ClickableWithIconAndLabel {
+            icon: ""
+        }
+
         ClockWidget {
             radius: Style.widget.radius
             style.background.idle: Style.widget.colors.background
@@ -47,6 +52,7 @@ Item {
 
         spacing: Style.dock.spacing
         offset: 12
+        radius: implicitWidth/2
         WorkspaceControl {
             filterByMonitor: false
         }
@@ -108,6 +114,10 @@ Item {
 
             radius: Style.widget.radius
             style.background.idle: Style.widget.colors.background
+        }
+
+        ClickableWithIconAndLabel {
+            icon: ""
         }
     }
 }

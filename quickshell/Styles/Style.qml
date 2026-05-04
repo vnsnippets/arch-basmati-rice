@@ -45,7 +45,7 @@ Item {
         readonly property int height: 40
         readonly property int spacing: 4
         readonly property int padding: 24
-        readonly property int radius: 12
+        readonly property int radius: 16
 
         readonly property QtObject colors: QtObject {
             readonly property color background: colors.mantle

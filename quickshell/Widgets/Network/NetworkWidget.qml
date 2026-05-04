@@ -66,6 +66,7 @@ ClickableWithIconAndLabel {
     id: root
     required property Component popup
     property bool showLabel: true
+    property string wifiIcon: ""
 
     // Use required properties for better performance/type safety
     readonly property int criticalLimit: 25
@@ -95,7 +96,7 @@ ClickableWithIconAndLabel {
         return color_connected_default;
     }
 
-    icon: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
+    icon: (network_state >= 60) ? root.wifiIcon: (network_state >= 30 || isScanning) ? "" : ""
     label: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
     style.text.idle: status_color
 

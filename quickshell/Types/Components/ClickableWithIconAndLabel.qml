@@ -12,11 +12,12 @@ import qs.Types.Components
 import qs.Types.States
 
 Clickable {
-    id: clickable
+    id: root
     property string icon: ""
     property string label: ""
 
     property int fontSize: Style.fonts.size
+    property string iconFont: Style.fonts.icon
 
     implicitWidth: (label === "") ? Style.widget.width : content.width + Style.widget.padding
     implicitHeight: Style.widget.height
@@ -26,16 +27,16 @@ Clickable {
         anchors.centerIn: parent
         spacing: Style.widget.spacing
 
-        readonly property bool isHoveredOrPress: (clickable.state === ClickableState.pressed || clickable.state === ClickableState.hover)
+        readonly property bool isHoveredOrPress: (root.state === ClickableState.pressed || root.state === ClickableState.hover)
 
         Text {
             id: icon_text
-            text: clickable.icon
+            text: root.icon
 
-            color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
+            color: (content.isHoveredOrPress) ? root.style.text.active : root.style.text.idle
             
-            font.pixelSize: clickable.fontSize
-            font.family: Style.fonts.icon
+            font.pixelSize: root.fontSize
+            font.family: root.iconFont
             visible: text !== ""
 
             Layout.alignment: Qt.AlignVCenter
@@ -46,11 +47,11 @@ Clickable {
 
         Text {
             id: label_text
-            text: clickable.label
+            text: root.label
             
-            color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
+            color: (content.isHoveredOrPress) ? root.style.text.active : root.style.text.idle
 
-            font.pixelSize: clickable.fontSize
+            font.pixelSize: root.fontSize
             font.family: Style.fonts.family
             visible: text !== ""
             
