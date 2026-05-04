@@ -22,7 +22,7 @@ Rectangle {
     height: masterLayout.height
     
     color: Style.dashboard.colors.background
-    radius: canvas.dashboardOpen ? Style.dashboard.radius : Style.border_radius
+    radius: canvas.dashboardOpen ? Style.dashboard.radius : Style.widget.radius
     clip: true
     
     // Animate dimension changes
@@ -109,7 +109,7 @@ Rectangle {
                     Layout.column: 4
 
                     style: ClickableStyle {
-                        background.idle: Style.color_slate
+                        background.idle: Style.colors.base
                     }
 
                     implicitWidth: 56
@@ -124,7 +124,7 @@ Rectangle {
                     Layout.column: 4
 
                     style: ClickableStyle {
-                        background.idle: Style.color_slate
+                        background.idle: Style.colors.base
                     }
 
                     implicitWidth: 56
@@ -139,7 +139,7 @@ Rectangle {
                     Layout.column: 4
 
                     style: ClickableStyle {
-                        background.idle: Style.color_slate
+                        background.idle: Style.colors.base
                     }
 
                     implicitWidth: 56
@@ -154,7 +154,7 @@ Rectangle {
                     Layout.column: 4
 
                     style: ClickableStyle {
-                        background.idle: Style.color_slate
+                        background.idle: Style.colors.base
                     }
 
                     implicitWidth: 56
@@ -169,7 +169,7 @@ Rectangle {
                     Layout.column: 4
 
                     style: ClickableStyle {
-                        background.idle: Style.color_slate
+                        background.idle: Style.colors.base
                     }
 
                     implicitWidth: 56

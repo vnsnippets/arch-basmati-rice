@@ -85,11 +85,6 @@ ShellRoot {
                     implicitHeight: Style.dock.height + (Style.dock.margin * 2)
                 }
 
-                Dashboard {
-                    id: dashboard
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
                 Loader {
                     id: popupContainer
                     active: canvas.activeWidget !== null

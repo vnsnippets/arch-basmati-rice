@@ -13,9 +13,9 @@ RowLayout {
     spacing: 8
 
     readonly property var profileMap: [
-        { icon: "", label: "Performance", color: Style.color_red, target: PowerProfile.Performance },
-        { icon: "", label: "Balanced", color: Style.color_yellow, target: PowerProfile.Balanced },
-        { icon: "", label: "Power Saver", color: Style.color_green, target: PowerProfile.PowerSaver }
+        { icon: "", label: "Performance", color: Style.colors.red, target: PowerProfile.Performance },
+        { icon: "", label: "Balanced", color: Style.colors.yellow, target: PowerProfile.Balanced },
+        { icon: "", label: "Power Saver", color: Style.colors.green, target: PowerProfile.PowerSaver }
     ]
 
     readonly property var activeProfile: profileMap[PowerProfiles.profile]
@@ -26,14 +26,14 @@ RowLayout {
         Text {
             text: "Profile"
             font.pixelSize: 14
-            color: Style.color_light
+            color: Style.colors.text
             opacity: 0.6
         }
 
         Text {
             text: root.activeProfile.label
             font.pixelSize: 16
-            color: Style.color_light
+            color: Style.colors.text
         }
     }
 
@@ -48,11 +48,11 @@ RowLayout {
 
             // Simplify style logic: if active, it stays its color even when idled
             style.background.idle: isActive ? modelData.color : Style.popup.button.background.idle
-            style.text.idle:       isActive ? Style.color_dark : Style.color_light
-            style.border.idle:     isActive ? modelData.color : Style.color_light
+            style.text.idle:       isActive ? Style.colors.mantle : Style.colors.text
+            style.border.idle:     isActive ? modelData.color : Style.colors.text
             
             style.background.active: modelData.color
-            style.text.active:       Style.color_dark
+            style.text.active:       Style.colors.mantle
             style.border.active:     modelData.color
 
             icon: modelData.icon

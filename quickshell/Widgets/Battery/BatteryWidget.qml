@@ -11,10 +11,10 @@ ClickableWithIconAndLabel {
     required property Component popup
 
     // Defaults to references
-    property color color_critical: Style.color_red
-    property color color_warning: Style.color_yellow
-    property color color_charging: Style.color_yellow
-    property color color_default: Style.color_green
+    property color color_critical: Style.colors.red
+    property color color_warning: Style.colors.yellow
+    property color color_charging: Style.colors.yellow
+    property color color_default: Style.colors.green
 
     readonly property var device: UPower.displayDevice
     property int batteryPercentage: Math.round(device.percentage * 100)

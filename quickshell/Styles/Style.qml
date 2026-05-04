@@ -4,27 +4,39 @@ import QtQuick
 
 
 Item {
-    readonly property color color_dark: "#181825"
-    readonly property color color_dark_75: Qt.alpha(color_dark, 0.75)
+    property QtObject colors: QtObject {
+        property color rosewater: "#f5e0dc"
+        property color flamingo: "#f2cdcd"
+        property color pink: "#f5c2e7"
+        property color mauve: "#cba6f7"
+        property color red: "#f38ba8"
+        property color maroon: "#eba0ac"
+        property color peach: "#fab387"
+        property color yellow: "#f9e2af"
+        property color green: "#a6e3a1"
+        property color teal: "#94e2d5"
+        property color sky: "#89dceb"
+        property color sapphire: "#74c7ec"
+        property color blue: "#89b4fa"
+        property color lavender: "#b4befe"
 
-
-    readonly property color color_slate: "#313244"
-    readonly property color color_muted: "#B1B2C4"
-    readonly property color color_light: "#cdd6f4"
-    readonly property color color_light_faded: "#A5cdd6f4"
-    
-    readonly property color color_blue: "#89b4fa"
-    readonly property color color_teal: "#94e2d5"
-    readonly property color color_green: "#a6e3a1"
-    readonly property color color_yellow: "#f9e2af"
-    readonly property color color_red: "#f38ba8"
-
-    readonly property int border_width: 1
-    readonly property int border_radius: 16
+        property color text: "#cdd6f4"
+        property color subtext1: "#bac2de"
+        property color subtext0: "#a6adc8"
+        property color overlay2: "#9399b2"
+        property color overlay1: "#7f849c"
+        property color overlay0: "#6c7086"
+        property color surface2: "#585b70"
+        property color surface1: "#45475a"
+        property color surface0: "#313244"
+        property color base: "#1e1e2e"
+        property color mantle: "#181825"
+        property color crust: "#11111b"
+    }
 
     readonly property QtObject dock: QtObject {
         readonly property int spacing: 4
-        readonly property int margin: 10
+        readonly property int margin: 8
         readonly property int height: 40
     }
 
@@ -33,17 +45,24 @@ Item {
         readonly property int height: 40
         readonly property int spacing: 4
         readonly property int padding: 24
+        readonly property int radius: 12
+
+        readonly property QtObject colors: QtObject {
+            readonly property color background: colors.mantle
+            readonly property color border: "transparent"
+            readonly property color text: colors.text
+        }
     }
 
     readonly property QtObject popup: QtObject {
-        readonly property real border_radius: 12
+        readonly property real radius: 12
         readonly property real spacing: 20
-        readonly property color background: color_dark
+        readonly property color background: colors.mantle
 
         readonly property QtObject button: QtObject {
             readonly property QtObject background: QtObject {
-                readonly property color idle: color_slate
-                readonly property color active: color_dark
+                readonly property color idle: colors.base
+                readonly property color active: colors.mantle
             }
         }
         readonly property QtObject animations: QtObject {
@@ -62,9 +81,9 @@ Item {
         readonly property int columns: 16
 
         readonly property QtObject colors: QtObject {
-            readonly property color background: color_dark_75
-            readonly property color border: color_light
-            readonly property color text: color_light
+            readonly property color background: colors.mantle
+            readonly property color border: colors.text
+            readonly property color text: colors.text
         }
 
         readonly property QtObject cell: QtObject {

@@ -6,6 +6,6 @@ import Quickshell
 import qs.Styles
 
 Rectangle {
-    color: Style.color_slate
+    color: Style.colors.base
     radius: Style.dashboard.cell.radius
 }

@@ -12,7 +12,7 @@ RowLayout {
     spacing: 10
     Text {
         text: ""
-        color: Style.color_light
+        color: Style.colors.text
         font.pixelSize: 20
     }
     
@@ -33,8 +33,8 @@ RowLayout {
             implicitHeight: 20
             radius: sd_root.availableHeight/2.5
             border.width: 1
-            border.color: Style.color_blue
-            color: Style.color_light
+            border.color: Style.colors.blue
+            color: Style.colors.text
             scale: sd_root.pressed ? 0.8 : 1
 
             Behavior on scale {
@@ -74,7 +74,7 @@ RowLayout {
                 // implicitWidth: (sd_root.visualPosition * (parent.width - sd_root.handle.width)) + (sd_root.handle.width)
                 // width: implicitWidth
                 height: parent.height
-                color: Style.color_blue
+                color: Style.colors.blue
                 radius: parent.radius
 
                 Behavior on width {

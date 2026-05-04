@@ -13,7 +13,7 @@ Popup {
         anchors.centerIn: parent
         Text {
             text: "Hello World from clock"
-            color: Style.color_light
+            color: Style.colors.text
             font.family: Style.fonts.family
             font.pixelSize: Style.fonts.size
         }

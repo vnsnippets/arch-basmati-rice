@@ -16,7 +16,7 @@ WrapperMouseArea {
 
     default property alias contentData: container.data
 
-    property int radius: Style.border_radius
+    property int radius: style.radius
 
     property QtObject locks: QtObject {
         property bool hover: false
@@ -51,13 +51,13 @@ WrapperMouseArea {
         State {
             name: ClickableState.hover
             PropertyChanges { target: container; scale: 1; }
-            PropertyChanges { target: container; radius: root.radius + 4; }
+            PropertyChanges { target: container; radius: root.radius*2; }
             PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
         },
         State {
             name: ClickableState.pressed
             PropertyChanges { target: container; scale: 0.94; }
-            PropertyChanges { target: container; radius: root.radius + 4; }
+            PropertyChanges { target: container; radius: root.radius*2; }
             PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
         }
     ]
@@ -67,9 +67,9 @@ WrapperMouseArea {
         anchors.fill: parent
         scale: 1.0
 
-        color: style.background.idle
-        border.color: style.border.idle
-        border.width: Style.border_width
+        color: root.style.background.idle
+        border.color: root.style.border.idle
+        border.width: root.style.borderWidth
 
         radius: root.radius
         // antialiasing: true

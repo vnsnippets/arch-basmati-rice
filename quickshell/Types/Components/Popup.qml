@@ -11,9 +11,9 @@ Rectangle {
     id: root
 
     color: Style.popup.background
-    radius: Style.popup.border_radius
+    radius: Style.popup.radius
     border.width: 1
-    border.color: Style.color_light
+    border.color: Style.colors.text
 
     default property alias content: content_container.data
     property bool active: false

@@ -19,62 +19,92 @@ import qs.Widgets.Workspaces
 
 import qs.Views
 
-RowLayout {
+Item {
     id: root
-    spacing: Style.dock.spacing
 
+    anchors.fill: parent
     anchors.topMargin: Style.dock.margin
     anchors.leftMargin: Style.dock.margin
     anchors.rightMargin: Style.dock.margin
 
     // --- LEFT ---
     RowLayout {
-        spacing: Style.dock.spacing
+        anchors.top: parent.top;
+        anchors.left: parent.left;
 
-        ClockWidget { format: "yyyy-MM-dd HH:mm" }
-        WorkspaceControl { filterByMonitor: false }
+        ClockWidget {
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
+        }
     }
 
-    Item { Layout.fillWidth: true }
+    WidgetGroup {
+        anchors.top: parent.top;
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        spacing: Style.dock.spacing
+        offset: 12
+        WorkspaceControl {
+            filterByMonitor: false
+        }
+    }
 
     // --- RIGHT ---
     RowLayout {
+        anchors.top: parent.top;
+        anchors.right: parent.right;
+
         spacing: Style.dock.spacing
 
         NetworkWidget  {
             popup: NetworkPopup {}
             showLabel: false
-            color_disconnected: Style.color_muted
-            color_connecting: Style.color_yellow
-            color_connected_default: Style.color_green
-            color_connected_critical: Style.color_red
-            color_connected_limited: Style.color_yellow
+            color_disconnected: Style.colors.subtext0
+            color_connecting: Style.colors.yellow
+            color_connected_default: Style.colors.green
+            color_connected_critical: Style.colors.red
+            color_connected_limited: Style.colors.yellow
+
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
         }
 
         AudioWidget {
-            color_inactive: Style.color_slate
-            color_default: Style.color_teal    
+            color_inactive: Style.colors.base
+            color_default: Style.colors.blue
+
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
         }
 
         BatteryWidget {
             popup: BatteryPopup {}
-            color_critical: Style.color_red
-            color_warning: Style.color_yellow
-            color_charging: Style.color_yellow
-            color_default: Style.color_green
+            color_critical: Style.colors.red
+            color_warning: Style.colors.yellow
+            color_charging: Style.colors.yellow
+            color_default: Style.colors.green
+
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
         }
 
         CaffeineWidget {
-            color_caffeineon: Style.color_red
-            color_caffeineoff: Style.color_blue
+            color_caffeineon: Style.colors.red
+            color_caffeineoff: Style.colors.blue
+
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
         }
 
         PowerWidget {
             Layout.alignment: Qt.AlignTop
-            style.text.idle: Style.color_red
-            style.background.active: Style.color_red
-            style.text.active: Style.color_dark
-            style.border.active: Style.color_red
+            style.text.idle: Style.colors.red
+            style.background.active: Style.colors.red
+            style.text.active: Style.colors.mantle
+            style.border.active: Style.colors.red
+
+            radius: Style.widget.radius
+            style.background.idle: Style.widget.colors.background
         }
     }
 }

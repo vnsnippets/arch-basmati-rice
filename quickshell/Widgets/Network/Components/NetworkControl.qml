@@ -25,13 +25,13 @@ RowLayout {
         Text {
             text: "Connected"
             font.pixelSize: 14
-            color: Style.color_light
+            color: Style.colors.text
             opacity: 0.6
         }
         Text {
             text: (networkState >= 70) ? `${activieWifiDevice?.Ssid} (${activieWifiDevice.Strength}%)` : (networkState >= 60) ? `${activieWifiDevice?.Ssid} (Local)` : (networkState >= 40) ? "Connecting" : "Disconnected"
             font.pixelSize: 16
-            color: Style.color_light
+            color: Style.colors.text
         }
     }
 
@@ -42,13 +42,13 @@ RowLayout {
             id: wifiToggle
             icon: ""
 
-            style.background.idle: (root.wifiOn) ? Style.color_blue : Style.color_dark
-            style.border.idle: (root.wifiOn) ? Style.color_blue : Style.color_dark
-            style.text.idle: (root.wifiOn) ? Style.color_dark : Style.color_light
+            style.background.idle: (root.wifiOn) ? Style.colors.blue : Style.colors.mantle
+            style.border.idle: (root.wifiOn) ? Style.colors.blue : Style.colors.mantle
+            style.text.idle: (root.wifiOn) ? Style.colors.mantle : Style.colors.text
 
-            style.background.active: Style.color_blue
-            style.border.active: Style.color_blue
-            style.text.active: Style.color_dark
+            style.background.active: Style.colors.blue
+            style.border.active: Style.colors.blue
+            style.text.active: Style.colors.mantle
 
             onClicked: Daemon.execute(["nmcli", "radio", "wifi", (root.wifiOn) ? "off" : "on"], () => {
                 Daemon.execute(["nmcli", "radio", "wifi"], (e) => {

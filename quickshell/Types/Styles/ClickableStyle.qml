@@ -4,14 +4,14 @@ import qs.Styles
 
 QtObject {
     property ColorByState background: ColorByState {
-        idle: Style.color_dark_75
-        active: Style.color_dark_75
+        idle: Style.colors.mantle
+        active: Style.colors.mantle
         hover: active
     }
 
     property ColorByState text: ColorByState {
-        idle: Style.color_light
-        active: Style.color_light
+        idle: Style.colors.text
+        active: Style.colors.text
         hover: active
     }
 
@@ -26,4 +26,7 @@ QtObject {
         active: text.active
         hover: "transparent"
     }
+    
+    property int borderWidth: 1
+    property int radius: 16
 }
