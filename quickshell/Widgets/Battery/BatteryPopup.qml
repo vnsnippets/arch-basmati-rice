@@ -9,7 +9,7 @@ import Quickshell
 import qs
 import qs.Styles
 import qs.Widgets.Battery.Components
-import qs.Types
+import qs.Types.Components
 
 Popup {
     id: root

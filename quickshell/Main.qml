@@ -75,12 +75,14 @@ ShellRoot {
                 Dock {
                     id: dock
                     z: 10
+                    
                     anchors {
                         top:   parent.top
                         left:  parent.left
                         right: parent.right
                     }
-                    implicitHeight: Style.dock.height
+
+                    implicitHeight: Style.dock.height + (Style.dock.margin * 2)
                 }
 
                 Dashboard {

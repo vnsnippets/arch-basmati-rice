@@ -5,9 +5,8 @@ import Quickshell
 
 import qs
 import qs.Styles
-import qs.Widgets
 import qs.Utilities
-import qs.Types
+import qs.Types.Components
 
 import NetworkMonitorPlugin
 

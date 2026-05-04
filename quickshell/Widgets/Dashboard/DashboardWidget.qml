@@ -2,14 +2,14 @@ import QtQuick
 import Quickshell
 
 import qs
-import qs.Types
+import qs.Types.Components
 import qs.Styles
 
 Clickable {
     id: widget
     property bool active: false
 
-    implicitWidth: Style.widgets.width
+    implicitWidth: Style.widget.width
 
     Text {
         id: icon

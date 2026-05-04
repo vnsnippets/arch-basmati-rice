@@ -6,11 +6,11 @@ import Quickshell
 import qs
 import qs.Styles
 import qs.Utilities
-import qs.Types
+import qs.Types.Components
 
 RowLayout {
     Layout.fillWidth: true
-    spacing: Style.widgets.spacing
+    spacing: Style.widget.spacing
 
     ClickableWithIconAndLabel {
         Layout.fillWidth: true

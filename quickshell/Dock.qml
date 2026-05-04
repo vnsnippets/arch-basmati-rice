@@ -9,7 +9,6 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 
 import qs.Styles
-import qs.Types
 import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
@@ -37,32 +36,7 @@ RowLayout {
         WorkspaceControl { style.border.active: Style.color_light }
     }
 
-    Item { 
-        Layout.fillWidth: true 
-        // Layout.fillHeight: true
-
-        // Clickable {
-        //     implicitWidth: Style.widgets.width
-        //     implicitHeight: Style.widgets.height
-
-        //     // TODO: Fix position - it is off center slightly
-        //     x: (canvas.width - implicitWidth)/2 - parent.x
-
-        //     Text {
-        //         id: label
-        //         anchors.centerIn: parent
-        //         text: ""
-        //         rotation: canvas.dashboardOpen ? 180 : 0
-        //         color: Style.dashboard.colors.text
-                
-        //         Behavior on rotation { 
-        //             NumberAnimation { duration: 300; easing.type: Easing.OutCubic } 
-        //         }
-        //     }
-
-        //     onClicked: canvas.dashboardOpen = !canvas.dashboardOpen
-        // }
-    }
+    Item { Layout.fillWidth: true }
 
     // --- RIGHT ---
     RowLayout {

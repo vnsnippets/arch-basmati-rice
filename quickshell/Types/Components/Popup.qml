@@ -18,8 +18,8 @@ Rectangle {
     default property alias content: content_container.data
     property bool active: false
 
-    implicitWidth: content_container.childrenRect.width + (Style.widgets.padding * 2)
-    implicitHeight: content_container.childrenRect.height + (Style.widgets.padding * 2)
+    implicitWidth: content_container.childrenRect.width + (Style.widget.padding * 2)
+    implicitHeight: content_container.childrenRect.height + (Style.widget.padding * 2)
     
     clip: true
     transformOrigin: Item.Top

@@ -8,7 +8,7 @@ import Quickshell
 
 import qs
 import qs.Styles
-import qs.Types
+import qs.Types.Components
 import qs.Widgets.Network.Components
 
 Popup {

@@ -6,7 +6,7 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Types
+import qs.Types.Components
 
 RowLayout {
     id: root
@@ -44,7 +44,7 @@ RowLayout {
             required property var modelData
             readonly property bool isActive: PowerProfiles.profile === modelData.target
 
-            implicitWidth: Style.widgets.width
+            implicitWidth: Style.widget.width
 
             // Simplify style logic: if active, it stays its color even when idled
             style.background.idle: isActive ? modelData.color : Style.popup.button.background.idle

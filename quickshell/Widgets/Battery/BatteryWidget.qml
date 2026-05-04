@@ -4,7 +4,7 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Types
+import qs.Types.Components
 
 ClickableWithIconAndLabel {
     id: root

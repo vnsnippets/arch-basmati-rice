@@ -2,11 +2,16 @@ pragma Singleton
 
 import QtQuick
 
+
 Item {
-    readonly property color color_dark: "#EA181825"
+    readonly property color color_dark: "#181825"
+    readonly property color color_dark_75: Qt.alpha(color_dark, 0.75)
+
+
     readonly property color color_slate: "#313244"
     readonly property color color_muted: "#B1B2C4"
     readonly property color color_light: "#cdd6f4"
+    readonly property color color_light_faded: "#A5cdd6f4"
     
     readonly property color color_blue: "#89b4fa"
     readonly property color color_teal: "#94e2d5"
@@ -15,7 +20,7 @@ Item {
     readonly property color color_red: "#f38ba8"
 
     readonly property int border_width: 1
-    readonly property int border_radius: 12
+    readonly property int border_radius: 16
 
     readonly property QtObject dock: QtObject {
         readonly property int spacing: 4
@@ -23,7 +28,7 @@ Item {
         readonly property int height: 40
     }
 
-    readonly property QtObject widgets: QtObject {
+    readonly property QtObject widget: QtObject {
         readonly property int width: 40
         readonly property int height: 40
         readonly property int spacing: 4
@@ -34,6 +39,7 @@ Item {
         readonly property real border_radius: 12
         readonly property real spacing: 20
         readonly property color background: color_dark
+
         readonly property QtObject button: QtObject {
             readonly property QtObject background: QtObject {
                 readonly property color idle: color_slate
@@ -53,7 +59,7 @@ Item {
         readonly property int radius: 32
 
         readonly property QtObject colors: QtObject {
-            readonly property color background: color_dark
+            readonly property color background: color_dark_75
             readonly property color border: color_light
             readonly property color text: color_light
         }

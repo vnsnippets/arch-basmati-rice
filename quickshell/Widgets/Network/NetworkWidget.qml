@@ -7,7 +7,7 @@ import NetworkMonitorPlugin
 import qs
 import qs.Styles
 import qs.Services
-import qs.Types
+import qs.Types.Components
 
 /**
 * Network.qml

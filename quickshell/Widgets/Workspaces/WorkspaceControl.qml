@@ -8,14 +8,17 @@ import Quickshell.Hyprland
 
 import qs
 import qs.Styles
-import qs.Types
+import qs.Types.Components
+import qs.Types.Styles
 
-RowLayout {
+Rectangle {
     id: root
-    spacing: Style.widgets.spacing
-    Layout.alignment: Qt.AlignCenter
-    Layout.leftMargin: 16
-    Layout.rightMargin: 16
+
+    implicitHeight: Style.widget.height
+    implicitWidth: repeatable.implicitWidth + Style.widget.padding
+
+    radius: Style.border_radius
+    color: Style.color_dark
 
     readonly property var filteredWorkspaces: {
         const screenName = canvas.screen?.name;
@@ -25,26 +28,35 @@ RowLayout {
             .sort((a, b) => a.id - b.id);
     }
 
-    property ColorScheme style: ColorScheme {}
+    property ClickableStyle style: ClickableStyle {
+        background.idle: Style.color_slate
+        background.active: Style.color_slate
+    }
 
-    Repeater {
-        model: root.filteredWorkspaces
+    RowLayout {
+        id: repeatable
+        anchors.centerIn: parent
+        spacing: Style.widget.spacing
 
-        Clickable {
-            id: dot
-            required property var modelData
-            readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData?.id ?? false
+        Repeater {
+            model: root.filteredWorkspaces
 
-            Layout.preferredHeight: 24
-            implicitWidth: (isActive) ? 40 : 24
-            radius: 20
+            Clickable {
+                id: dot
+                required property var modelData
+                readonly property bool isActive: Hyprland.focusedWorkspace?.id === modelData?.id ?? false
 
-            style: root.style
+                Layout.preferredHeight: 24
+                implicitWidth: (isActive) ? 40 : 24
+                radius: 20
 
-            onClicked: modelData.activate()
+                style: root.style
 
-            Behavior on implicitWidth {
-                NumberAnimation { duration: 200; easing.type: Easing.OutQuint }
+                onClicked: modelData.activate()
+
+                Behavior on implicitWidth {
+                    NumberAnimation { duration: 200; easing.type: Easing.OutQuint }
+                }
             }
         }
     }

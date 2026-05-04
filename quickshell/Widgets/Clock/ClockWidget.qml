@@ -4,7 +4,7 @@ import Quickshell
 import qs
 import qs.Styles
 import qs.Utilities
-import qs.Types
+import qs.Types.Components
 
 ClickableWithIconAndLabel {
     id: root

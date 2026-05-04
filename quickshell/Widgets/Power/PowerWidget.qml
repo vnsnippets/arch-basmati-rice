@@ -4,7 +4,7 @@ import Quickshell.Io
 
 import qs
 import qs.Utilities
-import qs.Types
+import qs.Types.Components
 
 ClickableWithIconAndLabel {
     id: widget

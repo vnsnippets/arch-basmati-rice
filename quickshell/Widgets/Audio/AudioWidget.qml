@@ -5,7 +5,7 @@ import Quickshell.Services.Pipewire
 
 import qs
 import qs.Utilities
-import qs.Types
+import qs.Types.Components
 
 ClickableWithIconAndLabel {
     id: container
