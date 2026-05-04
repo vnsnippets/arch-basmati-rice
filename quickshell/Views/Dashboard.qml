@@ -5,36 +5,38 @@ import Quickshell
 import Quickshell.Widgets
 
 import qs.Styles
+import qs.Types.Styles
 import qs.Types.Components
+import qs.Controls
 
 Rectangle {
     id: root
-    readonly property int animDuration: 500 
+    readonly property int animDuration: 400 
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top
     anchors.topMargin: Style.dock.margin
     
     // Dynamic Dimensions
-    width: canvas.dashboardOpen ? Style.dashboard.width : clockContainer.width
-    height: canvas.dashboardOpen ? Style.dashboard.height : Style.widget.height
+    width: masterLayout.width
+    height: masterLayout.height
     
     color: Style.dashboard.colors.background
     radius: canvas.dashboardOpen ? Style.dashboard.radius : Style.border_radius
-
     clip: true
     
     // Animate dimension changes
-    Behavior on width { NumberAnimation { duration: animDuration; easing.type: Easing.OutQuint } }
-    Behavior on height { NumberAnimation { duration: animDuration; easing.type: Easing.OutQuint } }
+    Behavior on width { NumberAnimation { duration: animDuration; easing.type: Easing.OutExpo } }
+    Behavior on height { NumberAnimation { duration: animDuration; easing.type: Easing.OutExpo } }
     Behavior on radius { NumberAnimation { duration: animDuration } }
 
     ColumnLayout {
-        anchors.fill: parent
+        id: masterLayout
 
         WrapperMouseArea {
             // Layout.fillWidth: true
             Layout.preferredHeight: Style.widget.height
+            Layout.preferredWidth: clockContainer.width
             Layout.alignment: Qt.AlignHCenter
 
             onClicked: canvas.dashboardOpen = !canvas.dashboardOpen
@@ -44,24 +46,18 @@ Rectangle {
 
             Item {
                 id: clockContainer
-                anchors.centerIn: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
 
                 implicitWidth: label.implicitWidth + Style.widget.padding
                 implicitHeight: label.implicitHeight
 
-                SystemClock {
-                    id: clock
-                    precision: SystemClock.Minutes
-                }
-                    
                 Text {
                     id: label
                     anchors.centerIn: parent
 
-                    readonly property string format: "yyyy-MM-dd HH:mm"
-                    // text: ""
+                    text: ""
                     
-                    text: Qt.formatDateTime(clock.date, format)
                     color: Style.dashboard.colors.text
 
                     font.pixelSize: Style.fonts.size
@@ -69,18 +65,19 @@ Rectangle {
 
                     renderType: Text.QtRendering // Often smoother for animations than NativeRendering
                     antialiasing: true 
+                    horizontalAlignment: Text.AlignHCenter
                     
                     // This helps the text engine handle sub-pixel positions better
                     transformOrigin: Item.Center
 
-                    opacity: canvas.dashboardOpen ? 0 : 1
-                    visible: opacity > 0
-                    Behavior on opacity { NumberAnimation { duration: animDuration/2 } }
+                    // opacity: canvas.dashboardOpen ? 0 : 1
+                    // visible: opacity > 0
+                    // Behavior on opacity { NumberAnimation { duration: animDuration } }
 
-                    // rotation: canvas.dashboardOpen ? 180 : 0
-                    // Behavior on rotation { 
-                    //     NumberAnimation { duration: 300; easing.type: Easing.OutCubic } 
-                    // }
+                    rotation: canvas.dashboardOpen ? 180 : 0
+                    Behavior on rotation { 
+                        NumberAnimation { duration: 300; easing.type: Easing.OutCubic } 
+                    }
                 }
             }
         }
@@ -88,76 +85,119 @@ Rectangle {
         // 3. Lazy Loaded Content
         Loader {
             id: contentLoader
-            // anchors.fill: parent
-            // anchors.margins: 20
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            Layout.leftMargin: Style.dashboard.spacing * 2
+            Layout.rightMargin: Style.dashboard.spacing * 2
+            Layout.bottomMargin: Style.dashboard.spacing * 2
             
             // UNLOADS content when minimized, LOADS when opened
-            active: canvas.dashboardOpen 
+            active: canvas.dashboardOpen
+            visible: canvas.dashboardOpen
             
-            sourceComponent: ColumnLayout {
-                spacing: 20
+            sourceComponent: GridLayout {
+                id: dashboardGrid
+                rows: Style.dashboard.rows
+                columns: Style.dashboard.columns
+                rowSpacing: Style.dashboard.spacing
+                columnSpacing: Style.dashboard.spacing
+                flow: GridLayout.TopToBottom
+                
+                ClickableWithIconAndLabel {
+                    Layout.row: 0
+                    Layout.column: 4
 
-                // Header with close button
-                // RowLayout {
-                //     Layout.fillWidth: true
-                //     Text {
-                //         text: "Dashboard"
-                //         color: "white"
-                //         font.bold: true; font.pointSize: 14
-                //     }
-                //     Item { Layout.fillWidth: true }
-                //     Rectangle {
-                //         width: 30; height: 30; radius: 15; color: "#333"
-                //         Text { anchors.centerIn: parent; text: "×"; color: "white"; font.pointSize: 16 }
-                //         MouseArea {
-                //             anchors.fill: parent
-                //             onClicked: canvas.dashboardOpen = false
-                //             hoverEnabled: true
-                //             cursorShape: Qt.PointingHandCursor
-                //         }
-                //     }
-                // }
+                    style: ClickableStyle {
+                        background.idle: Style.color_slate
+                    }
 
-                // // Tabs
-                // Row {
-                //     Layout.alignment: Qt.AlignHCenter
-                //     spacing: 10
-                //     Repeater {
-                //         model: ["Home", "Settings", "Info"]
-                //         delegate: Rectangle {
-                //             width: 100; height: 35; radius: 6
-                //             color: canvas.currentTab === index ? "#3d5afe" : "#333"
-                //             Text { anchors.centerIn: parent; text: modelData; color: "white" }
-                //             MouseArea {
-                //                 anchors.fill: parent
-                //                 onClicked: canvas.currentTab = index
-                //             }
-                //         }
-                //     }
-                // }
+                    implicitWidth: 56
+                    implicitHeight: 56
+                    fontSize: 20
 
-                // // Sliding Panes
-                // ListView {
-                //     Layout.fillWidth: true
-                //     Layout.fillHeight: true
-                //     clip: true
-                //     orientation: ListView.Horizontal
-                //     snapMode: ListView.SnapOneItem
-                //     currentIndex: canvas.currentTab
-                //     model: 3
-                //     delegate: Item {
-                //         width: ListView.view.width
-                //         height: ListView.view.height
-                //         Text {
-                //             anchors.centerIn: parent
-                //             text: "Tab Content " + (index + 1)
-                //             color: "#aaa"; font.pointSize: 20
-                //         }
-                //     }
-                //     onCurrentIndexChanged: canvas.currentTab = currentIndex
-                // }
+                    icon: ""
+                }
+
+                ClickableWithIconAndLabel {
+                    Layout.row: 1
+                    Layout.column: 4
+
+                    style: ClickableStyle {
+                        background.idle: Style.color_slate
+                    }
+
+                    implicitWidth: 56
+                    implicitHeight: 56
+                    fontSize: 20
+
+                    icon: "󰂯"
+                }
+
+                ClickableWithIconAndLabel {
+                    Layout.row: 2
+                    Layout.column: 4
+
+                    style: ClickableStyle {
+                        background.idle: Style.color_slate
+                    }
+
+                    implicitWidth: 56
+                    implicitHeight: 56
+                    fontSize: 20
+
+                    icon: ""
+                }
+
+                ClickableWithIconAndLabel {
+                    Layout.row: 3
+                    Layout.column: 4
+
+                    style: ClickableStyle {
+                        background.idle: Style.color_slate
+                    }
+
+                    implicitWidth: 56
+                    implicitHeight: 56
+                    fontSize: 20
+
+                    icon: "󰂠"
+                }
+
+                ClickableWithIconAndLabel {
+                    Layout.row: 4
+                    Layout.column: 4
+
+                    style: ClickableStyle {
+                        background.idle: Style.color_slate
+                    }
+
+                    implicitWidth: 56
+                    implicitHeight: 56
+                    fontSize: 20
+
+                    icon: "󰈈"
+                }
+
+                DashboardItem {
+                    Layout.row: 0
+                    Layout.column: 2
+
+                    implicitHeight: 56
+                    implicitWidth: brightness.width + Style.dashboard.cell.margin * 2
+
+                    BrightnessControl { id: brightness; anchors.centerIn: parent; }
+                }
+
+                DashboardItem {
+                    Layout.row: 0
+                    Layout.column: 1
+
+                    implicitHeight: 56
+                    implicitWidth: volume.width + Style.dashboard.cell.margin * 2
+
+                    VolumeControl { id: volume; anchors.centerIn: parent; }
+                }
             }
         }
     }

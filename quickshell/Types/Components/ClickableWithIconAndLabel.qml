@@ -16,6 +16,8 @@ Clickable {
     property string icon: ""
     property string label: ""
 
+    property int fontSize: Style.fonts.size
+
     implicitWidth: (label === "") ? Style.widget.width : content.width + Style.widget.padding
     implicitHeight: Style.widget.height
 
@@ -32,7 +34,7 @@ Clickable {
 
             color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
             
-            font.pixelSize: Style.fonts.size
+            font.pixelSize: clickable.fontSize
             font.family: Style.fonts.icon
             visible: text !== ""
 
@@ -48,7 +50,7 @@ Clickable {
             
             color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
 
-            font.pixelSize: Style.fonts.size
+            font.pixelSize: clickable.fontSize
             font.family: Style.fonts.family
             visible: text !== ""
             

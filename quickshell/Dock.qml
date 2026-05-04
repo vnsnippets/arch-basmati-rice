@@ -13,7 +13,6 @@ import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
 import qs.Widgets.Clock
-import qs.Widgets.Dashboard
 import qs.Widgets.Network
 import qs.Widgets.Power
 import qs.Widgets.Workspaces
@@ -32,7 +31,7 @@ RowLayout {
     RowLayout {
         spacing: Style.dock.spacing
 
-        // ClockWidget { format: "yyyy-MM-dd HH:mm" }
+        ClockWidget { format: "yyyy-MM-dd HH:mm" }
         WorkspaceControl { filterByMonitor: false }
     }
 

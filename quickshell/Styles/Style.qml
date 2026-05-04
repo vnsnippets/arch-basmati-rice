@@ -55,13 +55,22 @@ Item {
         readonly property int margin: 10
         readonly property int width: 1920/2
         readonly property int height: 1200/2
-        readonly property int spacing: 10
+        readonly property int spacing: 8
         readonly property int radius: 32
+
+        readonly property int rows: 10
+        readonly property int columns: 16
 
         readonly property QtObject colors: QtObject {
             readonly property color background: color_dark_75
             readonly property color border: color_light
             readonly property color text: color_light
+        }
+
+        readonly property QtObject cell: QtObject {
+            readonly property int size: 56
+            readonly property int radius: 16
+            readonly property int margin: 16
         }
     }
 
