@@ -3,6 +3,7 @@ import Quickshell
 
 import qs
 import qs.Types.Components
+import qs.Types.States
 import qs.Styles
 
 Clickable {
@@ -15,7 +16,7 @@ Clickable {
         id: icon
         text: ""
         anchors.centerIn: parent
-        color: (widget.state === widget._states.Pressed || widget.state === widget._states.Hover) ? widget.style.text.active : widget.style.text.idle
+        color: (widget.state === widget.ClickableState.Pressed || widget.state === widget.ClickableState.Hover) ? widget.style.text.active : widget.style.text.idle
         
         transformOrigin: Item.Center 
         rotation: widget.active ? 180 : 0

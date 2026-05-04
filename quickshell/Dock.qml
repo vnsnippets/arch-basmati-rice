@@ -32,8 +32,8 @@ RowLayout {
     RowLayout {
         spacing: Style.dock.spacing
 
-        ClockWidget { format: "yyyy-MM-dd HH:mm" }
-        WorkspaceControl { style.border.active: Style.color_light }
+        // ClockWidget { format: "yyyy-MM-dd HH:mm" }
+        WorkspaceControl { filterByMonitor: false }
     }
 
     Item { Layout.fillWidth: true }

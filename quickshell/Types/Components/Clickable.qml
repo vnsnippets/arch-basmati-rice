@@ -8,11 +8,11 @@ import Quickshell.Widgets
 import qs
 import qs.Styles
 import qs.Types.Styles
+import qs.Types.States
 import qs.Utilities
 
 WrapperMouseArea {
     id: root
-    readonly property var _states: ({ Idle: "IDLE", Pressed: "PRESSED", Hover: "HOVER" })
 
     default property alias contentData: container.data
 
@@ -35,27 +35,27 @@ WrapperMouseArea {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
-    onPressed: root.state = _states.Pressed
-    onReleased: root.state = _states.Hover
-    onEntered: root.state = _states.Hover
-    onExited: root.state = _states.Idle
+    onPressed: root.state = ClickableState.pressed
+    onReleased: root.state = ClickableState.hover
+    onEntered: root.state = ClickableState.hover
+    onExited: root.state = ClickableState.idle
 
     // --- states ---
     states: [
         State {
-            name: _states.Idle
+            name: ClickableState.idle
             PropertyChanges { target: container; scale: 1.0; }
             PropertyChanges { target: container; radius: root.radius; }
             PropertyChanges { target: container; color: root.style.background.idle; border.color: root.style.border.idle; }
         },
         State {
-            name: _states.Hover
+            name: ClickableState.hover
             PropertyChanges { target: container; scale: 1; }
             PropertyChanges { target: container; radius: root.radius + 4; }
             PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
         },
         State {
-            name: _states.Pressed
+            name: ClickableState.pressed
             PropertyChanges { target: container; scale: 0.94; }
             PropertyChanges { target: container; radius: root.radius + 4; }
             PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
@@ -73,7 +73,6 @@ WrapperMouseArea {
 
         radius: root.radius
         // antialiasing: true
-
 
         Behavior on width { NumberAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic; } }
         Behavior on scale { NumberAnimation { duration: Style.animations.duration/2; } }

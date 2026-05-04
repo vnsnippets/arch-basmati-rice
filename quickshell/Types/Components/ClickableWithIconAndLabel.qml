@@ -9,9 +9,10 @@ import qs
 import qs.Styles
 import qs.Utilities
 import qs.Types.Components
+import qs.Types.States
 
 Clickable {
-    id: root
+    id: clickable
     property string icon: ""
     property string label: ""
 
@@ -22,15 +23,14 @@ Clickable {
         id: content
         anchors.centerIn: parent
         spacing: Style.widget.spacing
-        
-        // Link this RowLayout's state to the Clickable's state
-        state: root.state 
+
+        readonly property bool isHoveredOrPress: (clickable.state === ClickableState.pressed || clickable.state === ClickableState.hover)
 
         Text {
             id: icon_text
-            text: root.icon
+            text: clickable.icon
 
-            color: (root.state === root._states.Pressed || root.state === root._states.Hover) ? root.style.text.active : root.style.text.idle
+            color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
             
             font.pixelSize: Style.fonts.size
             font.family: Style.fonts.icon
@@ -39,15 +39,14 @@ Clickable {
             Layout.alignment: Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             
-            // Add Behaviors here for the animation
-            Behavior on color { ColorAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic } }
+            Behavior on color { ColorAnimation { duration: Style.animations.duration; } }
         }
 
         Text {
             id: label_text
-            text: root.label
+            text: clickable.label
             
-            color: (root.state === root._states.Pressed || root.state === root._states.Hover) ? root.style.text.active : root.style.text.idle
+            color: (content.isHoveredOrPress) ? clickable.style.text.active : clickable.style.text.idle
 
             font.pixelSize: Style.fonts.size
             font.family: Style.fonts.family
@@ -56,8 +55,7 @@ Clickable {
             Layout.alignment: Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             
-            // Add Behaviors here for the animation
-            Behavior on color { ColorAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic } }
+            Behavior on color { ColorAnimation { duration: Style.animations.duration; } }
         }
     }
 }

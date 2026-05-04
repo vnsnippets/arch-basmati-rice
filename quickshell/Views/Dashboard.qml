@@ -16,11 +16,12 @@ Rectangle {
     anchors.topMargin: Style.dock.margin
     
     // Dynamic Dimensions
-    width: canvas.dashboardOpen ? Style.dashboard.width : Style.widget.width
+    width: canvas.dashboardOpen ? Style.dashboard.width : clockContainer.width
     height: canvas.dashboardOpen ? Style.dashboard.height : Style.widget.height
     
     color: Style.dashboard.colors.background
-    radius: canvas.dashboardOpen ? Style.dashboard.radius : Style.border_radius // More rounded when it's a button
+    radius: canvas.dashboardOpen ? Style.dashboard.radius : Style.border_radius
+
     clip: true
     
     // Animate dimension changes
@@ -31,34 +32,55 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
 
-        Item {
-            Layout.fillWidth: true
+        WrapperMouseArea {
+            // Layout.fillWidth: true
             Layout.preferredHeight: Style.widget.height
+            Layout.alignment: Qt.AlignHCenter
 
-            // Click to toggle
-            MouseArea {
-                anchors.fill: parent
-                onClicked: canvas.dashboardOpen = !canvas.dashboardOpen
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-            }
+            onClicked: canvas.dashboardOpen = !canvas.dashboardOpen
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
 
-            Text {
-                id: label
+
+            Item {
+                id: clockContainer
                 anchors.centerIn: parent
-                text: ""
-                color: Style.dashboard.colors.text
 
-                font.pixelSize: Style.fonts.size
-                font.family: Style.fonts.family
+                implicitWidth: label.implicitWidth + Style.widget.padding
+                implicitHeight: label.implicitHeight
 
-                // opacity: canvas.dashboardOpen ? 0 : 1
-                // visible: opacity > 0
-                // Behavior on opacity { NumberAnimation { duration: animDuration } }
+                SystemClock {
+                    id: clock
+                    precision: SystemClock.Minutes
+                }
+                    
+                Text {
+                    id: label
+                    anchors.centerIn: parent
 
-                rotation: canvas.dashboardOpen ? 180 : 0
-                Behavior on rotation { 
-                    NumberAnimation { duration: 300; easing.type: Easing.OutCubic } 
+                    readonly property string format: "yyyy-MM-dd HH:mm"
+                    // text: ""
+                    
+                    text: Qt.formatDateTime(clock.date, format)
+                    color: Style.dashboard.colors.text
+
+                    font.pixelSize: Style.fonts.size
+                    font.family: Style.fonts.family
+
+                    renderType: Text.QtRendering // Often smoother for animations than NativeRendering
+                    antialiasing: true 
+                    
+                    // This helps the text engine handle sub-pixel positions better
+                    transformOrigin: Item.Center
+
+                    opacity: canvas.dashboardOpen ? 0 : 1
+                    visible: opacity > 0
+                    Behavior on opacity { NumberAnimation { duration: animDuration/2 } }
+
+                    // rotation: canvas.dashboardOpen ? 180 : 0
+                    // Behavior on rotation { 
+                    //     NumberAnimation { duration: 300; easing.type: Easing.OutCubic } 
+                    // }
                 }
             }
         }
