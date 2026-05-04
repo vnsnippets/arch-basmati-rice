@@ -91,7 +91,7 @@ RowLayout {
             }
 
             // Only allow clicking if the workspace actually exists
-            onClicked: if (ws) ws.activate();
+            onClicked: if (ws && !isActive) ws.activate();
 
             Behavior on implicitWidth {
                 NumberAnimation { duration: 200; easing.type: Easing.OutQuint }

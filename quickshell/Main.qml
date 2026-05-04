@@ -26,6 +26,8 @@ ShellRoot {
 
                 anchors { top: true; left: true; right: true }
                 implicitHeight: Style.dock.height + Style.dock.margin
+                
+                WlrLayershell.layer: WlrLayer.Bottom
 
                 color: "transparent"
             }

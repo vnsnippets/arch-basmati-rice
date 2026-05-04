@@ -22,8 +22,10 @@ import qs.Views
 Item {
     id: root
 
-    anchors.fill: parent
-    anchors.topMargin: Style.dock.margin
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: parent.top
+
     anchors.leftMargin: Style.dock.margin
     anchors.rightMargin: Style.dock.margin
 
@@ -31,6 +33,7 @@ Item {
     RowLayout {
         anchors.top: parent.top;
         anchors.left: parent.left;
+        anchors.verticalCenter: parent.verticalCenter;
 
         ClockWidget {
             radius: Style.widget.radius
@@ -39,7 +42,7 @@ Item {
     }
 
     WidgetGroup {
-        anchors.top: parent.top;
+        anchors.verticalCenter: parent.verticalCenter;
         anchors.horizontalCenter: parent.horizontalCenter
 
         spacing: Style.dock.spacing
@@ -53,6 +56,7 @@ Item {
     RowLayout {
         anchors.top: parent.top;
         anchors.right: parent.right;
+        anchors.verticalCenter: parent.verticalCenter;
 
         spacing: Style.dock.spacing
 
@@ -97,7 +101,6 @@ Item {
         }
 
         PowerWidget {
-            Layout.alignment: Qt.AlignTop
             style.text.idle: Style.colors.red
             style.background.active: Style.colors.red
             style.text.active: Style.colors.mantle
