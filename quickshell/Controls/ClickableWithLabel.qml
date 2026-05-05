@@ -6,10 +6,10 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 import qs
+import qs.Types
 import qs.Styles
+import qs.Controls
 import qs.Utilities
-import qs.Types.Components
-import qs.Types.States
 
 Clickable {
     id: root
@@ -29,36 +29,22 @@ Clickable {
 
         readonly property bool isHoveredOrPress: (root.state === ClickableState.pressed || root.state === ClickableState.hover)
 
-        Text {
+        StyledText {
             id: icon_text
             text: root.icon
-
             color: (content.isHoveredOrPress) ? root.style.text.active : root.style.text.idle
             
             font.pixelSize: root.fontSize
             font.family: root.iconFont
-            visible: text !== ""
-
-            Layout.alignment: Qt.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            
-            Behavior on color { ColorAnimation { duration: Style.animations.duration; } }
         }
 
-        Text {
+        StyledText {
             id: label_text
-            text: root.label
-            
+            text: root.label            
             color: (content.isHoveredOrPress) ? root.style.text.active : root.style.text.idle
 
             font.pixelSize: root.fontSize
             font.family: Style.fonts.family
-            visible: text !== ""
-            
-            Layout.alignment: Qt.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            
-            Behavior on color { ColorAnimation { duration: Style.animations.duration; } }
         }
     }
 }

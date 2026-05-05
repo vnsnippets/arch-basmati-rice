@@ -4,11 +4,10 @@ import Quickshell.Services.UPower
 
 import qs
 import qs.Styles
-import qs.Types.Components
+import qs.Controls
 
-ClickableWithIconAndLabel {
+ClickableWithLabel {
     id: root
-    required property Component popup
 
     // Defaults to references
     property color color_critical: Style.colors.red
@@ -32,6 +31,4 @@ ClickableWithIconAndLabel {
         if (batteryPercentage <= Context.battery.warningLimit) return color_warning;
         return color_default;
     }
-
-    onClicked: canvas.handleWidgetPopup(this);
 }

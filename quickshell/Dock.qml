@@ -17,8 +17,7 @@ import qs.Widgets.Network
 import qs.Widgets.Power
 import qs.Widgets.Workspaces
 
-import qs.Views
-import qs.Types.Components
+import qs.Controls
 
 Item {
     id: root
@@ -36,8 +35,8 @@ Item {
         anchors.left: parent.left;
         anchors.verticalCenter: parent.verticalCenter;
 
-        ClickableWithIconAndLabel {
-            icon: ""
+        ClickableWithLabel {
+            icon: ""
         }
 
         ClockWidget {
@@ -46,7 +45,7 @@ Item {
         }
     }
 
-    WidgetGroup {
+    FramedGroup {
         anchors.verticalCenter: parent.verticalCenter;
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -67,9 +66,8 @@ Item {
         spacing: Style.dock.spacing
 
         NetworkWidget  {
-            popup: NetworkPopup {}
             showLabel: false
-            color_disconnected: Style.colors.subtext0
+            color_disconnected: Style.colors.subtext
             color_connecting: Style.colors.yellow
             color_connected_default: Style.colors.green
             color_connected_critical: Style.colors.red
@@ -88,7 +86,6 @@ Item {
         }
 
         BatteryWidget {
-            popup: BatteryPopup {}
             color_critical: Style.colors.red
             color_warning: Style.colors.yellow
             color_charging: Style.colors.yellow
@@ -116,8 +113,8 @@ Item {
             style.background.idle: Style.widget.colors.background
         }
 
-        ClickableWithIconAndLabel {
-            icon: ""
+        ClickableWithLabel {
+            icon: ""
         }
     }
 }

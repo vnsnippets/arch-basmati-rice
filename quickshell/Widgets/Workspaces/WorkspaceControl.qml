@@ -7,10 +7,9 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs
+import qs.Types
 import qs.Styles
-import qs.Types.Components
-import qs.Types.Styles
-import qs.Types.States
+import qs.Controls
 
 RowLayout {
     id: root
@@ -77,16 +76,7 @@ RowLayout {
 
             // Dynamic Styling
             style: ClickableStyle {
-                background.idle: {
-                    if (isActive) return root.activeColor;
-
-                    // If workspace exists and has windows
-                    if (ws && ws.toplevels?.values?.length > 0) {
-                        return Qt.alpha(Style.colors.text, 0.30)
-                    }
-                    // Default color for "empty" placeholder dots (if workspaces < 5)
-                    return Style.colors.base
-                }
+                background.idle: (isActive) ? root.activeColor : Style.colors.surface
                 background.active: background.idle
             }
 
@@ -97,7 +87,7 @@ RowLayout {
                 NumberAnimation { duration: 200; easing.type: Easing.OutQuint }
             }
 
-            Text {
+            StyledText {
                 anchors.centerIn: parent
                 text: "" // "󱂬" "" "" "󰍺" "󰍹"
                 visible: dot.isOtherMonitor
@@ -118,12 +108,10 @@ RowLayout {
         style.background.idle: Style.colors.base
         style.background.active: Style.colors.base
 
-        Text {
+        StyledText {
             anchors.centerIn: parent
             text: ""
             color: Style.colors.text
-            font.pixelSize: root.fontSize
-            font.family: Style.fonts.icon
         }
 
         onClicked: Hyprland.dispatch(`workspace ${Hyprland.workspaces.values.length + 1}`);

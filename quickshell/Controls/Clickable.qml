@@ -6,9 +6,8 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 import qs
+import qs.Types
 import qs.Styles
-import qs.Types.Styles
-import qs.Types.States
 import qs.Utilities
 
 WrapperMouseArea {
@@ -26,7 +25,6 @@ WrapperMouseArea {
     property ClickableStyle style: ClickableStyle {}
     
     width: implicitWidth
-
     implicitWidth: container.childrenRect.width + Style.widget.padding
     implicitHeight: Style.widget.height
 
@@ -64,17 +62,19 @@ WrapperMouseArea {
     
     Rectangle {
         id: container
-        anchors.fill: parent
+        anchors.left: parent.left
         scale: 1.0
+
+        height: parent.height // Follow root height
 
         color: root.style.background.idle
         border.color: root.style.border.idle
         border.width: root.style.borderWidth
 
         radius: root.radius
+        clip: true
         // antialiasing: true
 
-        Behavior on width { NumberAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic; } }
         Behavior on scale { NumberAnimation { duration: Style.animations.duration/2; } }
         Behavior on radius { NumberAnimation { duration: Style.animations.duration/2; } }
         Behavior on color { ColorAnimation { duration: Style.animations.duration/2; } }

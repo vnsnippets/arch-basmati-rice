@@ -3,12 +3,11 @@ import Quickshell
 
 import qs
 import qs.Styles
+import qs.Controls
 import qs.Utilities
-import qs.Types.Components
 
-ClickableWithIconAndLabel {
+ClickableWithLabel {
     id: root
-    readonly property Component popup: ClockPopup {}
     property string format: "yyyy-MM-dd HH:mm"
 
     SystemClock {
@@ -17,6 +16,4 @@ ClickableWithIconAndLabel {
     }
 
     label: Qt.formatDateTime(system_clock.date, format)
-
-    onClicked: canvas.handleWidgetPopup(this);
 }

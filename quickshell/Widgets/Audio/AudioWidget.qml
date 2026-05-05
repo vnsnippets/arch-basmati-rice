@@ -1,13 +1,15 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 
 import qs
+import qs.Styles
+import qs.Controls
 import qs.Utilities
-import qs.Types.Components
 
-ClickableWithIconAndLabel {
+Clickable {
     id: container
 
     readonly property real increment_diff: 0.05
@@ -15,6 +17,8 @@ ClickableWithIconAndLabel {
 
     property color color_inactive: null
     property color color_default: null
+
+    implicitWidth: this.containsMouse ? content.width + Style.widget.padding : Style.widget.width
 
     Timer {
         id: throttle_timer
@@ -26,14 +30,12 @@ ClickableWithIconAndLabel {
         objects: [Pipewire.defaultAudioSink]
     }
     
-    icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
+    // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
-    label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
+    // label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
     style.text.idle: Pipewire?.defaultAudioSink?.audio ? color_default : color_inactive
 
-    onClicked: () => {
-        Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
-    }
+    onClicked: Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
 
     onWheel: (event) => {
         if (change_lock || !Pipewire.defaultAudioSink?.audio) return;
@@ -56,4 +58,9 @@ ClickableWithIconAndLabel {
         throttle_timer.restart();
     }
 
+    StyledText {
+        anchors.centerIn: parent
+        text: ""
+        color: Style.colors.green
+    }
 }

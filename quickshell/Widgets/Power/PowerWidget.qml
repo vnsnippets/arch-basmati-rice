@@ -3,10 +3,10 @@ import Quickshell
 import Quickshell.Io
 
 import qs
+import qs.Controls
 import qs.Utilities
-import qs.Types.Components
 
-ClickableWithIconAndLabel {
+ClickableWithLabel {
     id: widget
     icon: ""
 

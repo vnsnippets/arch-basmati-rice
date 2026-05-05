@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 
-
 Item {
     property QtObject colors: QtObject {
         property color rosewater: "#f5e0dc"
@@ -21,14 +20,14 @@ Item {
         property color lavender: "#b4befe"
 
         property color text: "#cdd6f4"
-        property color subtext1: "#bac2de"
-        property color subtext0: "#a6adc8"
-        property color overlay2: "#9399b2"
-        property color overlay1: "#7f849c"
-        property color overlay0: "#6c7086"
-        property color surface2: "#585b70"
-        property color surface1: "#45475a"
-        property color surface0: "#313244"
+        // property color subtext1: "#bac2de"
+        property color subtext: "#a6adc8"
+        // property color overlay2: "#9399b2"
+        // property color overlay1: "#7f849c"
+        // property color overlay0: "#6c7086"
+        // property color surface2: "#585b70"
+        // property color surface1: "#45475a"
+        property color surface: "#313244"
         property color base: "#1e1e2e"
         property color mantle: "#181825"
         property color crust: "#11111b"

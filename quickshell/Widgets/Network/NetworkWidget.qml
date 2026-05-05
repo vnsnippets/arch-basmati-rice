@@ -6,8 +6,8 @@ import NetworkMonitorPlugin
 
 import qs
 import qs.Styles
+import qs.Controls
 import qs.Services
-import qs.Types.Components
 
 /**
 * Network.qml
@@ -62,11 +62,9 @@ import qs.Types.Components
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-ClickableWithIconAndLabel {
+ClickableWithLabel {
     id: root
-    required property Component popup
     property bool showLabel: true
-    property string wifiIcon: ""
 
     // Use required properties for better performance/type safety
     readonly property int criticalLimit: 25
@@ -96,10 +94,7 @@ ClickableWithIconAndLabel {
         return color_connected_default;
     }
 
-    icon: (network_state >= 60) ? root.wifiIcon: (network_state >= 30 || isScanning) ? "" : ""
+    icon: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
     label: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
     style.text.idle: status_color
-
-    // onClicked: Networking.handleConnectionToggle()
-    onClicked: canvas.handleWidgetPopup(this);
 }
