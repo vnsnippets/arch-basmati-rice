@@ -8,19 +8,13 @@ import qs.Styles
 import qs.Controls
 import qs.Utilities
 
-ClickableWithLabel {
+Clickable {
     id: root
 
     readonly property bool active: Context.process.prevent_screen_lock !== null
 
     property color color_caffeineon: Style.colors.red
     property color color_caffeineoff: Style.colors.text
-
-    // (Active: True)   - Caffeine active (System won't lock)
-    // (Active: False)  - Auto-lock is active (System will lock)
-    icon: (active) ? "󱂟" : ""
-    label: (active) ? `[${Context.process.prevent_screen_lock.processId}]` : ""
-    style.text.idle: (active) ? color_caffeineon : color_caffeineoff
     
     onClicked: () => {
         if (active) {
@@ -39,5 +33,11 @@ ClickableWithLabel {
                 }
             });
         }
+    }
+
+    StyledText {
+        anchors.centerIn: parent
+        text: (root.active) ? "󱂟" : ""
+        color: (root.active) ? root.color_caffeineon : root.color_caffeineoff
     }
 }

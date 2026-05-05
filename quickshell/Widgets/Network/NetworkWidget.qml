@@ -62,7 +62,7 @@ import qs.Services
 * | 32    | LOOPBACK      | Loopback interface (standard 127.0.0.1).         |
 **/
 
-ClickableWithLabel {
+Clickable {
     id: root
     property bool showLabel: true
 
@@ -94,7 +94,18 @@ ClickableWithLabel {
         return color_connected_default;
     }
 
-    icon: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
-    label: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
-    style.text.idle: status_color
+    RowLayout {
+        anchors.centerIn: parent
+        spacing: Style.clickable.spacing
+
+        StyledText {
+            text: (network_state >= 60) ? "": (network_state >= 30 || isScanning) ? "" : ""
+            color: root.status_color
+        }
+
+        StyledText {
+            text: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
+            color: root.status_color
+        }
+    }
 }

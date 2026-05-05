@@ -13,7 +13,7 @@ import qs.Controls
 
 RowLayout {
     id: root
-    spacing: Style.widget.spacing
+    spacing: Style.clickable.spacing
 
     property bool filterByMonitor: true
 
@@ -66,19 +66,15 @@ RowLayout {
             readonly property bool isActive: Hyprland.focusedWorkspace?.id === ws?.id
             // readonly property bool hasWindows: ws?.toplevels?.count > 0 ?? false
 
-            readonly property bool isOtherMonitor: !root.filterByMonitor && 
-                                                    ws && 
-                                                    ws.monitor?.name !== canvas.screen?.name
+            readonly property bool isOtherMonitor: (!root.filterByMonitor && ws && ws.monitor?.name !== canvas.screen?.name) ?? false
 
             Layout.preferredHeight: root.dotSize
             implicitWidth: isActive ? dotActiveSize : root.dotSize
             radius: dotRadius
 
             // Dynamic Styling
-            style: ClickableStyle {
-                background.idle: (isActive) ? root.activeColor : Style.colors.surface
-                background.active: background.idle
-            }
+            backgroundIdleColor: (isActive) ? root.activeColor : Style.colors.surface
+            backgroundActiveColor: Style.colors.mantle
 
             // Only allow clicking if the workspace actually exists
             onClicked: if (ws && !isActive) ws.activate();
@@ -104,9 +100,6 @@ RowLayout {
         Layout.preferredHeight: root.dotSize
         implicitWidth: root.dotSize
         radius: dotRadius
-
-        style.background.idle: Style.colors.base
-        style.background.active: Style.colors.base
 
         StyledText {
             anchors.centerIn: parent

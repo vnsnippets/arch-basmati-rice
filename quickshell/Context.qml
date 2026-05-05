@@ -20,4 +20,9 @@ Singleton {
         readonly property int criticalLimit: 20
         readonly property int warningLimit: 30
     }
+
+    readonly property SystemClock clock: SystemClock {
+        id: system_clock
+        precision: SystemClock.Minutes
+    }
 }

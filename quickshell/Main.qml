@@ -33,7 +33,8 @@ ShellRoot {
                 screen: modelData
 
                 // Full screen — anchored to all four edges
-                anchors { top: true; left: true; right: true; bottom: true }
+                anchors { top: true; left: true; right: true; }
+                implicitHeight: barSpace.implicitHeight
 
                 exclusionMode: ExclusionMode.Ignore
                 WlrLayershell.layer: WlrLayer.Top

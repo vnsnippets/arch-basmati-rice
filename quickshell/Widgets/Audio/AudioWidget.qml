@@ -18,8 +18,6 @@ Clickable {
     property color color_inactive: null
     property color color_default: null
 
-    implicitWidth: this.containsMouse ? content.width + Style.widget.padding : Style.widget.width
-
     Timer {
         id: throttle_timer
         interval: 50 
@@ -33,7 +31,6 @@ Clickable {
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "" : ""
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
     // label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
-    style.text.idle: Pipewire?.defaultAudioSink?.audio ? color_default : color_inactive
 
     onClicked: Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
 
@@ -61,6 +58,6 @@ Clickable {
     StyledText {
         anchors.centerIn: parent
         text: ""
-        color: Style.colors.green
+        color: Pipewire?.defaultAudioSink?.audio ? color_default : color_inactive
     }
 }

@@ -19,13 +19,13 @@ Clickable {
     property int fontSize: Style.fonts.size
     property string iconFont: Style.fonts.icon
 
-    implicitWidth: (label === "") ? Style.widget.width : content.width + Style.widget.padding
-    implicitHeight: Style.widget.height
+    implicitWidth: (label === "") ? root.style.width : content.width + root.style.padding
+    implicitHeight: root.style.height
 
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: Style.widget.spacing
+        spacing: root.style.spacing
 
         readonly property bool isHoveredOrPress: (root.state === ClickableState.pressed || root.state === ClickableState.hover)
 

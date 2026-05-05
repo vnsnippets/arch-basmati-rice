@@ -15,50 +15,26 @@ WrapperMouseArea {
 
     default property alias contentData: container.data
 
-    property int radius: style.radius
+    property int radius: Style.clickable.radius
 
     property QtObject locks: QtObject {
         property bool hover: false
         property bool pressed: false
     }
 
-    property ClickableStyle style: ClickableStyle {}
-    
-    width: implicitWidth
-    implicitWidth: container.childrenRect.width + Style.widget.padding
-    implicitHeight: Style.widget.height
+    property color backgroundIdleColor: Style.colors.base
+    property color backgroundActiveColor: Style.colors.mantle
+
+    property color borderIdleColor: backgroundIdleColor
+    property color borderActiveColor: Style.colors.text
+
+    implicitWidth: Math.max(container.childrenRect.width + Style.clickable.padding, Style.clickable.width)
+    height: Style.clickable.height
 
     Layout.alignment: Qt.AlignCenter
     
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
-
-    onPressed: root.state = ClickableState.pressed
-    onReleased: root.state = ClickableState.hover
-    onEntered: root.state = ClickableState.hover
-    onExited: root.state = ClickableState.idle
-
-    // --- states ---
-    states: [
-        State {
-            name: ClickableState.idle
-            PropertyChanges { target: container; scale: 1.0; }
-            PropertyChanges { target: container; radius: root.radius; }
-            PropertyChanges { target: container; color: root.style.background.idle; border.color: root.style.border.idle; }
-        },
-        State {
-            name: ClickableState.hover
-            PropertyChanges { target: container; scale: 1; }
-            PropertyChanges { target: container; radius: root.radius*2; }
-            PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
-        },
-        State {
-            name: ClickableState.pressed
-            PropertyChanges { target: container; scale: 0.94; }
-            PropertyChanges { target: container; radius: root.radius*2; }
-            PropertyChanges { target: container; color: root.style.background.active; border.color: root.style.border.active; }
-        }
-    ]
     
     Rectangle {
         id: container
@@ -67,9 +43,9 @@ WrapperMouseArea {
 
         height: parent.height // Follow root height
 
-        color: root.style.background.idle
-        border.color: root.style.border.idle
-        border.width: root.style.borderWidth
+        color: root.containsMouse ? root.backgroundActiveColor : root.backgroundIdleColor
+        border.color: root.containsMouse ? root.borderActiveColor : root.borderIdleColor
+        border.width: Style.clickable.borderWidth
 
         radius: root.radius
         clip: true

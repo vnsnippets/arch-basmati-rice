@@ -8,13 +8,13 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Widgets
 
+import qs
+
 import qs.Styles
 import qs.Widgets.Audio
 import qs.Widgets.Battery
 import qs.Widgets.Caffeine
-import qs.Widgets.Clock
 import qs.Widgets.Network
-import qs.Widgets.Power
 import qs.Widgets.Workspaces
 
 import qs.Controls
@@ -35,13 +35,11 @@ Item {
         anchors.left: parent.left;
         anchors.verticalCenter: parent.verticalCenter;
 
-        ClickableWithLabel {
-            icon: ""
-        }
-
-        ClockWidget {
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
+        Clickable {
+            StyledText {
+                anchors.centerIn: parent
+                text: Qt.formatDateTime(Context.clock.date, "yyyy-MM-dd HH:mm")
+            }
         }
     }
 
@@ -52,9 +50,8 @@ Item {
         spacing: Style.dock.spacing
         offset: 12
         radius: implicitWidth/2
-        WorkspaceControl {
-            filterByMonitor: false
-        }
+
+        WorkspaceControl { filterByMonitor: true }
     }
 
     // --- RIGHT ---
@@ -72,17 +69,11 @@ Item {
             color_connected_default: Style.colors.green
             color_connected_critical: Style.colors.red
             color_connected_limited: Style.colors.yellow
-
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
         }
 
         AudioWidget {
             color_inactive: Style.colors.base
             color_default: Style.colors.blue
-
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
         }
 
         BatteryWidget {
@@ -90,31 +81,24 @@ Item {
             color_warning: Style.colors.yellow
             color_charging: Style.colors.yellow
             color_default: Style.colors.green
-
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
         }
 
         CaffeineWidget {
             color_caffeineon: Style.colors.red
             color_caffeineoff: Style.colors.blue
-
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
         }
 
-        PowerWidget {
-            style.text.idle: Style.colors.red
-            style.background.active: Style.colors.red
-            style.text.active: Style.colors.mantle
-            style.border.active: Style.colors.red
-
-            radius: Style.widget.radius
-            style.background.idle: Style.widget.colors.background
-        }
-
-        ClickableWithLabel {
-            icon: ""
+        Clickable {
+            id: powerWidget            
+            backgroundIdleColor: Style.colors.mantle
+            backgroundActiveColor: Style.colors.red
+            borderActiveColor: Style.colors.red
+            onClicked: Context.process.shutdown = Daemon.execute(["poweroff"]);
+            StyledText {
+                anchors.centerIn: parent
+                text:""
+                color: powerWidget.containsMouse ? Style.colors.mantle : Style.colors.red
+            }
         }
     }
 }
