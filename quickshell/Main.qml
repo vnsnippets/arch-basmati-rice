@@ -7,6 +7,7 @@ import Quickshell.Wayland
 
 import qs
 import qs.Styles
+import qs.Controls
 import qs.Utilities
 
 ShellRoot {
@@ -36,8 +37,7 @@ ShellRoot {
                 screen: modelData
 
                 // Full screen — anchored to all four edges
-                anchors { top: true; left: true; right: true; }
-                implicitHeight: barSpace.implicitHeight
+                anchors { top: true; left: true; right: true; bottom: true; }
 
                 exclusionMode: ExclusionMode.Ignore
                 WlrLayershell.layer: WlrLayer.Top
@@ -50,6 +50,23 @@ ShellRoot {
                 mask: Region {
                     Region { item: dockMask }
                     // Region { item: (canvas.dashboardOpen) ? dashboard : null }
+                }
+
+                readonly property alias panel: sidePanel                        
+                property bool dashboardOpen: false
+                property int currentTab: 0
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "black"
+                    opacity: canvas.dashboardOpen ? 0.3 : 0
+                    visible: opacity > 0
+                    Behavior on opacity { NumberAnimation { duration: 300 } }
+                    
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: canvas.dashboardOpen = false
+                    }
                 }
 
                 Item {
@@ -73,6 +90,11 @@ ShellRoot {
                     }
 
                     implicitHeight: Style.dock.height + (Style.dock.margin * 2)
+                }
+
+                Panel { 
+                    id: sidePanel
+                    anchors.top: dock.bottom
                 }
             }
         }

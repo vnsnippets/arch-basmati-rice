@@ -17,6 +17,7 @@ import qs.Widgets.Caffeine
 import qs.Widgets.Network
 import qs.Widgets.Workspaces
 
+import qs.Types
 import qs.Controls
 
 Item {
@@ -90,14 +91,33 @@ Item {
 
         Clickable {
             id: powerWidget            
-            backgroundIdleColor: Style.colors.mantle
+            backgroundIdleColor: Style.colors.base
             backgroundActiveColor: Style.colors.red
             borderActiveColor: Style.colors.red
             onClicked: Context.process.shutdown = Daemon.execute(["poweroff"]);
             StyledText {
                 anchors.centerIn: parent
                 text:""
-                color: powerWidget.containsMouse ? Style.colors.mantle : Style.colors.red
+                color: powerWidget.containsMouse ? Style.colors.base : Style.colors.red
+            }
+        }
+        
+        Clickable {
+            StyledText {
+                anchors.centerIn: parent
+                text:""
+            }
+
+            Component { id: headerComponent; Text { text: "COMPONENT 1"; color: "white"; font.pixelSize: 20 } }
+            Component { id: settingsComponent; Text { text: "COMPONENT 2"; color: "white"; font.pixelSize: 20 } }
+            Component { id: footerComponent; Text { text: "COMPONENT 3"; color: "white"; font.pixelSize: 20 } }
+
+            property bool panelOpen: false
+            onClicked: {
+                if (panelOpen) canvas.panel.close();
+                else canvas.panel.load(PanelDirection.right, headerComponent, settingsComponent, footerComponent);
+
+                panelOpen = !panelOpen;
             }
         }
     }
