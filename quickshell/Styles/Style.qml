@@ -39,7 +39,8 @@ QtObject {
     }
 
     readonly property int spacing: 4
-    readonly property int margin: 8 
+    readonly property int margin: 8
+    readonly property int borderWidth: 1
 
     readonly property QtObject clickable: QtObject {
         readonly property QtObject background: QtObject {
@@ -55,7 +56,6 @@ QtObject {
             readonly property color active: Style.colors.text
         }
 
-        readonly property int borderWidth: 1
         readonly property int radius: 16
         readonly property int width: 40
         readonly property int height: 40
@@ -65,6 +65,16 @@ QtObject {
 
     readonly property QtObject dock: QtObject {
         readonly property int height: Style.clickable.height + Style.margin
+    }
+
+    readonly property QtObject panel: QtObject {
+        readonly property int spacing: 20
+        readonly property int radius: 12
+        readonly property int padding: 24
+        readonly property QtObject colors: QtObject {
+            readonly property color background: Style.colors.base
+            readonly property color border: Style.colors.surface
+        }
     }
 
     readonly property QtObject animations: QtObject {

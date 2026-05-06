@@ -4,23 +4,18 @@ import QtQuick.Controls
 import qs.Styles
 
 Slider {
-    id: root
-    visible: container.containsMouse
-            
+    id: root            
     property alias progressWidth: progress.width
 
-    readonly property color activeColor: Style.colors.blue
+    required property color activeColor
 
-    readonly property color handleColor: Style.colors.blue
-    readonly property color handleBorderColor: handleColor
+    required property color handleColor
+    required property color handleBorderColor
 
-    readonly property color trackColor: Qt.alpha(Style.colors.text, 0.1)
-    readonly property int trackWidth: 100
-    readonly property int trackHeight: 8
+    required property color trackColor
+    required property int trackHeight
 
     readonly property int trackYPosition: root.topPadding + root.availableHeight / 2 - height / 2
-
-    implicitWidth: container.containsMouse ? root.trackWidth : 0
 
     Behavior on implicitWidth {
         NumberAnimation { 

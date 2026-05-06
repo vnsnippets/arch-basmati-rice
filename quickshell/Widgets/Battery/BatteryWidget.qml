@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Services.UPower
 
 import qs
+import qs.Types
 import qs.Styles
 import qs.Controls
 
@@ -46,4 +47,11 @@ Clickable {
             color: textColor
         }
     }
+
+    Component {
+        id: panel
+        BatteryPanel {}
+    }
+
+    onClicked: canvas.pop(PanelPosition.right, panel)
 }

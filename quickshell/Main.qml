@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 import qs
+import qs.Types
 import qs.Styles
 import qs.Controls
 import qs.Utilities
@@ -37,6 +38,7 @@ ShellRoot {
 
                 // Full screen — anchored to all four edges
                 anchors { top: true; left: true; right: true; bottom: true; }
+                margins { top: Style.margin; left: Style.margin; right: Style.margin; bottom: Style.margin; } 
 
                 exclusionMode: ExclusionMode.Ignore
                 WlrLayershell.layer: WlrLayer.Top
@@ -46,8 +48,19 @@ ShellRoot {
                 surfaceFormat.opaque: false
                 focusable: false
 
+                function pop(position, component) {
+                    if (panel.activePanel === component) {
+                        panel.activePanel = null;
+                        return;
+                    }
+
+                    panel.position = position;
+                    panel.activePanel = component;
+                }
+
                 mask: Region {
-                    Region { item: dockMask }
+                    Region { item: dock }
+                    Region { item: (panel.item) ? panel : null }
                     // Region { item: (canvas.dashboardOpen) ? dashboard : null }
                 }
 
@@ -64,16 +77,6 @@ ShellRoot {
                     }
                 }
 
-                Item {
-                    id: dockMask
-                    anchors {
-                        top:   parent.top
-                        left:  parent.left
-                        right: parent.right
-                    }
-                    implicitHeight: Style.dock.height                    
-                }
-
                 Dock {
                     id: dock
                     z: 10
@@ -82,11 +85,10 @@ ShellRoot {
                         top:   parent.top
                         left:  parent.left
                         right: parent.right
-                    }
-
-                    // Add additional margin for bottom margin set by hyprland
-                    implicitHeight: Style.dock.height + Style.margin 
+                    } 
                 }
+
+                PanelLoader { id: panel; position: ""; }
             }
         }
     }

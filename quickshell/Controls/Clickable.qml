@@ -45,7 +45,7 @@ WrapperMouseArea {
         
         color: root.containsMouse ? root.backgroundActiveColor : root.backgroundIdleColor
         border.color: root.containsMouse ? root.borderActiveColor : root.borderIdleColor
-        border.width: Style.clickable.borderWidth
+        border.width: Style.borderWidth
 
         radius: root.radius
         clip: true

@@ -27,14 +27,13 @@ Item {
     anchors.right: parent.right
     anchors.top: parent.top
 
-    anchors.leftMargin: Style.margin
-    anchors.rightMargin: Style.margin
+    implicitHeight: Style.clickable.height
 
     // --- LEFT ---
     RowLayout {
         anchors.top: parent.top;
         anchors.left: parent.left;
-        anchors.verticalCenter: parent.verticalCenter;
+        anchors.verticalCenter: parent.verticalCenter
 
         Clickable {
             implicitWidth: clock.width + Style.clickable.padding
@@ -46,8 +45,7 @@ Item {
         }
     }
     FramedGroup {
-        anchors.verticalCenter: parent.verticalCenter;
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
         color: Style.colors.waybackground
 
         spacing: Style.spacing
@@ -69,7 +67,7 @@ Item {
     RowLayout {
         anchors.top: parent.top;
         anchors.right: parent.right;
-        anchors.verticalCenter: parent.verticalCenter;
+        anchors.verticalCenter: parent.verticalCenter
 
         spacing: Style.spacing
 
