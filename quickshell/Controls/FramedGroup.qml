@@ -16,7 +16,6 @@ Rectangle {
     property int offset: 8
 
     radius: Style.clickable.radius
-    color: Style.colors.mantle
 
     implicitWidth: masterLayout.width + offset
     implicitHeight: masterLayout.height + offset

@@ -22,13 +22,13 @@ WrapperMouseArea {
         property bool pressed: false
     }
 
-    property color backgroundIdleColor: Style.colors.base
-    property color backgroundActiveColor: Style.colors.mantle
+    property color backgroundIdleColor: Style.clickable.background.idle
+    property color backgroundActiveColor: Style.clickable.background.active
 
-    property color borderIdleColor: backgroundIdleColor
-    property color borderActiveColor: Style.colors.text
+    property color borderIdleColor: Style.clickable.border.idle
+    property color borderActiveColor: Style.clickable.border.active
 
-    implicitWidth: Math.max(container.childrenRect.width + Style.clickable.padding, Style.clickable.width)
+    implicitWidth: Style.clickable.width
     height: Style.clickable.height
 
     Layout.alignment: Qt.AlignCenter
@@ -41,8 +41,8 @@ WrapperMouseArea {
         anchors.left: parent.left
         scale: 1.0
 
-        height: parent.height // Follow root height
-
+        height: parent.height
+        
         color: root.containsMouse ? root.backgroundActiveColor : root.backgroundIdleColor
         border.color: root.containsMouse ? root.borderActiveColor : root.borderIdleColor
         border.width: Style.clickable.borderWidth

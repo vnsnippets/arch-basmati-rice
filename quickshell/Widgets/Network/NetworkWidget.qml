@@ -104,7 +104,8 @@ Clickable {
         }
 
         StyledText {
-            text: (!showLabel) ? "" : (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
+            visible: showLabel
+            text: (network_state >= 70) ? `${active_device?.Ssid} (${active_device.Strength}%)` : (network_state >= 60) ? `${active_device?.Ssid} (Local)` : (network_state >= 40) ? "Connecting" : "Disconnected"
             color: root.status_color
         }
     }

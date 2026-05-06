@@ -27,8 +27,8 @@ Item {
     anchors.right: parent.right
     anchors.top: parent.top
 
-    anchors.leftMargin: Style.dock.margin
-    anchors.rightMargin: Style.dock.margin
+    anchors.leftMargin: Style.margin
+    anchors.rightMargin: Style.margin
 
     // --- LEFT ---
     RowLayout {
@@ -37,22 +37,32 @@ Item {
         anchors.verticalCenter: parent.verticalCenter;
 
         Clickable {
+            implicitWidth: clock.width + Style.clickable.padding
             StyledText {
+                id: clock
                 anchors.centerIn: parent
                 text: Qt.formatDateTime(Context.clock.date, "yyyy-MM-dd HH:mm")
             }
         }
     }
-
     FramedGroup {
         anchors.verticalCenter: parent.verticalCenter;
         anchors.horizontalCenter: parent.horizontalCenter
+        color: Style.colors.waybackground
 
-        spacing: Style.dock.spacing
+        spacing: Style.spacing
         offset: 12
         radius: implicitWidth/2
 
-        WorkspaceControl { filterByMonitor: true }
+        WorkspaceControl {
+            filterByMonitor: true
+            activeColor: Style.colors.green
+            inactiveColor: Style.clickable.background.idle
+            activeBorderColor: Style.colors.green
+            inactiveBorderColor: Style.clickable.border.idle
+            activeTextColor: Style.colors.base
+            inactiveTextColor: Style.colors.text
+        }
     }
 
     // --- RIGHT ---
@@ -61,7 +71,7 @@ Item {
         anchors.right: parent.right;
         anchors.verticalCenter: parent.verticalCenter;
 
-        spacing: Style.dock.spacing
+        spacing: Style.spacing
 
         NetworkWidget  {
             showLabel: false
@@ -85,13 +95,12 @@ Item {
         }
 
         CaffeineWidget {
-            color_caffeineon: Style.colors.red
-            color_caffeineoff: Style.colors.blue
+            activeColor: Style.colors.red
+            inactiveColor: Style.colors.blue
         }
 
         Clickable {
-            id: powerWidget            
-            backgroundIdleColor: Style.colors.base
+            id: powerWidget
             backgroundActiveColor: Style.colors.red
             borderActiveColor: Style.colors.red
             onClicked: Context.process.shutdown = Daemon.execute(["poweroff"]);

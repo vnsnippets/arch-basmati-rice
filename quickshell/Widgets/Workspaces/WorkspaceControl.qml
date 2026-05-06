@@ -22,7 +22,15 @@ RowLayout {
     readonly property int dotActiveSize: dotSize
     readonly property int fontSize: 14
 
-    readonly property color activeColor: Style.colors.green
+    required property color activeColor
+    required property color inactiveColor
+
+    required property color activeBorderColor
+    required property color inactiveBorderColor
+
+    required property color activeTextColor
+    required property color inactiveTextColor
+    
 
     readonly property var filteredWorkspaces: {
         const screenName = canvas.screen?.name;
@@ -64,7 +72,6 @@ RowLayout {
             // Get the workspace object if it exists for this index
             readonly property var ws: root.filteredWorkspaces[index]
             readonly property bool isActive: Hyprland.focusedWorkspace?.id === ws?.id
-            // readonly property bool hasWindows: ws?.toplevels?.count > 0 ?? false
 
             readonly property bool isOtherMonitor: (!root.filterByMonitor && ws && ws.monitor?.name !== canvas.screen?.name) ?? false
 
@@ -73,8 +80,10 @@ RowLayout {
             radius: dotRadius
 
             // Dynamic Styling
-            backgroundIdleColor: (isActive) ? root.activeColor : Style.colors.surface
-            backgroundActiveColor: Style.colors.mantle
+            backgroundIdleColor: (isActive) ? root.activeColor : inactiveColor
+            backgroundActiveColor: root.activeColor
+
+            borderIdleColor: (isActive) ? root.activeColor : inactiveBorderColor
 
             // Only allow clicking if the workspace actually exists
             onClicked: if (ws && !isActive) ws.activate();
@@ -87,7 +96,7 @@ RowLayout {
                 anchors.centerIn: parent
                 text: "" // "󱂬" "" "" "󰍺" "󰍹"
                 visible: dot.isOtherMonitor
-                color: isActive ? Style.colors.mantle : Style.colors.text
+                color: isActive ? root.activeTextColor : root.inactiveTextColor
                 font.pixelSize: root.fontSize
                 font.family: Style.fonts.icon
                 Layout.alignment: Qt.AlignVCenter
@@ -104,7 +113,7 @@ RowLayout {
         StyledText {
             anchors.centerIn: parent
             text: ""
-            color: Style.colors.text
+            color: root.inactiveTextColor
         }
 
         onClicked: Hyprland.dispatch(`workspace ${Hyprland.workspaces.values.length + 1}`);

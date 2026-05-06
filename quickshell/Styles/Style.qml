@@ -33,9 +33,28 @@ QtObject {
         readonly property color base: "#1e1e2e"
         readonly property color mantle: "#181825"
         readonly property color crust: "#11111b"
+
+        readonly property color waybackground: "#232634"
+        readonly property color wayborder: "#394250"
     }
 
+    readonly property int spacing: 4
+    readonly property int margin: 8 
+
     readonly property QtObject clickable: QtObject {
+        readonly property QtObject background: QtObject {
+            readonly property color idle: Style.colors.waybackground
+            readonly property color active: Style.colors.mantle
+        }
+        readonly property QtObject border: QtObject {
+            readonly property color idle: Style.colors.wayborder
+            readonly property color active: Style.colors.text
+        }
+        readonly property QtObject text: QtObject {
+            readonly property color idle: Style.colors.green
+            readonly property color active: Style.colors.text
+        }
+
         readonly property int borderWidth: 1
         readonly property int radius: 16
         readonly property int width: 40
@@ -44,52 +63,8 @@ QtObject {
         readonly property int spacing: 4
     }
 
-    readonly property int spacing: 4
-    readonly property int margin: 8 
-
     readonly property QtObject dock: QtObject {
-        readonly property int spacing: 4
-        readonly property int margin: 8
-        readonly property int height: 40
-    }
-
-    readonly property QtObject popup: QtObject {
-        readonly property real radius: 12
-        readonly property real spacing: 20
-        readonly property color background: colors.mantle
-
-        readonly property QtObject button: QtObject {
-            readonly property QtObject background: QtObject {
-                readonly property color idle: colors.base
-                readonly property color active: colors.mantle
-            }
-        }
-        readonly property QtObject animations: QtObject {
-            readonly property int duration: 300
-        }
-    }
-
-    readonly property QtObject dashboard: QtObject {
-        readonly property int margin: 10
-        readonly property int width: 1920/2
-        readonly property int height: 1200/2
-        readonly property int spacing: 8
-        readonly property int radius: 32
-
-        readonly property int rows: 10
-        readonly property int columns: 16
-
-        readonly property QtObject colors: QtObject {
-            readonly property color background: colors.mantle
-            readonly property color border: colors.text
-            readonly property color text: colors.text
-        }
-
-        readonly property QtObject cell: QtObject {
-            readonly property int size: 56
-            readonly property int radius: 16
-            readonly property int margin: 16
-        }
+        readonly property int height: Style.clickable.height + Style.margin
     }
 
     readonly property QtObject animations: QtObject {

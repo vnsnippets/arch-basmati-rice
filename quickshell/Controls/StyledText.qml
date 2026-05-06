@@ -3,8 +3,10 @@ import QtQuick
 import qs.Styles
 
 Text {
+    property bool active: false
+
     id: root
-    color: Style.colors.text
+    color: (active) ? Style.clickable.text.active : Style.clickable.text.idle
     font.pixelSize: Style.fonts.size
     font.family: Style.fonts.icon
     horizontalAlignment: Text.AlignHCenter

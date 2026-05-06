@@ -25,8 +25,7 @@ ShellRoot {
                 screen: modelData
 
                 anchors { top: true; left: true; right: true }
-                implicitHeight: Style.dock.height + Style.dock.margin
-                
+                implicitHeight: Style.dock.height
                 WlrLayershell.layer: WlrLayer.Bottom
 
                 color: "transparent"
@@ -51,10 +50,6 @@ ShellRoot {
                     Region { item: dockMask }
                     // Region { item: (canvas.dashboardOpen) ? dashboard : null }
                 }
-
-                readonly property alias panel: sidePanel                        
-                property bool dashboardOpen: false
-                property int currentTab: 0
 
                 Rectangle {
                     anchors.fill: parent
@@ -89,12 +84,8 @@ ShellRoot {
                         right: parent.right
                     }
 
-                    implicitHeight: Style.dock.height + (Style.dock.margin * 2)
-                }
-
-                Panel { 
-                    id: sidePanel
-                    anchors.top: dock.bottom
+                    // Add additional margin for bottom margin set by hyprland
+                    implicitHeight: Style.dock.height + Style.margin 
                 }
             }
         }

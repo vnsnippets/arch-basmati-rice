@@ -9,13 +9,13 @@ import qs.Controls
 
 Clickable {
     id: root
-    implicitWidth: masterLayout.width + Style.clickable.padding
+    implicitWidth: content.width + Style.clickable.padding
 
     // Defaults to references
-    property color color_critical: Style.colors.red
-    property color color_warning: Style.colors.yellow
-    property color color_charging: Style.colors.yellow
-    property color color_default: Style.colors.green
+    required property color color_critical
+    required property color color_warning
+    required property color color_charging
+    required property color color_default
 
     property int batteryPercentage: Math.round(device.percentage * 100)
 
@@ -30,7 +30,7 @@ Clickable {
     }
 
     RowLayout {
-        id: masterLayout
+        id: content
         anchors.centerIn: parent
         spacing: Style.clickable.spacing
 

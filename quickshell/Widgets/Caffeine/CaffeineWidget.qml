@@ -13,8 +13,8 @@ Clickable {
 
     readonly property bool active: Context.process.prevent_screen_lock !== null
 
-    property color color_caffeineon: Style.colors.red
-    property color color_caffeineoff: Style.colors.text
+    required property color activeColor
+    required property color inactiveColor
     
     onClicked: () => {
         if (active) {
@@ -38,6 +38,6 @@ Clickable {
     StyledText {
         anchors.centerIn: parent
         text: (root.active) ? "󱂟" : ""
-        color: (root.active) ? root.color_caffeineon : root.color_caffeineoff
+        color: (root.active) ? root.activeColor : root.inactiveColor
     }
 }
