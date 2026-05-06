@@ -7,18 +7,26 @@ import QtQuick.Controls
 import Quickshell
 
 import qs
+import qs.Types
 import qs.Styles
 import qs.Controls
 import qs.Utilities
 import qs.Widgets.Battery.Controls
 
-ColumnLayout {
-    id: container
-    anchors.centerIn: parent
-    spacing: Style.panel.spacing
-    
-    Text {
-        color: "white"
-        text: "Hello World"
+PanelWrapper {
+    implicitWidth: container.width + Style.panel.padding * 2
+    implicitHeight: container.height + Style.panel.padding * 2
+
+    position: PanelPosition.right
+
+    ColumnLayout {
+        id: container
+        anchors.centerIn: parent
+        spacing: Style.panel.spacing
+        
+        Text {
+            color: "white"
+            text: "Hello World"
+        }
     }
 }

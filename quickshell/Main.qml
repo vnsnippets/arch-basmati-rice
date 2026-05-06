@@ -48,19 +48,9 @@ ShellRoot {
                 surfaceFormat.opaque: false
                 focusable: false
 
-                function pop(position, component) {
-                    // Not sure why
-                    // But if I don't "reset" the anchors here
-                    // New position anchors are not reset in panel loader
-                    panel.anchors.left = undefined
-                    panel.anchors.right = undefined
-                    panel.showPanelAsync(position, component);
-                }
-
                 mask: Region {
                     Region { item: dock }
-                    Region { item: (panel.item) ? panel : null }
-                    // Region { item: (canvas.dashboardOpen) ? dashboard : null }
+                    Region { item: (panelRight.item) ? panelRight : null }
                 }
 
                 Rectangle {
@@ -78,16 +68,15 @@ ShellRoot {
 
                 Dock {
                     id: dock
-                    z: 10
-                    
-                    anchors {
-                        top:   parent.top
-                        left:  parent.left
-                        right: parent.right
-                    } 
+                    anchors.top: parent.top;
+                    anchors.left: parent.left;
+                    anchors.right: parent.right; 
                 }
 
-                PanelLoader { id: panel; }
+                PanelContainer {
+                    id: panelRight
+                    anchors.right: parent.right
+                }
             }
         }
     }

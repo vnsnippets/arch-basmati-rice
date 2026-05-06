@@ -75,7 +75,7 @@ QtObject {
             readonly property color background: Style.colors.slate
             readonly property color border: Style.colors.surface
         }
-        readonly property int animation: 500
+        readonly property int animation: 300
     }
 
     readonly property QtObject animations: QtObject {

@@ -34,7 +34,7 @@ Clickable {
     // label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
 
     // onClicked: Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
-    onClicked: canvas.pop(PanelPosition.left, Qt.createComponent("AudioPanel.qml"))
+    onClicked: panelRight.showAsync(Qt.createComponent("AudioPanel.qml"))
 
     onWheel: (event) => {
         if (change_lock || !Pipewire.defaultAudioSink?.audio) return;

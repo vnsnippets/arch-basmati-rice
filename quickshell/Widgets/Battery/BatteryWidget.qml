@@ -48,5 +48,5 @@ Clickable {
         }
     }
 
-    onClicked: canvas.pop(PanelPosition.right, Qt.createComponent("BatteryPanel.qml"))
+    onClicked: panelRight.showAsync(Qt.createComponent("BatteryPanel.qml"))
 }
