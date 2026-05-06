@@ -49,14 +49,12 @@ ShellRoot {
                 focusable: false
 
                 function pop(position, component) {
-                    // if (panel.activePanel?.url === component.url) {
-                    //     panel.activePanel = null;
-                    //     return;
-                    // }
-
-                    panel.position = position;
-                    // panel.content = component;
-                    panel.showPanelAsync(component);
+                    // Not sure why
+                    // But if I don't "reset" the anchors here
+                    // New position anchors are not reset in panel loader
+                    panel.anchors.left = undefined
+                    panel.anchors.right = undefined
+                    panel.showPanelAsync(position, component);
                 }
 
                 mask: Region {
@@ -89,7 +87,7 @@ ShellRoot {
                     } 
                 }
 
-                PanelLoader { id: panel; position: ""; }
+                PanelLoader { id: panel; }
             }
         }
     }

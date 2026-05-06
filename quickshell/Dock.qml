@@ -46,7 +46,7 @@ Item {
     }
     FramedGroup {
         anchors.centerIn: parent
-        color: Style.colors.waybackground
+        color: Style.colors.slate
 
         spacing: Style.spacing
         offset: 12

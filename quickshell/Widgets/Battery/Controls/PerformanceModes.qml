@@ -55,7 +55,7 @@ RowLayout {
                 readonly property bool isActive: PowerProfiles.profile === modelData.target
 
                 // Simplify style logic: if active, it stays its color even when idled
-                backgroundIdleColor: isActive ? modelData.color : Style.colors.waybackground
+                backgroundIdleColor: isActive ? modelData.color : Style.colors.slate
                 borderIdleColor:     isActive ? modelData.color : Style.colors.wayborder
                 
                 backgroundActiveColor: modelData.color

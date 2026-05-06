@@ -12,21 +12,21 @@ import qs.Utilities
 
 Loader {
     id: root
-    anchors {
-        top: canvas.top
-        left: position === PanelPosition.left ? canvas.left : undefined
-        right: position === PanelPosition.right ? canvas.right : undefined
-    }
+
+    property string position: ""
 
     y: Style.dock.height
 
-    required property string position
     property Component content: null
 
     active: content !== null
 
     readonly property var stopwatch: Stopwatch.create(root, false, false);
-    function showPanelAsync(component) {
+    function showPanelAsync(position, component) {
+        root.anchors.left = position === PanelPosition.left ? parent.left : undefined
+        root.anchors.right = position === PanelPosition.right ? parent.right : undefined
+        root.position = position
+
         // --- Cold Start ---
         if (content === null) {
             content = component;
@@ -46,7 +46,6 @@ Loader {
         }
 
         // --- Parallel Swap Logic ---
-        // 1. Start fading out the current content
         item.swap(component);
     }
 
@@ -62,7 +61,17 @@ Loader {
         Behavior on implicitHeight { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
         
         clip: true
-        transformOrigin: Item.Left
+        
+        // Dynamically map the position to the transformOrigin
+        transformOrigin: {
+            switch(root.position) {
+                case PanelPosition.top:    return Item.Top;
+                case PanelPosition.bottom: return Item.Bottom;
+                case PanelPosition.left:   return Item.TopLeft;
+                case PanelPosition.right:  return Item.TopRight;
+                default:                   return Item.Center;
+            }
+        }
 
         property bool active: false
 

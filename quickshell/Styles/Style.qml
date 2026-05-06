@@ -34,7 +34,7 @@ QtObject {
         readonly property color mantle: "#181825"
         readonly property color crust: "#11111b"
 
-        readonly property color waybackground: "#232634"
+        readonly property color slate: "#232634"
         readonly property color wayborder: "#394250"
     }
 
@@ -44,7 +44,7 @@ QtObject {
 
     readonly property QtObject clickable: QtObject {
         readonly property QtObject background: QtObject {
-            readonly property color idle: Style.colors.waybackground
+            readonly property color idle: Style.colors.slate
             readonly property color active: Style.colors.mantle
         }
         readonly property QtObject border: QtObject {
@@ -72,7 +72,7 @@ QtObject {
         readonly property int radius: 12
         readonly property int padding: 24
         readonly property QtObject colors: QtObject {
-            readonly property color background: Style.colors.waybackground
+            readonly property color background: Style.colors.slate
             readonly property color border: Style.colors.surface
         }
         readonly property int animation: 500
