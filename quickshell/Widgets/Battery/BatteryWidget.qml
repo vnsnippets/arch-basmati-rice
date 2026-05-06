@@ -48,10 +48,5 @@ Clickable {
         }
     }
 
-    Component {
-        id: panel
-        BatteryPanel {}
-    }
-
-    onClicked: canvas.pop(PanelPosition.right, panel)
+    onClicked: canvas.pop(PanelPosition.right, Qt.createComponent("BatteryPanel.qml"))
 }

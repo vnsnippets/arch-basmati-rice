@@ -16,11 +16,9 @@ ColumnLayout {
     id: container
     anchors.centerIn: parent
     spacing: Style.panel.spacing
-
-    BatteryStatus { Layout.fillWidth: true }
-    BrightnessControl { Layout.fillWidth: true }
-    PerformanceModes { Layout.fillWidth: true }
-
-    // --- Power Profiles Selector ---
-    // ModeControl { Layout.fillWidth: true }
+    
+    Text {
+        color: "white"
+        text: "Hello World"
+    }
 }

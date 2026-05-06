@@ -33,26 +33,8 @@ Rectangle {
     Behavior on scale { NumberAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic } }
     Behavior on opacity { NumberAnimation { duration: Style.animations.duration } }
 
-
-    ColumnLayout {
+    Item {
         id: container
         anchors.centerIn: parent
-        spacing: Style.panel.spacing
     }
-
-    // Item {
-    //     id: content_container
-    //     anchors.fill: parent
-
-    //     opacity: root.active ? 1 : 0
-    //     //scale: 1 / root.scale  // Enable for counter scaling
-
-    //     y: root.active ? 0 : 10 
-    //     Behavior on y { NumberAnimation { duration: Style.animations.duration; easing.type: Easing.OutCubic } }
-    //     Behavior on opacity { NumberAnimation { duration: Style.animations.duration } }
-    // }
-
-    // Component.onCompleted: {
-    //     active = true;
-    // }
 }

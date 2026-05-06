@@ -72,9 +72,10 @@ QtObject {
         readonly property int radius: 12
         readonly property int padding: 24
         readonly property QtObject colors: QtObject {
-            readonly property color background: Style.colors.base
+            readonly property color background: Style.colors.waybackground
             readonly property color border: Style.colors.surface
         }
+        readonly property int animation: 500
     }
 
     readonly property QtObject animations: QtObject {

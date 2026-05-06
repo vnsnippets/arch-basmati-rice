@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 
 import qs
+import qs.Types
 import qs.Styles
 import qs.Controls
 import qs.Utilities
@@ -32,7 +33,8 @@ Clickable {
     // icon: Pipewire?.defaultAudioSink?.audio?.muted ? "\ue906" : (Pipewire?.defaultAudioSink?.audio?.volume === 0) ? "\ue905" : (Pipewire?.defaultAudioSink?.audio?.volume <= 0.5) ? "\ue908" : "\ue907"
     // label: `${(Pipewire?.defaultAudioSink?.audio?.volume * 100).toFixed(0) ?? 0}%`
 
-    onClicked: Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
+    // onClicked: Pipewire.defaultAudioSink.audio.muted = Pipewire?.ready ? !Pipewire?.defaultAudioSink?.audio?.muted : false;
+    onClicked: canvas.pop(PanelPosition.left, Qt.createComponent("AudioPanel.qml"))
 
     onWheel: (event) => {
         if (change_lock || !Pipewire.defaultAudioSink?.audio) return;

@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -10,7 +12,7 @@ import qs.Controls
 
 RowLayout {
     id: root
-    spacing: 8
+    spacing: 24
 
     readonly property var profileMap: [
         { icon: "", label: "Performance", color: Style.colors.red, target: PowerProfile.Performance },
@@ -40,29 +42,32 @@ RowLayout {
         }
     }
 
-    Repeater {
-        model: root.profileMap
+    Row {
+        spacing: 8
+        Repeater {
+            model: root.profileMap
 
-        delegate: Clickable {
-            id: button
-            Layout.alignment: Qt.AlignVCenter
+            delegate: Clickable {
+                id: button
+                Layout.alignment: Qt.AlignVCenter
 
-            required property var modelData
-            readonly property bool isActive: PowerProfiles.profile === modelData.target
+                required property var modelData
+                readonly property bool isActive: PowerProfiles.profile === modelData.target
 
-            // Simplify style logic: if active, it stays its color even when idled
-            backgroundIdleColor: isActive ? modelData.color : Style.colors.waybackground
-            borderIdleColor:     isActive ? modelData.color : Style.colors.wayborder
-            
-            backgroundActiveColor: modelData.color
-            borderActiveColor:     modelData.color
+                // Simplify style logic: if active, it stays its color even when idled
+                backgroundIdleColor: isActive ? modelData.color : Style.colors.waybackground
+                borderIdleColor:     isActive ? modelData.color : Style.colors.wayborder
+                
+                backgroundActiveColor: modelData.color
+                borderActiveColor:     modelData.color
 
-            StyledText {
-                anchors.centerIn: parent
-                text: modelData.icon
-                color: (isActive || button.containsMouse) ? Style.colors.base : Style.colors.text
+                StyledText {
+                    anchors.centerIn: parent
+                    text: modelData.icon
+                    color: (isActive || button.containsMouse) ? Style.colors.base : Style.colors.text
+                }
+                onClicked: PowerProfiles.profile = modelData.target
             }
-            onClicked: PowerProfiles.profile = modelData.target
         }
     }
 }

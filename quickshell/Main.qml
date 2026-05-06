@@ -49,13 +49,14 @@ ShellRoot {
                 focusable: false
 
                 function pop(position, component) {
-                    if (panel.activePanel === component) {
-                        panel.activePanel = null;
-                        return;
-                    }
+                    // if (panel.activePanel?.url === component.url) {
+                    //     panel.activePanel = null;
+                    //     return;
+                    // }
 
                     panel.position = position;
-                    panel.activePanel = component;
+                    // panel.content = component;
+                    panel.showPanelAsync(component);
                 }
 
                 mask: Region {
